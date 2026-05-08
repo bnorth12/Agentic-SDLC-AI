@@ -1,0 +1,16 @@
+﻿# Application
+APP_ENV=development
+LOG_LEVEL=INFO
+
+# Model provider
+OLLAMA_BASE_URL=http://ollama:11434
+OLLAMA_MODEL=llama3.1:8b-instruct-q4_K_M
+
+# Persistence
+POSTGRES_URL=postgresql://agentic:agentic@postgres:5432/agentic_sdlc
+CHECKPOINT_TABLE=langgraph_checkpoints
+VECTOR_TABLE=agent_embeddings
+
+# Optional
+ENABLE_HITL=true
+DEFAULT_TIMEOUT_SECONDS=120

@@ -1,0 +1,21 @@
+﻿"""Smoke tests for starter project modules."""
+
+import unittest
+
+from src.graphs.supervisor import build_supervisor_graph
+from src.state.schema import AgentState
+
+
+class StarterModulesTest(unittest.TestCase):
+    def test_agent_state_defaults(self) -> None:
+        state = AgentState()
+        self.assertEqual(state.phase, "intake")
+        self.assertEqual(state.backlog, [])
+        self.assertFalse(state.requires_human_approval)
+
+    def test_supervisor_placeholder(self) -> None:
+        self.assertEqual(build_supervisor_graph(), "supervisor-graph-placeholder")
+
+
+if __name__ == "__main__":
+    unittest.main()

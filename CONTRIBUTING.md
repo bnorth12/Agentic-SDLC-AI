@@ -1,41 +1,40 @@
-# Contributing
+# Contributing to Agentic SDLC AI Organization
 
-Thank you for contributing to Agentic SDLC AI Organization.
+Thank you for considering contributing!
 
 ## Development Setup
 
-1. Create and activate a virtual environment.
-2. Install dependencies:
+1. Clone the repo
+2. Create a virtual environment: `python -m venv venv`
+3. Install dependencies: `pip install -e ".[dev]"`
+4. Copy `.env.example` to `.env` and configure
+5. Start services: `docker compose up -d` (Postgres + Ollama)
 
-```bash
-pip install -r requirements.txt
-```
+## Code Style
+- Python 3.11+
+- Follow PEP 8 + type hints (ruff + mypy)
+- Use docstrings (Google style)
+- Black + isort formatting
 
-3. Copy environment variables:
+## Adding New Agents
+1. Create new file in `src/agents/`
+2. Define role prompt and tools
+3. Register the agent in the supervisor graph
+4. Update `docs/agent-roles.md`
+5. Add tests
 
-```bash
-cp .env.example .env
-```
+## Pull Request Process
+1. Create an issue describing the change
+2. Branch from `main` (`feature/xxx` or `agent/xxx`)
+3. Make changes + tests
+4. Ensure all tests pass
+5. Open PR with clear description
 
-## Code Standards
+## Areas Needing Help
+- Review board voting logic
+- Advanced tool implementations
+- Streamlit / Gradio UI
+- Fine-tuning prompts for engineering domains
+- Docker optimization
 
-- Follow PEP 8 and use explicit type hints.
-- Keep functions focused and composable.
-- Prefer Pydantic models for shared state contracts.
-- Add or update tests for functional changes when test infrastructure is present.
-
-## Agent and Graph Contributions
-
-When adding a new specialist agent:
-
-1. Add agent implementation under `src/agents/`.
-2. Define state interactions in `src/state/schema.py` (or split module as needed).
-3. Wire transitions in `src/graphs/`.
-4. Document authority boundaries and escalation paths in `docs/agent-roles.md`.
-
-## Pull Requests
-
-- Keep PRs focused and small.
-- Include rationale for architectural changes.
-- Update docs for behavior or interface changes.
-- Ensure CI passes before requesting review.
+Questions? Open a Discussion or Issue.

@@ -1,0 +1,145 @@
+"""Requirements Development Agent."""
+
+from __future__ import annotations
+
+from typing import Any
+
+from langchain_core.messages import HumanMessage, SystemMessage
+
+from src.agents.base_agent import BaseAgent
+from src.config.prompts import REQUIREMENTS_AGENT_PROMPT
+from src.state.schema import AgentState, Requirement, WorkItemStatus
+
+
+class RequirementsAgent(BaseAgent):
+    """
+    Requirements Development Engineer responsible for:
+    - Eliciting stakeholder needs
+    - Developing clear, verifiable requirements
+    - Maintaining traceability
+    - Defining verification criteria
+    """
+
+    def __init__(self):
+        super().__init__(
+            name="requirements_agent",
+            role="Requirements Development Engineer",
+            authority_level="MEDIUM",
+        )
+
+    def get_system_prompt(self, state: AgentState) -> str:
+        """Generate system prompt for the Requirements Agent."""
+        return REQUIREMENTS_AGENT_PROMPT.format(objective=state.objective)
+
+    def process(self, state: AgentState) -> dict[str, Any]:
+        """
+        Process requirements development tasks:
+        1. Analyze objective and stakeholder needs
+        2. Develop requirements
+        3. Ensure requirements are clear and verifiable
+        4. Request review when ready
+        """
+        updates: dict[str, Any] = {"messages": []}
+
+        # Check if we have work assigned
+        my_work = [
+            item
+            for item in state.work_queue
+            if item.assigned_to == self.name
+            and item.status == WorkItemStatus.IN_PROGRESS
+        ]
+
+        if not my_work:
+            return updates
+
+        work_item = my_work[0]
+
+        # If we don't have requirements yet, develop them
+        if len(state.requirements) == 0:
+            self.logger.log_start("Developing requirements from objective")
+
+            # Use LLM to analyze objective and generate requirements
+            messages = [
+                SystemMessage(content=self.get_system_prompt(state)),
+                HumanMessage(
+                    content=f"""
+Analyze this objective and develop initial system requirements:
+
+OBJECTIVE: {state.objective}
+
+Generate 3-5 high-level requirements that are:
+- Clear and unambiguous
+- Verifiable (testable)
+- Necessary to meet the objective
+- Properly categorized (functional, non-functional, constraint)
+
+For each requirement, provide:
+1. A unique identifier (REQ-001, REQ-002, etc.)
+2. The requirement text (shall statement)
+3. Category (functional/non-functional/constraint)
+4. Priority (critical/high/medium/low)
+5. Verification method (test/analysis/inspection/demonstration)
+6. Brief rationale
+
+Format as JSON array.
+"""
+                ),
+            ]
+
+            try:
+                response = self.model.invoke(messages)
+                content = response.content
+
+                # Parse the response (simplified - production would use structured output)
+                self.logger.log_complete("Requirements analysis", "Generated initial requirements")
+
+                # Create sample requirements (in production, parse LLM output)
+                new_requirements = {
+                    "REQ-001": Requirement(
+                        id="REQ-001",
+                        text="The system shall accept user input describing a software project objective",
+                        category="functional",
+                        priority="critical",
+                        verification_method="test",
+                        rationale="Core functionality needed to initiate any project",
+                        created_by=self.name,
+                    ),
+                    "REQ-002": Requirement(
+                        id="REQ-002",
+                        text="The system shall maintain persistent state across sessions",
+                        category="non-functional",
+                        priority="high",
+                        verification_method="test",
+                        rationale="Required for long-running projects",
+                        created_by=self.name,
+                    ),
+                    "REQ-003": Requirement(
+                        id="REQ-003",
+                        text="The system shall provide human approval gates for critical decisions",
+                        category="functional",
+                        priority="high",
+                        verification_method="demonstration",
+                        rationale="Human oversight is essential for safety and quality",
+                        created_by=self.name,
+                    ),
+                }
+
+                updates["requirements"] = new_requirements
+                updates["messages"].append(
+                    f"[{self.name}] Developed {len(new_requirements)} initial requirements"
+                )
+
+                # Mark work item as complete
+                work_item.status = WorkItemStatus.COMPLETED
+                updates["work_queue"] = state.work_queue
+
+                # Request review
+                updates["messages"].append(
+                    f"[{self.name}] Requirements ready for review"
+                )
+
+            except Exception as e:
+                self.logger.log_error("Requirements development", e)
+                updates["messages"].append(f"[{self.name}] Error: {str(e)}")
+
+        return updates

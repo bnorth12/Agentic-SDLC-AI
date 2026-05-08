@@ -1,40 +1,32 @@
-# Architecture
+# System Architecture
 
-## System Overview
+## High-Level Design
+This system uses a **hierarchical LangGraph** with persistent state.
 
-The platform uses a hierarchical **LangGraph** topology:
+- **Level 0 (Supervisor)**: Program Manager + Chief Engineer agents
+- **Level 1**: Specialist Agents (Requirements, Architecture, Safety, etc.)
+- **Level 2**: Review Board Subgraphs (multi-agent collaborative reviews)
 
-1. **Program Manager Supervisor** handles mission goals, scope, and release priorities.
-2. **Chief Engineer Supervisor** manages technical decomposition and cross-discipline trade-offs.
-3. **Specialist Agent Layer** executes role-specific tasks (requirements, architecture, development, verification, safety/security, configuration management).
-4. **Review Board Subgraphs** enforce governance gates (design review, safety review, release readiness).
+## Core Components
 
-## High-Level Graph Design
+### Shared State (`AgentState`)
+- Current artifacts (requirements, architecture, code baseline, etc.)
+- Risk register, decision log, history summary
+- Program metrics (schedule, open issues, verification status)
 
-Conceptual flow:
+### Persistence
+- LangGraph `PostgresCheckpointer` → survives restarts
+- pgvector → long-term memory & RAG
 
-- Intake objective
-- Decompose into SDLC work packages
-- Route to specialist agents
-- Aggregate artifacts into shared state
-- Trigger board reviews at phase gates
-- Escalate HITL interrupts for approvals/waivers
-- Finalize and publish outcomes
+### Human-in-the-Loop
+LangGraph `interrupt_before` / `interrupt_after` nodes allow experts to review, edit, or override decisions.
 
-## State Management
+### Review Boards
+Implemented as reusable subgraphs where multiple specialist agents debate, vote, and produce a recommendation. Chief Engineer / Program Manager can override with justification.
 
-- Shared typed state model via Pydantic (`AgentState`)
-- Persistent checkpoints (PostgreSQL) for resumable runs
-- Explicit message and artifact channels for traceability
-- Decision log entries for governance/audit
-
-## HITL Flow
-
-Human intervention is used for:
-
-- Scope/requirement approval
-- Safety/security critical decisions
-- Architecture exceptions and waivers
-- Release go/no-go decisions
-
-Interrupt points are designed as explicit graph nodes so execution can pause safely and resume with approved context.
+## Data Flow
+1. New task → Supervisor routes to appropriate agent(s)
+2. Agent works → updates shared state
+3. Major decision → routed to Review Board subgraph
+4. HITL interrupt (if configured)
+5. Continue or loop back as needed

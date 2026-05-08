@@ -1,27 +1,26 @@
 # Hardware Requirements
 
-This guide provides practical sizing for local/self-hosted deployments using Ollama (or compatible inference runtimes).
+## Minimal (Prototyping)
+- CPU: Modern 8+ core
+- RAM: 32 GB
+- GPU: 8–12 GB VRAM (e.g., RTX 3060/4060) or Apple M1/M2
+- Storage: 500 GB SSD
+- Models: 7B–13B quantized (Llama 3.1 8B, Mistral, etc.)
 
-## Sizing Tiers
+## Recommended (Daily Use)
+- CPU: 12+ core
+- RAM: 64–128 GB
+- GPU: RTX 4090 (24 GB) or better / Apple M3 Max / M4 Pro (64+ GB unified)
+- Storage: 1–2 TB NVMe SSD
+- Models: 32B–70B quantized
 
-| Tier | CPU | RAM | GPU | Target Models | Use Case |
-| --- | --- | --- | --- | --- | --- |
-| Minimal | 8 cores | 32 GB | Optional (8 GB VRAM) | 3B-8B quantized | Personal experiments |
-| Recommended | 12-16 cores | 64 GB | 24 GB VRAM | 8B-14B | Daily engineering workflow |
-| Production | 32+ cores | 128+ GB | 48-80 GB+ total VRAM | 14B-70B (distributed/quantized) | Multi-user persistent orchestration |
+## Production / Heavy Workloads
+- Multi-GPU server (2–4 × 4090 or A6000)
+- 128–256 GB RAM
+- Dedicated storage array
+- Supports 70B+ models or multiple simultaneous agents
 
-## Storage
-
-- NVMe SSD strongly recommended
-- 100+ GB free for models, checkpoints, embeddings, and logs
-- Use dedicated volumes for Postgres durability
-
-## Networking
-
-- Stable low-latency local network between app, model host, and database
-- Consider reverse proxy and TLS termination for multi-user deployments
-
-## Notes
-
-- Quantized models reduce VRAM at quality/performance trade-offs.
-- For production, plan observability and backup capacity in addition to inference hardware.
+**Notes**:
+- Ollama works great for most use cases.
+- Use quantized models (Q4_K_M / Q5_K_M) for best performance.
+- CPU-only is possible but slow for larger models.

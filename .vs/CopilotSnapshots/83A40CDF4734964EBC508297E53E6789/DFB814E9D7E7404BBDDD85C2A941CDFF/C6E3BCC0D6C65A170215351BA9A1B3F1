@@ -1,0 +1,38 @@
+﻿# Application Settings
+APP_ENV=development
+LOG_LEVEL=INFO
+
+# Ollama Model Provider
+OLLAMA_BASE_URL=http://localhost:11434
+OLLAMA_MODEL=llama3.1:8b-instruct-q4_K_M
+
+# Role-specific models (optional - will use OLLAMA_MODEL if not specified)
+# MODEL_PROGRAM_MANAGER=llama3.1:8b-instruct-q4_K_M
+# MODEL_CHIEF_ENGINEER=llama3.1:8b-instruct-q4_K_M
+# MODEL_REQUIREMENTS=llama3.1:8b-instruct-q4_K_M
+# MODEL_ARCHITECTURE=llama3.1:8b-instruct-q4_K_M
+
+# PostgreSQL Persistence
+POSTGRES_URL=postgresql://agentic:agentic@localhost:5432/agentic_sdlc
+CHECKPOINT_TABLE=langgraph_checkpoints
+VECTOR_TABLE=agent_embeddings
+
+# Human-in-the-Loop Settings
+ENABLE_HITL=true
+HITL_TIMEOUT_SECONDS=300
+AUTO_APPROVE_LOW_RISK=false
+
+# Performance Settings
+DEFAULT_TIMEOUT_SECONDS=120
+MAX_ITERATIONS=25
+TEMPERATURE=0.7
+
+# Memory & Context
+ENABLE_VECTOR_MEMORY=true
+MAX_CONTEXT_MESSAGES=20
+SUMMARIZATION_THRESHOLD=10
+
+# Observability (Optional)
+ENABLE_TRACING=false
+# LANGSMITH_API_KEY=your_api_key_here
+LANGSMITH_PROJECT=agentic-sdlc-ai

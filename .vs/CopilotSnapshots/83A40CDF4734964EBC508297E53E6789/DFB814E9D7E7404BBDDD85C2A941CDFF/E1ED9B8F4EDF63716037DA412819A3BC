@@ -1,0 +1,32 @@
+﻿"""State management for the Agentic SDLC system."""
+
+from src.state.persistence import PersistenceManager, get_persistence_manager
+from src.state.schema import (
+    AgentState,
+    BoardDecision,
+    Decision,
+    DecisionStatus,
+    Phase,
+    Requirement,
+    Risk,
+    StateMetadata,
+    VerificationStatus,
+    WorkItem,
+    WorkItemStatus,
+)
+
+__all__ = [
+    "AgentState",
+    "BoardDecision",
+    "Decision",
+    "DecisionStatus",
+    "Phase",
+    "PersistenceManager",
+    "Requirement",
+    "Risk",
+    "StateMetadata",
+    "VerificationStatus",
+    "WorkItem",
+    "WorkItemStatus",
+    "get_persistence_manager",
+]

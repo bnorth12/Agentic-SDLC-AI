@@ -1,49 +1,27 @@
-# Agent Roles
+# Agent Roles & Responsibilities
 
-## Supervisory Roles
+## Leadership
+- **Program Manager Agent**: Overall schedule, resources, stakeholder alignment, work planning
+- **Chief Engineer Agent**: Technical authority, design decisions, trade studies, governance enforcement
 
-### Program Manager
-- **Responsibility:** Mission planning, milestone definition, priority management.
-- **Authority:** Approves scope and release objectives.
-- **Interactions:** Coordinates with Chief Engineer and governance boards.
+## Core Engineering Agents
+- **Systems Engineering**: Requirements flow-down, interface control, system architecture oversight
+- **Requirements Development**: Elicitation, analysis, traceability, verification criteria
+- **Safety / Security / Reliability**: Hazard analysis, threat modeling, FMEA, security controls
+- **Systems Architecture**: High-level design, views (DoDAF/TAF), patterns & standards
+- **Interface Design**: ICDs, APIs, data exchange specifications
+- **Software Development**: Code generation, refactoring, module implementation
+- **Verification & Validation**: Test plan generation, automated testing, V&V execution
+- **Integration & Test**: System integration planning and execution
+- **Configuration Management**: Baselines, change control, versioning
+- **Data Management**: Data architecture, models, quality, governance
+- **Documentation & Training**: User manuals, training materials, sustainment docs
 
-### Chief Engineer
-- **Responsibility:** Technical leadership and cross-domain arbitration.
-- **Authority:** Approves architecture direction and integration strategy.
-- **Interactions:** Delegates to specialist agents and triggers board reviews.
+## Support Roles (to be added)
+- Quality Assurance
+- DevOps / Deployment
+- Human Factors / Usability
+- Cost & Schedule Analysis
+- Operations & Sustainment
 
-## Specialist SDLC Roles
-
-### Systems Engineering Agent
-- Defines system context, interfaces, and constraints.
-- Maintains system-level traceability from objectives to design artifacts.
-
-### Requirements Agent
-- Produces structured, testable requirements.
-- Manages change impact and requirement baseline updates.
-
-### Safety/Security/Reliability Agent
-- Performs hazard/threat analysis and reliability assessments.
-- Escalates critical findings to HITL and review boards.
-
-### Architecture Agent
-- Produces logical/physical architecture candidates and trade studies.
-- Aligns design decisions with non-functional requirements.
-
-### Development Agent
-- Generates implementation plans and code changes.
-- Coordinates with Verification Agent on acceptance criteria.
-
-### Verification & Validation Agent
-- Creates test strategies, traceability, and evidence mapping.
-- Validates implementation against requirements and safety constraints.
-
-### Configuration Management Agent
-- Maintains baselines, version metadata, and release manifests.
-- Enforces branching, change control, and reproducibility checks.
-
-## Review Boards (Subgraphs)
-
-- **Design Review Board:** Architecture and interface consistency gate.
-- **Safety/Security Review Board:** Risk acceptance gate.
-- **Release Readiness Board:** Integration, validation, and deployment gate.
+Each agent has defined **authority levels**, **required approvals**, and **handoff protocols** documented in code.
