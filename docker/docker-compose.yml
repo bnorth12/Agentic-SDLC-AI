@@ -22,7 +22,7 @@ services:
       context: ..
       dockerfile: docker/Dockerfile
     env_file:
-      - ../.env.example
+      - ../.env
     depends_on:
       - ollama
       - postgres
