@@ -1,6 +1,6 @@
 # Makefile for Agentic SDLC AI
 
-.PHONY: help setup install test lint format clean run-example health check-db pull-models
+.PHONY: help setup install test lint format clean run-example health check-db pull-models governance-validate
 
 help:
     @echo "Agentic SDLC AI - Development Commands"
@@ -15,6 +15,7 @@ help:
     @echo "  make lint         - Run linters"
     @echo "  make format       - Format code"
     @echo "  make health       - Check system health"
+    @echo "  make governance-validate - Validate governance evidence sample"
     @echo ""
     @echo "Running:"
     @echo "  make run-example  - Run basic example"
@@ -73,6 +74,10 @@ run-example:
 run-cli:
     @echo "🚀 Running CLI..."
     python -m src.cli.main --help
+
+governance-validate:
+    @echo "🛡️  Validating governance evidence..."
+    python scripts/validate_governance_evidence.py --input examples/governance/sample_gate2_outputs.json --gate gate_2
 
 clean:
     @echo "🧹 Cleaning up..."

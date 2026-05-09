@@ -124,15 +124,60 @@ See [`docs/hardware-requirements.md`](docs/hardware-requirements.md)
 
 ---
 
+## Capabilities & System Overview
+
+Start here to understand what Agentic-SDLC-AI does and how the multi-agent concept enables governance-driven SDLC workflows:
+
+- [`docs/CAPABILITIES.md`](docs/CAPABILITIES.md) — High-level capabilities, agent roles, orchestration flow, example workflows
+- [`docs/agent-roles.md`](docs/agent-roles.md) — Detailed agent specifications, responsibilities, and decision authorities
+
+---
+
 ## Roadmap
 
 See [`docs/roadmap.md`](docs/roadmap.md) — currently in **Phase 0 (Foundation)**.
+
+See also [`docs/project-plan/PROJECT_PLAN.md`](docs/project-plan/PROJECT_PLAN.md) and [`docs/project-plan/SPRINT_SUCCESSION.md`](docs/project-plan/SPRINT_SUCCESSION.md) for detailed 8-sprint delivery plan.
+
+---
+
+## Governance Policies and Plans
+
+For policy-driven agent operations and HITL review guidance, see:
+
+- [`docs/policies/README.md`](docs/policies/README.md)
+- [`docs/plans/README.md`](docs/plans/README.md)
+- [`docs/governance/README.md`](docs/governance/README.md)
+
+These documents define what agents must enforce and how lifecycle gates are approved from requirements through release.
+
+---
+
+## Product Requirements & Architecture
+
+For formal requirements with full traceability and architecture details:
+
+- [`docs/requirements/PRODUCT_REQUIREMENTS.md`](docs/requirements/PRODUCT_REQUIREMENTS.md) — 34 seed requirements with 4-level hierarchy, parent-child traceability, and verification statements
+- [`docs/plans/requirements-management-plan.md`](docs/plans/requirements-management-plan.md) — Authoring standard for noun-SHALL-verb format, ID scheme, and all 11 mandatory requirement attributes
+- [`docs/architecture.md`](docs/architecture.md) — Technical architecture decisions and rationale
 
 ---
 
 ## Agent Roles
 
 See [`docs/agent-roles.md`](docs/agent-roles.md) for the full list of planned agents and their responsibilities.
+
+---
+
+## Governance Policies and Plans
+
+For policy-driven agent operations and HITL review guidance, see:
+
+- [`docs/policies/README.md`](docs/policies/README.md)
+- [`docs/plans/README.md`](docs/plans/README.md)
+- [`docs/governance/README.md`](docs/governance/README.md)
+
+These documents define what agents must enforce and how lifecycle gates are approved from requirements through release.
 
 ---
 

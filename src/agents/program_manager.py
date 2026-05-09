@@ -65,6 +65,27 @@ class ProgramManagerAgent(BaseAgent):
                 f"[{self.name}] Transitioning to REQUIREMENTS phase and assigning work"
             )
 
+            updates.update(
+                self.build_governance_output(
+                    gate="gate_1",
+                    policy_ids=["PMP-001", "SEMP-001"],
+                    traceability_links=[
+                        {
+                            "objective": state.objective,
+                            "work_items": [item.id for item in work_items],
+                        }
+                    ],
+                    evidence_links={
+                        "objective_statement": state.objective,
+                        "initial_backlog": [item.id for item in work_items],
+                        "initial_risk_register": (
+                            list(state.risks.keys()) if state.risks else ["no_open_risks"]
+                        ),
+                    },
+                    notes="Objective accepted and initial scoped backlog created",
+                )
+            )
+
         # Check for phase transitions
         elif state.phase == Phase.REQUIREMENTS:
             if len(state.requirements) > 0 and not state.active_board:

@@ -1,6 +1,5 @@
 """State management for the Agentic SDLC system."""
 
-from src.state.persistence import PersistenceManager, get_persistence_manager
 from src.state.schema import (
     AgentState,
     BoardDecision,
@@ -14,6 +13,18 @@ from src.state.schema import (
     WorkItem,
     WorkItemStatus,
 )
+
+try:
+    from src.state.persistence import PersistenceManager, get_persistence_manager
+except ModuleNotFoundError:  # Optional dependency may not be installed in all environments.
+    PersistenceManager = None  # type: ignore[assignment]
+
+    def get_persistence_manager() -> None:
+        """Placeholder when persistence extras are unavailable."""
+        raise ModuleNotFoundError(
+            "Persistence dependencies are unavailable. Install optional postgres "
+            "checkpoint dependencies to use persistence features."
+        )
 
 __all__ = [
     "AgentState",

@@ -14,6 +14,10 @@ from src.tools.file_operations import (
     write_file,
     write_json,
 )
+from src.tools.governance_validation import (
+    validate_agent_output,
+    validate_outputs,
+)
 from src.tools.memory_tools import MemoryStore, get_memory_store
 
 __all__ = [
@@ -26,6 +30,8 @@ __all__ = [
     "parse_python_code",
     "read_file",
     "read_json",
+    "validate_agent_output",
+    "validate_outputs",
     "validate_code_style",
     "write_file",
     "write_json",

@@ -90,6 +90,9 @@ class BaseAgent(ABC):
         # Default escalation logic - can be overridden
         escalation_keywords = [
             "unsafe",
+            "safety issue",
+            "critical safety",
+            "critical",
             "critical risk",
             "requirement conflict",
             "design flaw",
@@ -120,6 +123,43 @@ class BaseAgent(ABC):
             "messages": [
                 f"[{self.name}] Requesting {board_name} for: {item}\nRationale: {rationale}"
             ],
+        }
+
+    def build_governance_output(
+        self,
+        gate: str,
+        policy_ids: list[str],
+        traceability_links: list[dict[str, Any]],
+        evidence_links: dict[str, Any],
+        risks_or_blockers: list[str] | None = None,
+        status: str = "READY",
+        notes: str = "",
+    ) -> dict[str, Any]:
+        """Build a governance output payload and top-level fields for gate validation."""
+        payload = {
+            "agent": self.name,
+            "policy_compliance": {
+                "status": "PASS" if status == "READY" else "CONDITIONAL",
+                "policies": policy_ids,
+            },
+            "traceability_links": traceability_links,
+            "gate_readiness": {
+                "gate": gate,
+                "status": status,
+                "notes": notes,
+            },
+            "evidence_links": evidence_links,
+            "risks_or_blockers": risks_or_blockers or [],
+        }
+
+        return {
+            "current_gate": gate,
+            "policy_compliance": payload["policy_compliance"],
+            "traceability_links": payload["traceability_links"],
+            "gate_readiness": payload["gate_readiness"],
+            "evidence_links": payload["evidence_links"],
+            "risks_or_blockers": payload["risks_or_blockers"],
+            "governance_output": payload,
         }
 
     def __call__(self, state: AgentState) -> dict[str, Any]:
