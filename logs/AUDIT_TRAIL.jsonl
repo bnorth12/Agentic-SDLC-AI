@@ -1,0 +1,6 @@
+# Audit Trail Log
+# JSON Lines format: one decision per line
+# This log will track all governance decisions throughout Sprint 0 and beyond
+
+# Example entry (first real entry will be logged during Sprint 0):
+# {"date": "2026-05-XX", "decision_id": "SP0-0001", "phase": "planning", "actor": "Chief Engineer", "action": "Approved Sprint 0 plan", "confidence": 95, "rationale": "Complete governance framework needed before agent execution", "approval": "self-approved", "outcome": "approved", "notes": "Foundation for Sprint 1"}
