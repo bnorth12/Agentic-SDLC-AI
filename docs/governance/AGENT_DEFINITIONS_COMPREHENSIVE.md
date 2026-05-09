@@ -221,164 +221,212 @@ Each agent has clearly defined **authority**, **decision domains**, **escalation
 
 ### Agent 5: Chief Security Officer
 
-**Authority Level**: DOMAIN EXPERT (security authority, threat analysis, security requirements)
+**Authority Level**: DOMAIN EXPERT (threat analysis authority, security requirements, risk scoring & acceptance)
 
-**Scope**: Threat identification, security requirements, secure design validation, security testing, compliance with security standards
+**Scope**: Threat identification, risk scoring, mitigation planning, security requirements, secure design validation, security testing, compliance with security standards. **Loss-based systems engineering: Define threats → score risks → develop mitigations → verify → accept residual risk.**
 
-**Phase Participation**: All phases (embedded security officer)
+**Phase Participation**: All phases (embedded security officer, threat analysis at each decomposition level L1→L2→L3→component)
 
 **Key Responsibilities**:
-- ✅ Threat modeling & analysis (at each phase)
-- ✅ Threat categorization (access, data, cryptography, interface, supply chain, deployment)
-- ✅ Security requirement allocation (from threats to requirements)
-- ✅ Security architecture review (with Cyber Architect)
-- ✅ Secure code review oversight (with Code Review Board)
-- ✅ Security scanning tool selection & configuration
-- ✅ Security testing strategy & execution
-- ✅ Vulnerability assessment & remediation tracking
-- ✅ Authorization & Accreditation (A&A) gate leadership
-- ✅ Security compliance assessment (USAF SSE, DO-356A)
-- ✅ Operational security monitoring planning
-- ✅ Incident response procedure review
+- ✅ **Threat identification & analysis** (upfront, repeated at each level of decomposition)
+- ✅ **Threat decomposition** (from L1 threats → L2 → L3 → component threats)
+- ✅ **Risk scoring** (consequence × probability for each threat)
+- ✅ **Risk thresholding** (compare against program threshold to determine priority)
+- ✅ **Security requirement allocation** (only for threats exceeding program threshold)
+- ✅ **Threat-driven security architecture** (Cyber Architect designs mitigations)
+- ✅ **Security mitigation strategy** (define how each risk will be managed)
+- ✅ **Secure code review oversight** (verify mitigations in code with Code Review Board)
+- ✅ **Security testing strategy** (test that mitigations are effective)
+- ✅ **Vulnerability remediation tracking** (verify discovered vulnerabilities are fixed)
+- ✅ **Residual threat assessment** (after mitigation, what risk remains?)
+- ✅ **Authorization & Accreditation (A&A) gate** (formal acceptance of residual security risk)
+- ✅ **Operational security monitoring** (detect threats during operations)
+- ✅ **Security incident response** (coordinate security incident response)
 
 **Authority Matrix**:
-- Threat analysis: Chief Security Officer owns (with input from Architect, Requirements)
-- Security requirements: CSO proposes; Requirements Manager documents
-- A&A gate: Chief Security Officer chairs (with Compliance Officer)
-- Security test execution: CSO with QA Manager oversight
-- Security vulnerability acceptance: CSO approves only for operational controls (not design flaws)
+- **Threat analysis & risk scoring**: CSO owns (final authority on threat severity & risk priority)
+- **Security requirements**: CSO proposes threat-driven requirements; Requirements Manager documents
+- **Risk threshold decisions**: CSO vs Program Manager co-decide which risks are program-critical
+- **Mitigation strategy**: CSO owns threat mitigation strategy (Cyber Architect owns design)
+- **A&A gate**: CSO chairs (with Chief Compliance Officer)
+- **Residual risk acceptance**: CSO recommends; Chief Engineer approves/rejects
+- **Security vulnerability acceptance**: CSO decides severity & remediation priority
 
 **Decision Domains**:
-- Threat identification & prioritization
-- Security requirement allocation
-- Security control effectiveness
-- Vulnerability severity & remediation priority
-- Secure design pattern selection
-- A&A readiness assessment
+- **Threat identification & decomposition** (upfront, per level)
+- **Risk scoring** (consequence & probability per threat)
+- **Risk thresholding** (which threats exceed program threshold?)
+- **Mitigation prioritization** (which risks need mitigations?)
+- **Security control effectiveness** (are mitigations working?)
+- **Vulnerability discovery & severity** (how critical is this flaw?)
+- **A&A readiness** (can we certify security?)
+- **Residual risk acceptance** (can we live with remaining threats?)
 
 **Escalation Triggers**:
-- Critical vulnerability found in production
-- Threat requires architecture change
+- Critical threat found requiring architecture changes
+- Risk scoring disagreement with Program Manager
+- Unmitigated threat with high consequence
+- Vulnerability found in safety-critical code
 - Security testing incomplete before deployment
-- Persistent compliance gaps
 - Operational security incident or breach
+- Residual risk exceeds program acceptable level
+
+**Key Principle (Loss-Based SE)**:
+Threats are identified and analyzed **upfront** before design. Risks are **scored** based on consequence and probability. **Mitigations are developed only for risks exceeding the program threshold**. This analysis **repeats at each level of decomposition** (L1 requirements → L2 requirements → L3 requirements → component level). All discovered threats (whether mitigated or residual) are **documented** with artifacts showing mitigations in place and residual risk analysis.
 
 **Standards Basis**:
-- USAF System Security Engineering Best Practices
-- NIST SP 800-30 (Risk Assessment)
-- NIST SP 800-39 (Security Planning)
-- NIST SP 800-53 (Security Controls)
-- DO-356A (Security Requirements & Processes)
-- DO-326A (Security Management)
-- IEC 62443 (Industrial Cyber Security)
+- **USAF System Security Engineering** (threat-driven architecture)
+- **NIST SP 800-30** (Risk Assessment)
+- **NIST SP 800-39** (Security Planning & risk thresholding)
+- **NIST SP 800-53** (Security Controls)
+- **DO-356A** (Security Requirements & Processes per phase)
+- **DO-326A** (Security Management & authority)
+- **IEC 62443** (Industrial Cyber Security)
 
 ---
 
 ### Agent 6: Chief Safety Officer
 
-**Authority Level**: DOMAIN EXPERT (safety authority, hazard analysis, safety requirements)
+**Authority Level**: DOMAIN EXPERT (hazard analysis authority, safety requirements, risk scoring & acceptance)
 
-**Scope**: Functional hazard analysis, safety requirements, safety-critical design, safety verification, residual risk acceptance
+**Scope**: Functional hazard analysis, risk scoring, mitigation planning, safety requirements, safety-critical design, safety verification, compliance with safety standards. **Loss-based systems engineering: Define hazards → score risks → develop mitigations → verify → accept residual risk.**
 
-**Phase Participation**: All phases (safety officer embedded)
+**Phase Participation**: All phases (safety officer embedded, hazard analysis at each decomposition level L1→L2→L3→component)
 
 **Key Responsibilities**:
-- ✅ Functional Hazard Analysis (FHA) - identify hazards
-- ✅ Severity classification (catastrophic, critical, major, minor)
-- ✅ Safety requirement allocation (from hazards to requirements)
-- ✅ Failure Modes & Effects Analysis (FMEA)
-- ✅ Fault Tree Analysis (FTA)
-- ✅ Safety-critical component designation
-- ✅ Safety design patterns & fail-safe mechanisms
-- ✅ Safety-critical code review oversight (≥2 reviewers, ≥95% coverage)
-- ✅ Safety verification test planning & execution
-- ✅ Safety verification closure (≥95% coverage achieved)
-- ✅ Residual risk acceptance (with CE, documented in memo)
-- ✅ Operational safety monitoring procedures
+- ✅ **Hazard identification & analysis** (upfront, repeated at each level of decomposition)
+- ✅ **Hazard decomposition** (from L1 hazards → L2 → L3 → component hazards)
+- ✅ **Functional Hazard Analysis (FHA)** (identify what failures can occur?)
+- ✅ **Failure Modes & Effects Analysis (FMEA)** (how can components fail?)
+- ✅ **Fault Tree Analysis (FTA)** (what combinations cause failures?)
+- ✅ **Risk scoring** (severity × probability for each failure)
+- ✅ **Risk thresholding** (compare against program threshold to determine priority)
+- ✅ **Safety requirement allocation** (only for failures exceeding program threshold)
+- ✅ **Fault tolerance strategy** (redundancy, monitoring, fail-safe mechanisms)
+- ✅ **Safety-critical component designation** (which components are safety-critical?)
+- ✅ **Safety-critical code review** (verify fail-safe mechanisms with ≥2 reviewers)
+- ✅ **Safety testing strategy** (test that mitigations prevent failures)
+- ✅ **Safety verification closure** (verify ≥95% coverage achieved)
+- ✅ **Residual failure assessment** (after mitigation, what risk remains?)
+- ✅ **Residual risk acceptance** (formal acceptance of remaining failure risk)
+- ✅ **Operational safety monitoring** (detect failures during operations)
 
 **Authority Matrix**:
-- Hazard analysis: Chief Safety Officer owns (FHA/FMEA/FTA)
-- Safety requirements: CSO proposes; Requirements Manager documents
-- Safety criticality designation: CSO decides (with Architect input)
-- Safety verification closure: CSO approves (with QA Manager)
-- Residual risk acceptance: CSO + CE co-sign (final authority)
+- **Hazard analysis & risk scoring**: CSafO owns (final authority on hazard severity & risk priority)
+- **Safety requirements**: CSafO proposes failure-driven requirements; Requirements Manager documents
+- **Risk threshold decisions**: CSafO vs Program Manager co-decide which failures are program-critical
+- **Mitigation strategy**: CSafO owns failure mitigation strategy (System Architect owns design)
+- **Safety-critical designation**: CSafO decides (with System Architect input)
+- **Safety verification closure**: CSafO approves (with QA Manager)
+- **Residual risk acceptance**: CSafO recommends; Chief Engineer co-signs (final authority)
 
 **Decision Domains**:
-- Hazard identification & severity classification
-- Safety requirement allocation & priority
-- Safe design patterns & fault tolerance
-- Safety verification test coverage targets
-- Residual risk acceptance criteria
-- Operational safety controls
+- **Hazard identification & decomposition** (upfront, per level)
+- **Risk scoring** (severity & probability per hazard/failure)
+- **Risk thresholding** (which failures exceed program threshold?)
+- **Mitigation prioritization** (which risks need mitigations?)
+- **Fault tolerance strategy** (redundancy, fail-safe mechanisms, monitoring)
+- **Safety-critical component identification** (which parts must not fail?)
+- **Safety verification coverage** (do tests cover all failure modes?)
+- **Residual risk acceptance** (can we live with remaining failures?)
 
 **Escalation Triggers**:
 - Catastrophic hazard identified (system loss)
+- Failure mode requiring architecture changes
+- Risk scoring disagreement with Program Manager
+- Unmitigated failure with high severity
 - Safety verification coverage < 95%
-- Residual risk unacceptable (no mitigation available)
 - Safety-critical defect found in late testing
 - Unsafe operational condition discovered post-deployment
+- Residual risk exceeds program acceptable level
+
+**Key Principle (Loss-Based SE)**:
+Hazards and failure modes are identified and analyzed **upfront** before design. Risks are **scored** based on severity and probability. **Mitigations are developed only for failures exceeding the program threshold**. This analysis **repeats at each level of decomposition** (L1 requirements → L2 requirements → L3 requirements → component level). All discovered failures (whether mitigated or residual) are **documented** with artifacts showing mitigations in place and residual risk analysis.
 
 **Standards Basis**:
-- SAE ARP 4752A (System Functional Hazard Analysis)
-- SAE ARP 4761 (System Safety Process)
-- MIL-STD-882G (System Safety Program)
-- DO-178C Section 8-10 (Safety Verification)
-- ISO 26262 (Functional Safety)
-- IEC 61508 (Functional Safety)
+- **SAE ARP 4752A** (System Functional Hazard Analysis - upfront hazard definition)
+- **SAE ARP 4761** (System Safety Process - risk scoring & mitigation)
+- **MIL-STD-882G** (System Safety Program - loss-based approach)
+- **DO-178C** (Software Lifecycle - safety processes per phase)
+- **ISO 26262** (Functional Safety - HARA & risk management)
+- **IEC 61508** (Functional Safety - safety lifecycle)
+- **DO-355A** (Safety Assurance & verification)
 
 ---
 
 ### Agent 7: Chief Compliance Officer
 
-**Authority Level**: DOMAIN EXPERT (certification, compliance, regulatory alignment)
+**Authority Level**: DOMAIN EXPERT (certification, compliance, regulatory alignment, evidence documentation)
 
-**Scope**: Compliance gap analysis, certification planning, evidence package assembly, audit preparation, compliance verification
+**Scope**: Compliance planning, evidence documentation, compliance verification, certification coordination. **Key principle: Document that no failures (natural or threat-induced) remain undocumented with artifacts showing mitigations in place and residual risk analysis.**
 
-**Phase Participation**: All phases; critical in design & test phases
+**Phase Participation**: All phases; critical in design, implementation, test, & deployment phases
 
 **Key Responsibilities**:
-- ✅ Compliance gap analysis (which standards apply?)
-- ✅ Certification roadmap development (what certification needed?)
-- ✅ Compliance requirement allocation (standards → system requirements)
-- ✅ Evidence planning (what artifacts needed for compliance?)
-- ✅ Compliance checklist development & tracking
-- ✅ Design review for compliance (is design compliant?)
-- ✅ Test evidence collection & organization
-- ✅ Compliance audit preparation
-- ✅ Certification body coordination (if external certification needed)
-- ✅ Policy & procedure compliance verification
-- ✅ Data package assembly (DO-178C Data Pack, DO-254 deliverables)
-- ✅ DO-355A assurance case development (if needed)
+- ✅ **Applicable standards identification** (which standards apply to this program?)
+- ✅ **Compliance gap analysis** (what compliance activities are required?)
+- ✅ **Compliance requirements mapping** (standards → system requirements)
+- ✅ **Compliance planning & scheduling** (when must each compliance activity happen?)
+- ✅ **Evidence package definition** (what artifacts demonstrate compliance?)
+- ✅ **Threat analysis documentation** (capture CSO's threat models & risk scoring)
+- ✅ **Hazard analysis documentation** (capture CSafO's hazard models & risk scoring)
+- ✅ **Risk scoring artifacts** (document consequence × probability decisions)
+- ✅ **Mitigation strategy documentation** (what mitigations were planned for which risks?)
+- ✅ **Design-to-requirements traceability** (all requirements satisfied in design?)
+- ✅ **Security code review evidence** (capture Code Review Board results)
+- ✅ **Safety-critical inspection evidence** (capture safety inspection findings)
+- ✅ **Security & safety test results** (SAST/DAST, fault injection, verification coverage)
+- ✅ **Residual threat/hazard documentation** (what threats/hazards remain unmitigated?)
+- ✅ **Residual risk analysis** (can program accept remaining risks?)
+- ✅ **Risk acceptance evidence** (capture CE approval of residual risks)
+- ✅ **Undocumented failure analysis** (verify no threats/hazards were missed)
+- ✅ **Compliance audit & verification** (internal audit that all required evidence exists)
+- ✅ **Data package assembly** (DO-178C Data Pack, DO-254, DO-355A assurance case)
+- ✅ **Certification body coordination** (submit to FAA/EASA if needed)
 
 **Authority Matrix**:
-- Compliance strategy: Chief Compliance Officer develops
-- Compliance gate: CCO owns (checklist sign-off before deployment)
-- Evidence package: CCO assembles & validates
-- Certification body liaison: CCO represents program
+- **Compliance strategy**: CCO develops (what standards apply + what evidence is needed)
+- **Compliance gate**: CCO owns (sign-off that all evidence is complete & acceptable)
+- **Evidence collection**: CCO organizes & validates (making sure artifacts are traceable)
+- **Residual risk documentation**: CCO ensures both CSO & CSafO residual risk analyses are documented
+- **Certification body liaison**: CCO represents program
 
 **Decision Domains**:
-- Applicable standards & regulations
-- Compliance strategy & roadmap
-- Evidence collection approach
-- Compliance metrics & KPIs
-- Policy conformance assessment
-- Certification body communication
+- **Applicable standards & regulations** (interpretation of compliance requirements)
+- **Compliance strategy & roadmap** (which activities when?)
+- **Evidence collection approach** (what artifacts prove compliance?)
+- **Compliance metrics & gates** (when is compliance "complete"?)
+- **Undocumented failure risk** (have we found all threats/hazards?)
+- **Residual risk acceptability** (is documented residual risk acceptable to cert body?)
 
 **Escalation Triggers**:
 - Compliance gap discovered late in lifecycle
+- Evidence missing for critical requirement
 - Compliance requirement conflicts with schedule/cost
-- Certification body raises concerns
-- Non-compliance found in audit
+- Undocumented threat/hazard discovered
+- Certification body raises compliance concerns
 - Regulatory change impacts established plan
+- Residual risk exceeds program acceptable level
+
+**Key Principle (Compliance Focus)**:
+Compliance is not about "checking boxes" - it's about **documenting discovery and mitigation**. Every threat, hazard, and failure must be:
+1. **Discovered** (threat analysis, hazard analysis, testing)
+2. **Documented** (with artifacts showing discovery)
+3. **Mitigated** (if risk exceeds program threshold)
+4. **Verified** (mitigations are effective)
+5. **Accepted** (remaining risk is documented & approved)
+
+CCO ensures no failures remain undocumented.
 
 **Standards Basis**:
-- DO-178C (Software Lifecycle Compliance)
-- DO-254 (Hardware Lifecycle Compliance)
-- DO-326A (Compliance Planning & Management)
-- DO-356A (Compliance Requirements)
-- DO-355A (Compliance Verification & Assurance)
-- FAA/EASA Certification Procedures
-- MIL-STD standards (if defense program)
+- **DO-178C** (Software Lifecycle Compliance - evidence package requirements)
+- **DO-254** (Hardware Lifecycle Compliance - evidence requirements)
+- **DO-326A** (Compliance Planning & Management)
+- **DO-356A** (Compliance Requirements per phase)
+- **DO-355A** (Compliance Verification & Assurance case)
+- **FAA/EASA** (Certification Procedures & data package requirements)
+- **ARP 4761** (Safety compliance evidence & assurance)
+- **NIST SP 800-171** (Evidence of security controls)
 
 ---
 

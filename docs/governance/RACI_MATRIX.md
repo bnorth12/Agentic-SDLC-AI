@@ -36,14 +36,16 @@ RACI is organized by SE domain (per INCOSE/NASA/USAF taxonomy):
 7. **Governance & Decision Management** (Gov)
 
 **NEW Domains** (6) - Added for Assured SDLC:
-8. **Security** (SEC) - Threat analysis, security architecture, testing
-9. **Safety** (SAF) - Hazard analysis, safety-critical design, safety verification
-10. **Compliance** (COMP) - Standards compliance, certification, evidence
-11. **Operations** (OPS) - Deployment, monitoring, incident response
-12. **Supply Chain Risk Management** (SCRM) - Dependencies, SBOM, CVE tracking
-13. **Integration Management** (INT) - Build, test environment, CI/CD
+8. **Security** (SEC) - Loss-based: Threat identification → risk scoring → mitigation → verification (25 activities)
+9. **Safety** (SAF) - Loss-based: Hazard identification → risk scoring → mitigation → verification (25 activities)
+10. **Compliance** (COMP) - Discovery & mitigation documentation with residual risk analysis (25 activities)
+11. **Operations** (OPS) - Deployment, monitoring, incident response (10 activities)
+12. **Supply Chain Risk Management** (SCRM) - Dependencies, SBOM, CVE tracking (10 activities)
+13. **Integration Management** (INT) - Build, test environment, CI/CD (10 activities)
 
-**Total: 13 SE Activity Domains with 130+ activities across 13 agents**
+**Total: 13 SE Activity Domains with 200+ activities across 13 agents**
+
+**Key Principle**: Security and Safety both follow loss-based systems engineering - define failures/threats upfront, score risks against program threshold, develop mitigations for risks exceeding threshold, verify mitigations, and document residual risk. Both repeat at each decomposition level (L1 → L2 → L3 → component).
 
 ---
 
@@ -189,63 +191,184 @@ RACI is organized by SE domain (per INCOSE/NASA/USAF taxonomy):
 
 ---
 
-### Domain 8: Security (NEW)
+### Domain 8: Security (Loss-Based Systems Engineering - Threat/Adversary-Induced Failures)
 
-| Activity | Req Mgr | Arch | CSO | CIO | Cyber Arch | Code Review | QA | Ops Lead | SQM |
-|----------|---------|------|-----|-----|------------|-------------|-----|----------|-----|
-| **SEC-001: Threat Modeling** | C | C | **R+A** | — | C | — | — | — | C |
-| **SEC-002: Threat Assessment** | — | — | **R+A** | — | C | — | — | — | — |
-| **SEC-003: Security Requirements** | **R** | C | **A** | — | — | — | — | — | — |
-| **SEC-004: Security Architecture** | — | C | **R** | **A** | **R** | — | — | — | — |
-| **SEC-005: Secure Pattern Design** | — | C | C | — | **R+A** | — | — | — | — |
-| **SEC-006: Cryptography Architecture** | — | C | C | — | **R+A** | — | — | — | — |
-| **SEC-007: Security Code Review** | — | — | **R** (oversight) | — | C | **R+A** | — | — | — |
-| **SEC-008: SAST/DAST Scanning** | — | — | **R** (config) | — | — | **R+A** | — | — | — |
-| **SEC-009: Vulnerability Remediation** | — | — | **R+A** | — | — | **R** (code fix) | C | — | C |
-| **SEC-010: Authorization & Accreditation** | — | — | **R+A** | C | C | — | — | — | — |
+**Foundation**: Loss-based systems engineering with threat identification, risk scoring, mitigation, verification, and compliance documentation. Repeated at each decomposition level (L1 → L2 → L3 → component).
+
+**Phase 1: Threat Identification & Analysis (Repeated at Each Level)**
+
+| Activity | Req Mgr | Arch | CSO | Cyber Arch | Code Review | QA | Ops Lead | SQM |
+|----------|---------|------|-----|------------|-------------|-----|----------|-----|
+| **SEC-001: Threat Definition (L1)** | C | — | **R+A** | C | — | — | — | — |
+| **SEC-002: Threat Decomposition (L1→L2→L3)** | C | — | **R+A** | C | — | — | — | — |
+| **SEC-003: Threat Modeling per Level** | C | C | **R+A** | **R** | — | — | — | — |
+| **SEC-004: Threat Characterization** | — | C | **R+A** | **R** | — | — | — | — |
+| **SEC-005: Attack Vector Identification** | — | — | **R+A** | **R** | C | — | — | — |
+
+**Phase 2: Risk Scoring & Thresholding (Against Program Threshold)**
+
+| Activity | Req Mgr | Arch | CSO | Cyber Arch | Code Review | QA | Ops Lead | SQM |
+|----------|---------|------|-----|------------|-------------|-----|----------|-----|
+| **SEC-006: Consequence Classification** | — | — | **R+A** | C | — | — | — | — |
+| **SEC-007: Probability Assessment** | — | — | **R+A** | C | — | — | — | — |
+| **SEC-008: Risk Score Calculation** | — | — | **R+A** | C | — | — | — | — |
+| **SEC-009: Risk Threshold Comparison** | — | — | **R+A** | C | — | — | — | — |
+| **SEC-010: Mitigation Priority Ranking** | — | — | **R+A** | C | — | — | — | — |
+
+**Phase 3: Mitigation Development (Risks Exceeding Threshold)**
+
+| Activity | Req Mgr | Arch | CSO | Cyber Arch | Code Review | QA | Ops Lead | SQM |
+|----------|---------|------|-----|------------|-------------|-----|----------|-----|
+| **SEC-011: Security Requirements Allocation** | **R** | C | **A** | — | — | — | — | — |
+| **SEC-012: Threat-Driven Architecture** | — | **R** | **A** | **R** (design patterns) | — | — | — | — |
+| **SEC-013: Secure Design Pattern Selection** | — | C | C | **R+A** | — | — | — | — |
+| **SEC-014: Cryptography Strategy** | — | C | C | **R+A** | — | — | — | — |
+| **SEC-015: Access Control Architecture** | — | **R** | **A** | **R** | — | — | — | — |
+
+**Phase 4: Implementation Verification (Mitigations in Code)**
+
+| Activity | Req Mgr | Arch | CSO | Cyber Arch | Code Review | QA | Ops Lead | SQM |
+|----------|---------|------|-----|------------|-------------|-----|----------|-----|
+| **SEC-016: Security Code Review** | — | — | **R** (oversight) | C | **R+A** (≥2 reviewers) | — | — | — |
+| **SEC-017: SAST Scanning (Pattern/Crypto)** | — | — | **R** (config) | — | **R+A** | — | — | — |
+| **SEC-018: DAST Testing (Threat Vectors)** | — | — | **R** (test plan) | — | **R** | **R+A** | — | — |
+| **SEC-019: Vulnerability Discovery** | — | — | **R+A** | **R** | **R** | **R** | — | — |
+| **SEC-020: Vulnerability Remediation** | — | — | **R+A** | — | **R** (code fix) | C | — | C |
+
+**Phase 5: Residual Risk & Acceptance**
+
+| Activity | Req Mgr | Arch | CSO | Cyber Arch | Code Review | QA | Ops Lead | SQM |
+|----------|---------|------|-----|------------|-------------|-----|----------|-----|
+| **SEC-021: Residual Threat Assessment** | — | — | **R+A** | — | — | — | — | — |
+| **SEC-022: Residual Risk Acceptance** | — | — | **R** (recommend) | — | C | — | — | — |
+| **SEC-023: Authorization & Accreditation** | — | — | **A** (CSO approval) | — | C | — | — | — |
+| **SEC-024: Operational Security Monitoring** | — | — | **R** (config) | — | — | — | **R+A** (execute) | — |
+| **SEC-025: Security Incident Response** | — | — | **R+A** | — | — | — | **R** (execute) | — |
 
 **Domain Owner**: Chief Security Officer  
-**Escalation Point**: Chief Security Officer (all security decisions)
+**Key Rule**: Threat analysis → risk scoring → mitigation → verification → acceptance. Repeats at L1, L2, L3, component levels.  
+**Escalation Point**: Chief Security Officer + Chief Engineer (risks exceeding threshold or residual risk acceptance)
 
 ---
 
-### Domain 9: Safety (NEW)
+### Domain 9: Safety (Loss-Based Systems Engineering - Natural/Accidental Failures)
+
+**Foundation**: Loss-based systems engineering with hazard identification, risk scoring, mitigation, verification, and compliance documentation. Repeated at each decomposition level (L1 → L2 → L3 → component).
+
+**Phase 1: Hazard Identification & Analysis (Repeated at Each Level)**
 
 | Activity | Req Mgr | Arch | CSafO | Chief Eng | Code Review | QA | SQM |
 |----------|---------|------|-------|-----------|-------------|-----|-----|
-| **SAF-001: Functional Hazard Analysis** | C | C | **R+A** | — | — | — | — |
-| **SAF-002: Hazard Classification** | — | — | **R+A** | C | — | — | — |
-| **SAF-003: Safety Requirements** | **R** | C | **A** | — | — | — | — |
-| **SAF-004: FMEA Development** | — | C | **R+A** | C | — | — | — |
-| **SAF-005: FTA Development** | — | C | **R+A** | C | — | — | — |
-| **SAF-006: Safety-Critical Component ID** | — | **R** | **A** | C | — | — | — |
-| **SAF-007: Fault Tolerance Design** | — | **R** | **A** | C | — | — | — |
-| **SAF-008: Safety-Critical Code Inspection** | — | — | **R** (lead) | — | **R+A** (≥2 reviewers) | — | — |
-| **SAF-009: Safety Testing** | — | C | **R** (plan) | — | C | **R+A** (exec) | — |
-| **SAF-010: Residual Risk Acceptance** | — | — | **R** (assess) | **A** (co-sign) | — | C | — |
+| **SAF-001: Functional Hazard Analysis (L1)** | C | C | **R+A** | — | — | — | — |
+| **SAF-002: Hazard Decomposition (L1→L2→L3)** | C | — | **R+A** | C | — | — | — |
+| **SAF-003: FMEA Development per Level** | — | C | **R+A** | C | — | — | — |
+| **SAF-004: FTA Development per Level** | — | C | **R+A** | C | — | — | — |
+| **SAF-005: Failure Mode Characterization** | — | C | **R+A** | C | — | — | — |
 
-**Domain Owner**: Chief Safety Officer  
-**Escalation Point**: Chief Safety Officer + Chief Engineer (residual risk)
+**Phase 2: Risk Scoring & Thresholding (Against Program Threshold)**
+
+| Activity | Req Mgr | Arch | CSafO | Chief Eng | Code Review | QA | SQM |
+|----------|---------|------|-------|-----------|-------------|-----|-----|
+| **SAF-006: Severity Classification** | — | — | **R+A** | C | — | — | — |
+| **SAF-007: Failure Probability Assessment** | — | — | **R+A** | C | — | — | — |
+| **SAF-008: Risk Score Calculation** | — | — | **R+A** | C | — | — | — |
+| **SAF-009: Risk Threshold Comparison** | — | — | **R+A** | C | — | — | — |
+| **SAF-010: Mitigation Priority Ranking** | — | — | **R+A** | C | — | — | — |
+
+**Phase 3: Mitigation Development (Risks Exceeding Threshold)**
+
+| Activity | Req Mgr | Arch | CSafO | Chief Eng | Code Review | QA | SQM |
+|----------|---------|------|-------|-----------|-------------|-----|-----|
+| **SAF-011: Safety Requirements Allocation** | **R** | C | **A** | C | — | — | — |
+| **SAF-012: Safety-Critical Component ID** | — | **R** | **A** | C | — | — | — |
+| **SAF-013: Fault Tolerance Architecture** | — | **R** | **A** | C | — | — | — |
+| **SAF-014: Redundancy Strategy** | — | **R** | **A** | C | — | — | — |
+| **SAF-015: Monitoring & Detection Design** | — | **R** | **A** | C | — | — | — |
+
+**Phase 4: Implementation Verification (Mitigations in Code)**
+
+| Activity | Req Mgr | Arch | CSafO | Chief Eng | Code Review | QA | SQM |
+|----------|---------|------|-------|-----------|-------------|-----|-----|
+| **SAF-016: Safety-Critical Code Inspection** | — | — | **R** (lead) | — | **R+A** (≥2 expert reviewers) | — | — |
+| **SAF-017: Fault Injection Testing** | — | C | **R** (plan) | — | — | **R+A** | — |
+| **SAF-018: Safety-Critical Testing** | — | C | **R** (plan) | — | C | **R+A** (≥95% coverage required) | — |
+| **SAF-019: Failure Detection Verification** | — | — | **R** (plan) | — | — | **R+A** | — |
+| **SAF-020: Recovery Path Testing** | — | — | **R** (plan) | — | — | **R+A** | — |
+
+**Phase 5: Residual Risk & Acceptance**
+
+| Activity | Req Mgr | Arch | CSafO | Chief Eng | Code Review | QA | SQM |
+|----------|---------|------|-------|-----------|-------------|-----|-----|
+| **SAF-021: Residual Failure Assessment** | — | — | **R+A** | — | — | — | — |
+| **SAF-022: Residual Risk Acceptance** | — | — | **R** (recommend) | **A** (co-sign) | — | — | — |
+| **SAF-023: Safety Case Closure** | — | — | **R+A** | C | — | — | — |
+| **SAF-024: Operational Safety Monitoring** | — | — | **R** (config) | — | — | — | — |
+| **SAF-025: Failure Trend Monitoring** | — | — | **R** (plan) | — | — | **R+A** | — |
+
+**Domain Owner**: Chief Safety Officer (Accountable for all safety decisions)  
+**Key Rule**: Hazard analysis → risk scoring → mitigation → verification → acceptance. Repeats at L1, L2, L3, component levels.  
+**Co-Approver**: Chief Engineer (residual risk acceptance & safety-critical decisions)  
+**Escalation Point**: Chief Safety Officer + Chief Engineer (risks exceeding threshold)
 
 ---
 
-### Domain 10: Compliance (NEW)
+### Domain 10: Compliance (Discovery, Mitigation, & Residual Risk Documentation)
 
-| Activity | Req Mgr | CCO | Chief Eng | Code Review | QA | Ops Lead |
-|----------|---------|-----|-----------|-------------|-----|----------|
-| **COMP-001: Applicable Standards ID** | C | **R+A** | C | — | — | — |
-| **COMP-002: Compliance Gap Analysis** | C | **R+A** | C | — | — | — |
-| **COMP-003: Compliance Planning** | — | **R+A** | C | — | — | — |
-| **COMP-004: Design Compliance Review** | C | **R** (audit) | **A** (approve) | — | — | — |
-| **COMP-005: Implementation Compliance** | — | **R** (audit) | **A** (approve) | C | — | — |
-| **COMP-006: Test Compliance Review** | — | **R** (audit) | **A** (approve) | — | **R** (evidence) | — |
-| **COMP-007: Evidence Collection** | **R** (trace) | **R** (organize) | — | **R** (metrics) | **R** (results) | — |
-| **COMP-008: Data Package Assembly** | — | **R+A** | C | — | — | — |
-| **COMP-009: Compliance Audit** | — | **R+A** | C | **R** (code audit) | **R** (test audit) | — |
-| **COMP-010: Certification Coordination** | — | **R+A** | — | — | — | — |
+**Foundation**: Document that no failures (natural or threat-induced) remain undocumented. Demonstrate discovery of hazards/threats, mitigations implemented, and residual risk analysis accepted.
+
+**Phase 1: Compliance Planning & Standards Mapping**
+
+| Activity | Req Mgr | CCO | CSO | CSafO | Chief Eng | Code Review | QA |
+|----------|---------|-----|-----|-------|-----------|-------------|-----|
+| **COMP-001: Applicable Standards Identification** | C | **R+A** | **R** (security) | **R** (safety) | C | — | — |
+| **COMP-002: Compliance Requirements Mapping** | C | **R+A** | **R** (security reqs) | **R** (safety reqs) | — | — | — |
+| **COMP-003: Compliance Gap Analysis** | C | **R+A** | C | C | C | — | — |
+| **COMP-004: Compliance Planning & Schedule** | — | **R+A** | C | C | C | — | — |
+| **COMP-005: Evidence Package Definition** | — | **R+A** | **R** (security evidence) | **R** (safety evidence) | C | — | — |
+
+**Phase 2: Discovery & Analysis Documentation**
+
+| Activity | Req Mgr | CCO | CSO | CSafO | Chief Eng | Code Review | QA |
+|----------|---------|-----|-----|-------|-----------|-------------|-----|
+| **COMP-006: Threat Analysis Documentation** | C | **R** (package) | **R+A** (analysis) | — | — | — | — |
+| **COMP-007: Hazard Analysis Documentation** | C | **R** (package) | — | **R+A** (analysis) | — | — | — |
+| **COMP-008: Risk Scoring Artifacts** | — | **R** (package) | **R** (security) | **R** (safety) | C | — | — |
+| **COMP-009: Mitigation Strategy Documentation** | C | **R** (package) | **R** (security) | **R** (safety) | C | — | — |
+| **COMP-010: Design-to-Requirements Traceability** | **R** | **R** (organize) | C | C | — | — | — |
+
+**Phase 3: Mitigation Verification Evidence**
+
+| Activity | Req Mgr | CCO | CSO | CSafO | Chief Eng | Code Review | QA |
+|----------|---------|-----|-----|-------|-----------|-------------|-----|
+| **COMP-011: Security Code Review Evidence** | — | **R** (package) | **R** (verify) | — | — | **R+A** (results) | — |
+| **COMP-012: Safety-Critical Code Inspection** | — | **R** (package) | — | **R** (verify) | — | **R** (reviews) | **R+A** (results) |
+| **COMP-013: SAST/DAST Test Results** | — | **R** (package) | **R** (interpret) | — | — | **R+A** (execute) | — |
+| **COMP-014: Security Test Coverage** | — | **R** (package) | **R** (plan) | — | — | C | **R+A** (metrics) |
+| **COMP-015: Safety Test Coverage** | — | **R** (package) | — | **R** (plan) | — | C | **R+A** (metrics ≥95%) |
+
+**Phase 4: Residual Risk & Acceptance Documentation**
+
+| Activity | Req Mgr | CCO | CSO | CSafO | Chief Eng | Code Review | QA |
+|----------|---------|-----|-----|-------|-----------|-------------|-----|
+| **COMP-016: Residual Threat Assessment Doc** | — | **R+A** (package) | **R** (assess) | — | — | — | — |
+| **COMP-017: Residual Hazard Assessment Doc** | — | **R+A** (package) | — | **R** (assess) | — | — | — |
+| **COMP-018: Residual Risk Analysis** | — | **R+A** | **R** (security) | **R** (safety) | C | — | — |
+| **COMP-019: Risk Acceptance Evidence** | — | **R** (package) | — | — | **A** (approved) | — | — |
+| **COMP-020: Undocumented Failure Analysis** | — | **R+A** | **R** (threats) | **R** (hazards) | — | C | C |
+
+**Phase 5: Certification & Audit Closeout**
+
+| Activity | Req Mgr | CCO | CSO | CSafO | Chief Eng | Code Review | QA |
+|----------|---------|-----|-----|-------|-----------|-------------|-----|
+| **COMP-021: Evidence Package Assembly** | **R** (trace) | **R+A** (organize) | **R** (security artifacts) | **R** (safety artifacts) | — | — | — |
+| **COMP-022: Compliance Verification Audit** | — | **R+A** | **R** (security audit) | **R** (safety audit) | C | **R** (code artifacts) | **R** (test artifacts) |
+| **COMP-023: Certifying Authority Coordination** | — | **R+A** | — | — | — | — | — |
+| **COMP-024: Final Data Package Submission** | — | **R+A** | — | — | — | — | — |
+| **COMP-025: Certification Maintenance** | — | **R+A** | **R** (security updates) | **R** (safety updates) | — | — | — |
 
 **Domain Owner**: Chief Compliance Officer  
-**Escalation Point**: Chief Compliance Officer + Chief Engineer (policy overrides)
+**Key Principle**: No failure (natural, accidental, or threat-induced) remains undocumented with evidence of mitigation.  
+**Escalation Point**: Chief Compliance Officer + Chief Engineer (certification issues)
 
 ---
 
