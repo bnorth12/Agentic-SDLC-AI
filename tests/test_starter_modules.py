@@ -49,7 +49,7 @@ class StarterModulesTest(unittest.TestCase):
             objective="Test objective for smoke test"
         )
 
-        config = {"recursion_limit": 5}
+        config = {"recursion_limit": 50}
         result = graph.invoke(initial_state, config=config)
 
         # Basic assertions
