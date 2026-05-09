@@ -24,8 +24,9 @@ This RACI matrix defines responsibility for key systems engineering activities a
 
 ## SE Activity Domains
 
-RACI is organized by SE domain (per INCOSE taxonomy):
+RACI is organized by SE domain (per INCOSE/NASA/USAF taxonomy):
 
+**Existing Domains** (7):
 1. **Requirements Management** (RM)
 2. **Architecture & Design** (AD)
 3. **Implementation & Integration** (II)
@@ -33,6 +34,16 @@ RACI is organized by SE domain (per INCOSE taxonomy):
 5. **Configuration & Change Management** (CCM)
 6. **Risk Management** (Risk)
 7. **Governance & Decision Management** (Gov)
+
+**NEW Domains** (6) - Added for Assured SDLC:
+8. **Security** (SEC) - Threat analysis, security architecture, testing
+9. **Safety** (SAF) - Hazard analysis, safety-critical design, safety verification
+10. **Compliance** (COMP) - Standards compliance, certification, evidence
+11. **Operations** (OPS) - Deployment, monitoring, incident response
+12. **Supply Chain Risk Management** (SCRM) - Dependencies, SBOM, CVE tracking
+13. **Integration Management** (INT) - Build, test environment, CI/CD
+
+**Total: 13 SE Activity Domains with 130+ activities across 13 agents**
 
 ---
 
@@ -175,6 +186,149 @@ RACI is organized by SE domain (per INCOSE taxonomy):
 
 **Domain Owner**: Chief Engineer (apex governance authority)  
 **Escalation Point**: All governance decisions route through Chief Engineer
+
+---
+
+### Domain 8: Security (NEW)
+
+| Activity | Req Mgr | Arch | CSO | CIO | Cyber Arch | Code Review | QA | Ops Lead | SQM |
+|----------|---------|------|-----|-----|------------|-------------|-----|----------|-----|
+| **SEC-001: Threat Modeling** | C | C | **R+A** | — | C | — | — | — | C |
+| **SEC-002: Threat Assessment** | — | — | **R+A** | — | C | — | — | — | — |
+| **SEC-003: Security Requirements** | **R** | C | **A** | — | — | — | — | — | — |
+| **SEC-004: Security Architecture** | — | C | **R** | **A** | **R** | — | — | — | — |
+| **SEC-005: Secure Pattern Design** | — | C | C | — | **R+A** | — | — | — | — |
+| **SEC-006: Cryptography Architecture** | — | C | C | — | **R+A** | — | — | — | — |
+| **SEC-007: Security Code Review** | — | — | **R** (oversight) | — | C | **R+A** | — | — | — |
+| **SEC-008: SAST/DAST Scanning** | — | — | **R** (config) | — | — | **R+A** | — | — | — |
+| **SEC-009: Vulnerability Remediation** | — | — | **R+A** | — | — | **R** (code fix) | C | — | C |
+| **SEC-010: Authorization & Accreditation** | — | — | **R+A** | C | C | — | — | — | — |
+
+**Domain Owner**: Chief Security Officer  
+**Escalation Point**: Chief Security Officer (all security decisions)
+
+---
+
+### Domain 9: Safety (NEW)
+
+| Activity | Req Mgr | Arch | CSafO | Chief Eng | Code Review | QA | SQM |
+|----------|---------|------|-------|-----------|-------------|-----|-----|
+| **SAF-001: Functional Hazard Analysis** | C | C | **R+A** | — | — | — | — |
+| **SAF-002: Hazard Classification** | — | — | **R+A** | C | — | — | — |
+| **SAF-003: Safety Requirements** | **R** | C | **A** | — | — | — | — |
+| **SAF-004: FMEA Development** | — | C | **R+A** | C | — | — | — |
+| **SAF-005: FTA Development** | — | C | **R+A** | C | — | — | — |
+| **SAF-006: Safety-Critical Component ID** | — | **R** | **A** | C | — | — | — |
+| **SAF-007: Fault Tolerance Design** | — | **R** | **A** | C | — | — | — |
+| **SAF-008: Safety-Critical Code Inspection** | — | — | **R** (lead) | — | **R+A** (≥2 reviewers) | — | — |
+| **SAF-009: Safety Testing** | — | C | **R** (plan) | — | C | **R+A** (exec) | — |
+| **SAF-010: Residual Risk Acceptance** | — | — | **R** (assess) | **A** (co-sign) | — | C | — |
+
+**Domain Owner**: Chief Safety Officer  
+**Escalation Point**: Chief Safety Officer + Chief Engineer (residual risk)
+
+---
+
+### Domain 10: Compliance (NEW)
+
+| Activity | Req Mgr | CCO | Chief Eng | Code Review | QA | Ops Lead |
+|----------|---------|-----|-----------|-------------|-----|----------|
+| **COMP-001: Applicable Standards ID** | C | **R+A** | C | — | — | — |
+| **COMP-002: Compliance Gap Analysis** | C | **R+A** | C | — | — | — |
+| **COMP-003: Compliance Planning** | — | **R+A** | C | — | — | — |
+| **COMP-004: Design Compliance Review** | C | **R** (audit) | **A** (approve) | — | — | — |
+| **COMP-005: Implementation Compliance** | — | **R** (audit) | **A** (approve) | C | — | — |
+| **COMP-006: Test Compliance Review** | — | **R** (audit) | **A** (approve) | — | **R** (evidence) | — |
+| **COMP-007: Evidence Collection** | **R** (trace) | **R** (organize) | — | **R** (metrics) | **R** (results) | — |
+| **COMP-008: Data Package Assembly** | — | **R+A** | C | — | — | — |
+| **COMP-009: Compliance Audit** | — | **R+A** | C | **R** (code audit) | **R** (test audit) | — |
+| **COMP-010: Certification Coordination** | — | **R+A** | — | — | — | — |
+
+**Domain Owner**: Chief Compliance Officer  
+**Escalation Point**: Chief Compliance Officer + Chief Engineer (policy overrides)
+
+---
+
+### Domain 11: Operations (NEW)
+
+| Activity | Ops Lead | Arch | CSO | Code Review | QA | Integration Mgr | SQM |
+|----------|----------|------|-----|-------------|-----|-----------------|-----|
+| **OPS-001: Deployment Strategy** | **R+A** | C | C | — | — | C | — |
+| **OPS-002: Deployment Procedure** | **R+A** | — | — | — | — | — | — |
+| **OPS-003: Rollback Procedure** | **R+A** | — | — | — | — | C | — |
+| **OPS-004: Operational Monitoring** | **R+A** | — | **R** (threat intel) | — | **R** (metrics) | — | — |
+| **OPS-005: Incident Response Plan** | **R+A** | — | **R** (security incidents) | — | **R** (quality issues) | — | — |
+| **OPS-006: Performance Baselining** | **R+A** | C | — | — | **R** | — | — |
+| **OPS-007: Patch Management** | **R+A** | — | **R** (security patches) | **R** (code review) | — | — | **R** (dependency patches) |
+| **OPS-008: Post-Deployment Validation** | **R+A** | C | — | — | **R** | — | — |
+| **OPS-009: Sustainment Procedure** | **R+A** | — | — | — | — | — | — |
+| **OPS-010: Disaster Recovery** | **R+A** | C | **R** (security) | — | — | — | — |
+
+**Domain Owner**: Operations Lead  
+**Escalation Point**: Operations Lead + Chief Engineer (critical issues)
+
+---
+
+### Domain 12: Supply Chain Risk Management (NEW)
+
+| Activity | SQM | CSO | Cyber Arch | Code Review | Integration Mgr | Ops Lead |
+|----------|-----|-----|------------|-------------|-----------------|----------|
+| **SCRM-001: Dependency Identification** | **R+A** | — | C | — | C | — |
+| **SCRM-002: Software Composition Analysis** | **R+A** | C | — | — | — | — |
+| **SCRM-003: Vendor Assessment** | **R+A** | **R** | — | — | — | — |
+| **SCRM-004: SBOM Development** | **R+A** | — | **R** (SBOM structure) | — | — | — |
+| **SCRM-005: License Compliance** | **R+A** | — | — | — | — | — |
+| **SCRM-006: CVE Monitoring** | **R+A** | **R** (threat eval) | — | — | — | — |
+| **SCRM-007: Vulnerability Remediation** | **R** (track) | **A** (decide) | **R** (recommend) | **R** (code fix) | — | **R** (deploy patch) |
+| **SCRM-008: Dependency Update** | **R** (track) | — | — | **R** (code review) | — | **R** (deploy) |
+| **SCRM-009: Supply Chain Incident Response** | **R+A** | **R** (threat) | — | — | — | **R** (ops impact) |
+| **SCRM-010: Supplier Quality Audit** | **R+A** | C | — | — | — | — |
+
+**Domain Owner**: Supplier Quality Manager  
+**Escalation Point**: Supplier Quality Manager + Chief Security Officer (supply chain threats)
+
+---
+
+### Domain 13: Integration Management (NEW)
+
+| Activity | Integration Mgr | System Arch | Code Review | QA | Ops Lead |
+|----------|-----------------|-------------|-------------|-----|----------|
+| **INT-001: Integration Strategy** | **R+A** | **R** (input) | — | C | — |
+| **INT-002: Build Automation** | **R+A** | — | C | — | — |
+| **INT-003: CI/CD Pipeline** | **R+A** | — | **R** | **R** | C |
+| **INT-004: Test Environment Setup** | **R+A** | C | — | **R** (requirements) | C |
+| **INT-005: Test Data Preparation** | **R+A** | — | — | **R** | — |
+| **INT-006: Build Infrastructure** | **R+A** | — | — | — | C |
+| **INT-007: Artifact Management** | **R+A** | — | — | — | **R** (deployment) |
+| **INT-008: Integration Testing** | **R** | C | — | **R+A** | — |
+| **INT-009: Infrastructure Monitoring** | **R+A** | — | — | — | — |
+| **INT-010: Build Metrics & SLA** | **R+A** | — | C | **R** | — |
+
+**Domain Owner**: Integration & Test Manager  
+**Escalation Point**: Integration & Test Manager + Program Manager (infrastructure impact)
+
+---
+
+## Expanded Authority Hierarchy (13 Agents)
+
+```
+Chief Engineer (APEX AUTHORITY)
+├── Program Manager (Project leadership)
+├── Requirements Manager (Requirements authority)
+├── System Architect (Architecture authority)
+├── Chief Security Officer (Security authority)
+├── Chief Safety Officer (Safety authority)
+├── Chief Compliance Officer (Compliance authority)
+└── SUPPORTING/SPECIALIZED:
+    ├── Cyber/Security Architect (Secure design patterns)
+    ├── Code Review Board (Code quality, MISRA, security, safety inspection)
+    ├── Quality/QA Manager (Quality gates, verification closure)
+    ├── Integration & Test Manager (Build infrastructure, CI/CD)
+    ├── Operations Lead (Deployment, operations, incident response)
+    └── Supplier Quality Manager (SBOM, SCA, CVE, vendor risk)
+```
+
+**Key Principle**: Every activity has ONE Accountable person. No shared "A" unless explicitly co-signed (e.g., residual risk = CSafO + CE)
 
 ---
 

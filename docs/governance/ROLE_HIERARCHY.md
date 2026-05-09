@@ -18,12 +18,20 @@ This document defines the organizational hierarchy for the Agentic-SDLC-AI gover
 ## Authority Hierarchy
 
 ```
-Chief Engineer (APEX AUTHORITY)
-├── Program Manager (Project leadership)
-├── Requirements Agent (Requirement elicitation)
-├── Architecture Agent (Technical design)
-├── Code Review Board (Quality gates)
-└── Deployment Manager (Release execution)
+Chief Engineer (APEX TECHNICAL AUTHORITY)
+├── Program Manager (PROJECT LEADERSHIP)
+├── Requirements Manager (Requirements authority)
+├── System Architect (Architecture & design authority)
+├── Chief Security Officer (SECURITY AUTHORITY - Threat analysis, A&A)
+├── Chief Safety Officer (SAFETY AUTHORITY - Hazard analysis, residual risk)
+├── Chief Compliance Officer (COMPLIANCE AUTHORITY - Certification, evidence)
+└── SPECIALIZED EXPERTS (Phase/domain-specific):
+    ├── Cyber/Security Architect (Secure design patterns, cryptography)
+    ├── Code Review Board (Code quality, MISRA, security review, safety inspection)
+    ├── Quality/QA Manager (Quality gates, test execution, verification closure)
+    ├── Integration & Test Manager (Test environment, CI/CD, build automation)
+    ├── Operations Lead (Deployment, incident response, threat monitoring)
+    └── Supplier Quality Manager (SBOM, SCA, CVE tracking, supply chain risk)
 ```
 
 ---
@@ -358,14 +366,379 @@ Decision Point → Authority → Escalate To
 
 ---
 
+### 7. Chief Security Officer — SECURITY AUTHORITY (NEW)
+
+**Title**: Chief Information Security Officer & Threat Authority  
+**Authority Level**: DOMAIN EXPERT (owns threat analysis, security requirements, A&A gate)
+
+**Responsibilities**:
+- Threat modeling and analysis (threat-driven security architecture)
+- Security requirements allocation from threat analysis
+- Secure architecture pattern validation (with Cyber Architect)
+- Security code review oversight (with Code Review Board)
+- Security testing leadership
+- Authorization & Accreditation (A&A) gate authority
+- Operational security monitoring planning
+- Vulnerability remediation coordination
+
+**Authority Matrix**:
+| Decision Type | Can Approve? | Can Reject? | Can Override? |
+|---------------|--------------|-------------|---------------|
+| Threat Analysis | ✅ Yes | ✅ Yes | No (CE arbitrates if challenged) |
+| Security Requirements | ✅ Yes | ✅ Yes | No (CE arbitrates) |
+| Security Vulnerability Critical | ✅ Yes (blocking merge) | ✅ Yes | ✅ Yes (emergency stop) |
+| A&A Gate Readiness | ✅ Yes (if criteria met) | ✅ Yes | No (CE override for exceptions) |
+| Security Control Design | Recommends | Escalates to CA | No (CA decides with CSO input) |
+
+**Escalation Triggers**:
+- Threat analysis confidence < 80%
+- Security vulnerability found (any severity)
+- Security requirement conflicts with functional design
+- A&A readiness < 90%
+- Cryptographic algorithm concerns
+
+**Standards**: DO-326A (Org & Authority), DO-356A (Threat to Controls), DO-355A (Security Assurance), USAF SSE, NIST 800-30/39/53
+
+---
+
+### 8. Chief Safety Officer — SAFETY AUTHORITY (NEW)
+
+**Title**: Chief Safety Officer & Hazard Authority  
+**Authority Level**: DOMAIN EXPERT (owns hazard analysis, safety requirements, residual risk)
+
+**Responsibilities**:
+- Functional Hazard Analysis (FHA) leadership
+- Safety requirement allocation from hazards
+- Safety-critical component identification & designation
+- Safety-critical design review (fault tolerance, redundancy)
+- Safety-critical code inspection oversight
+- Safety testing & verification (≥95% coverage)
+- Residual risk acceptance (co-signed with CE)
+- Post-deployment safety monitoring
+
+**Authority Matrix**:
+| Decision Type | Can Approve? | Can Reject? | Can Override? |
+|---------------|--------------|-------------|---------------|
+| Hazard Analysis | ✅ Yes | ✅ Yes | No (CE arbitrates if challenged) |
+| Safety Criticality | ✅ Yes | ✅ Yes | No (CE final authority) |
+| Safety Requirement | ✅ Yes | ✅ Yes | No (CE if conflict with feasibility) |
+| Residual Risk Acceptance | Co-signs with CE | Co-signs with CE | No (CE+CSafO joint decision) |
+| Safety-Critical Code | ✅ Yes (≥2 reviewers) | ✅ Yes (blocking) | ✅ Yes (if critical defect) |
+
+**Escalation Triggers**:
+- Hazard analysis completeness < 90%
+- Safety-critical component identified too late (design phase after allocation)
+- Safety verification coverage < 95%
+- Residual risk disagreement with CE
+- Safety incident post-deployment
+
+**Standards**: ARP 4752A (FHA/System Safety), ARP 4761 (FMEA/FTA), MIL-STD-882G (System Safety), DO-178C (Safety-Critical Code), DO-355A (Safety Assurance)
+
+---
+
+### 9. Chief Compliance Officer — COMPLIANCE AUTHORITY (NEW)
+
+**Title**: Chief Compliance Officer & Certification Authority  
+**Authority Level**: DOMAIN EXPERT (owns compliance planning, gap analysis, evidence package)
+
+**Responsibilities**:
+- Compliance gap analysis (applicable standards identification)
+- Compliance roadmap development
+- Standards compliance allocation to agents
+- Compliance metrics & tracking
+- Design compliance verification
+- Test evidence collection & organization
+- Data package assembly (DO-178C, DO-256A format)
+- Certification body coordination
+- Compliance audit preparation
+
+**Authority Matrix**:
+| Decision Type | Can Approve? | Can Reject? | Can Override? |
+|---------------|--------------|-------------|---------------|
+| Applicable Standards | ✅ Yes | ✅ Yes | No (CE arbitrates major conflicts) |
+| Compliance Gap | ✅ Yes | ✅ Yes | No (CE for policy exceptions) |
+| Compliance Waiver | Recommends | Escalates | No (CE decides) |
+| Evidence Sufficiency | ✅ Yes (for compliance) | ✅ Yes (if incomplete) | No (CE if policy override needed) |
+| Data Package Readiness | ✅ Yes (if complete) | ✅ Yes | No (CE for release decision) |
+
+**Escalation Triggers**:
+- Compliance gap > 20% effort estimate
+- Standards conflict with design
+- Evidence package > 10% incomplete before deployment gate
+- Certification body raises major concern
+- Policy or regulatory change mid-project
+
+**Standards**: DO-326A (Planning & Assurance), DO-356A (Data Package), DO-355A (Evidence & Certification), FAA/EASA Procedures, EIA-632, CMMI
+
+---
+
+### 10. Cyber/Security Architect — SECURITY DESIGN EXPERT (NEW)
+
+**Title**: Cyber & Security Architecture Designer  
+**Authority Level**: SUPPORTING EXPERT (designs secure architecture patterns, cryptography, SBOM)
+
+**Responsibilities**:
+- Secure architecture pattern design (defense-in-depth, zero-trust)
+- Security control architecture (preventive, detective, responsive)
+- Cryptographic architecture design & key management strategy
+- Secure interface specification (authentication, encryption, logging)
+- Threat-to-architecture mapping (verify design addresses all threats)
+- Supply chain security design (dependency management, SBOM design)
+- Security monitoring architecture (logging, alerting, forensics)
+- Architecture documentation (security viewpoints, ADRs)
+
+**Authority Matrix**:
+| Decision Type | Can Approve? | Can Reject? | Can Override? |
+|---------------|--------------|-------------|---------------|
+| Secure Design Pattern | Proposes | Escalates to CSO | No (CSO decides) |
+| Cryptographic Algorithm | Proposes | Escalates to CSO | No (CSO approves per NIST) |
+| SBOM Design Strategy | ✅ Yes | ✅ Yes | No (SQM implements) |
+| Security Logging Architecture | ✅ Yes | ✅ Yes | No (Operations Lead implements) |
+| Design Review Comments | ✅ Yes (technical input) | — (advisory) | No (System Architect final) |
+
+**Escalation Triggers**:
+- Cryptographic algorithm not on NIST approved list
+- Secure pattern conflict with performance requirements
+- SBOM design impacts system architecture significantly
+- Security monitoring adds > 20% overhead
+
+**Standards**: DO-356A (Security Design), NIST 800-175B (Cryptography), NIST 800-53 (Security Controls), IEC 62443 (Cybersecurity), ISO/IEC/IEEE 42010 (Architecture)
+
+**Phase Participation**: Architecture & Design phase primarily; Implementation for design review.
+
+---
+
+### 11. Code Review Board — QUALITY & SECURITY GATEKEEPER (EXPANDED)
+
+**Title**: Code Review Board Lead & Merge Authority  
+**Authority Level**: QUALITY GATEKEEPER (owns code quality, MISRA, security review, safety inspection)
+
+**Responsibilities**:
+- Code style & standards enforcement (MISRA-C 2012)
+- Complexity assessment (cyclomatic, nesting depth, function length)
+- Security code review (input validation, auth, crypto, data handling)
+- Safety-critical code inspection (≥2 reviewers, ≥95% coverage)
+- Peer review coordination (2+ approvals for merge)
+- Static analysis tool configuration (SonarQube, Checkmarx, etc.)
+- Test coverage verification (≥95% target)
+- Code waiver documentation & tracking
+- Merge approval authority
+- Quality metrics reporting
+
+**Authority Matrix**:
+| Decision Type | Can Approve? | Can Reject? | Can Override? |
+|---------------|--------------|-------------|---------------|
+| Code Merge (standard) | ✅ Yes (2+ reviewers) | ✅ Yes | No (CE for override) |
+| MISRA Compliance | ✅ Yes (Mandatory 100%, Required ≥95%) | ✅ Yes | No (CE for exception) |
+| Code Complexity Waiver | No (recommends) | Escalates | No (CE decides) |
+| Security Code Issue | ✅ Yes (critical blocks merge) | ✅ Yes | ✅ Yes (emergency) |
+| Safety-Critical Code | ✅ Yes (≥2 reviewers, ≥95%) | ✅ Yes (blocking) | No (CSafO final) |
+
+**Escalation Triggers**:
+- MISRA violation of Mandatory rule (0% allowed)
+- Complexity > 10 (cyclomatic)
+- Security vulnerability critical
+- Test coverage < 95%
+- Safety-critical code with < 2 reviewers
+- Reviewer disagreement (2+ hold on merge)
+
+**Standards**: MISRA-C 2012 (Code Standards), IEEE 1729 (Code Inspection), NIST 800-181 (Secure Coding), DO-178C (Code Review), DO-254 (Hardware Design Review), ARP 4761 (Safety-Critical Code)
+
+**Phase Participation**: Implementation phase onwards (code review); then Verification & Validation (test execution).
+
+---
+
+### 12. Quality/QA Manager — VERIFICATION AUTHORITY (NEW)
+
+**Title**: Quality Assurance Manager & Verification Closure Authority  
+**Authority Level**: QUALITY GATEKEEPER (owns quality gates, test execution, verification closure)
+
+**Responsibilities**:
+- Quality planning & metrics definition
+- Test planning & test strategy development
+- Test case development (linked to requirements)
+- Test execution management (unit, integration, system, regression)
+- Defect triage & severity classification
+- Defect resolution verification & closure
+- Coverage analysis & reporting (statement, branch, MC/DC)
+- Verification evidence compilation
+- Test environment monitoring
+- Quality metrics tracking & dashboards
+- Post-release quality monitoring coordination
+
+**Authority Matrix**:
+| Decision Type | Can Approve? | Can Reject? | Can Override? |
+|---------------|--------------|-------------|---------------|
+| Test Plan | ✅ Yes | ✅ Yes | No (Code Review Board consults) |
+| Coverage Threshold (≥95%) | ✅ Yes | ✅ Yes (if < 95%) | No (CE for exception) |
+| Defect Closure | ✅ Yes (if fix verified) | ✅ Yes (if not fixed) | No (developer fixes) |
+| Phase Test Readiness | ✅ Yes (if criteria met) | ✅ Yes (if gaps) | No (PM schedule arbitrates) |
+| Non-Conformance Closure | ✅ Yes (if corrected) | ✅ Yes (if unresolved) | No (CE for policy exception) |
+
+**Escalation Triggers**:
+- Coverage < 95% before deployment gate
+- Critical defects unresolved
+- Test environment unavailable
+- Quality metrics > 20% below baseline
+- Post-release defect escape rate > 5%
+
+**Standards**: IEEE 1233 (Test Specification), IEEE 1028 (Test & Review), DO-178C (Verification), NASA-STD-7009A (Verification & Validation), CMMI (Verification & Validation)
+
+**Phase Participation**: Test & Verification phase primarily; then Deployment readiness & Sustainment.
+
+---
+
+### 13. Integration & Test Manager — TEST INFRASTRUCTURE EXPERT (NEW)
+
+**Title**: Integration & Test Infrastructure Manager  
+**Authority Level**: SUPPORTING EXPERT (manages test environment, CI/CD, build automation)
+
+**Responsibilities**:
+- Integration strategy development (sequencing, build approach)
+- Test environment setup & maintenance
+- Test data preparation & management
+- CI/CD pipeline development & maintenance
+- Build automation & artifact management
+- Test automation tool configuration
+- Test environment troubleshooting & monitoring
+- Build & deployment infrastructure
+- Infrastructure metrics & performance tuning
+- Capacity planning for testing
+
+**Authority Matrix**:
+| Decision Type | Can Approve? | Can Reject? | Can Override? |
+|---------------|--------------|-------------|---------------|
+| Test Environment Design | ✅ Yes | ✅ Yes | No (QA Manager consults) |
+| Build Infrastructure | ✅ Yes | ✅ Yes | No (PM resource arbitrates) |
+| Integration Sequencing | ✅ Yes | ✅ Yes (if risks high) | No (CE if architecture impact) |
+| Tool/Technology Selection | ✅ Yes | ✅ Yes | No (PM budget arbitrates) |
+| Test Environment Outage Response | ✅ Yes (emergency) | ✅ Yes (restart decision) | ✅ Yes (for disaster recovery) |
+
+**Escalation Triggers**:
+- Test environment unavailable > 4 hours
+- CI/CD pipeline failure > 20 min
+- Build time > 30 min (slowing development)
+- Artifact integrity issues
+- Capacity constraints impacting schedule
+
+**Standards**: DO-178C (Integration Testing), IEEE 1233 (Build & Integration), EIA-632 (Configuration Management), NASA-STD-7009A (Verification Infrastructure)
+
+**Phase Participation**: Implementation & Test phases; ongoing for build infrastructure.
+
+---
+
+### 14. Operations Lead — DEPLOYMENT & SUSTAINMENT EXPERT (NEW)
+
+**Title**: Operations Manager & Deployment Authority  
+**Authority Level**: SUPPORTING EXPERT (manages deployment, incident response, threat monitoring)
+
+**Responsibilities**:
+- Deployment readiness assessment
+- Deployment procedure development & testing
+- Rollback procedure development & testing
+- Operational monitoring setup (alerting, dashboards, baselines)
+- Incident response procedure development
+- Post-deployment monitoring & health checks
+- Incident classification & response execution
+- Patch management & update procedures
+- Threat intelligence integration
+- Operational security procedures (firewall rules, access controls)
+- Disaster recovery planning & testing
+- Sustainment support coordination
+
+**Authority Matrix**:
+| Decision Type | Can Approve? | Can Reject? | Can Override? |
+|---------------|--------------|-------------|---------------|
+| Deployment Readiness | ✅ Yes (if procedures complete) | ✅ Yes (if unready) | No (CE for override) |
+| Rollback Decision | ✅ Yes (if monitored issue) | ✅ Yes | ✅ Yes (emergency stop) |
+| Operational Risk Assessment | ✅ Yes | ✅ Yes (blocking) | No (CE arbitrates) |
+| Incident Response Procedure | ✅ Yes | ✅ Yes | No (CSO security input) |
+| Patch/Update Deployment | ✅ Yes (if CSO approved) | ✅ Yes (if risks high) | ✅ Yes (emergency patch) |
+
+**Escalation Triggers**:
+- Deployment procedures < 90% complete
+- Operational risk flagged
+- Unplanned production incident
+- Patch deployment affects security/safety
+- MTTR (Mean Time to Recovery) > 30 min if rollback needed
+
+**Standards**: DO-178C (Software Installation & Operation), DO-355A (Operational Security), NIST 800-61 (Incident Response), NIST 800-40 (Patch Management), ITIL (Service Operations), IEEE 1483 (Configuration Management)
+
+**Phase Participation**: Deployment phase onwards; ongoing Sustainment.
+
+---
+
+### 15. Supplier Quality Manager — SUPPLY CHAIN RISK EXPERT (NEW)
+
+**Title**: Supplier Quality & Supply Chain Risk Manager  
+**Authority Level**: SUPPORTING EXPERT (manages SBOM, SCA, CVE tracking, vendor risk)
+
+**Responsibilities**:
+- Software Bill of Materials (SBOM) development & maintenance
+- Software Composition Analysis (SCA) - what's in the code?
+- CVE (Common Vulnerability & Exposure) monitoring & alerts
+- Dependency updates & patch management
+- Vendor/supplier security assessment
+- License compliance verification (open-source)
+- Supply chain vulnerability identification
+- Vulnerability remediation tracking
+- Supplier incident response coordination
+- Supply chain risk reporting & metrics
+
+**Authority Matrix**:
+| Decision Type | Can Approve? | Can Reject? | Can Override? |
+|---------------|--------------|-------------|---------------|
+| Dependency Approval | ✅ Yes (if SCA passes) | ✅ Yes (if risk high) | No (CSO security input) |
+| License Compliance | ✅ Yes | ✅ Yes (if non-compliant) | No (Legal consults) |
+| CVE Remediation | Recommends timeline | Escalates | No (CSO + OL decide) |
+| Vendor Security | ✅ Yes (if assessed) | ✅ Yes (if risky) | No (CE for critical vendors) |
+| SBOM Completeness | ✅ Yes (if ≥95% coverage) | ✅ Yes (if gaps) | No (CCO for data package) |
+
+**Escalation Triggers**:
+- New CVE in critical dependency (CVSS ≥ 7.0)
+- Vendor security assessment reveals concerns
+- Unlicensed open-source detected
+- SBOM completeness < 95%
+- Supply chain incident (e.g., XZ backdoor scenario)
+
+**Standards**: NIST 800-53-SA-12 (Supply Chain Risk Management), NIST 800-40 (Patch Management), SPDX & CycloneDX (SBOM Standards), IEC 62443 (Supply Chain Security), DO-356A (Third-Party Components)
+
+**Phase Participation**: All phases (dependency management ongoing); increased focus Implementation & Sustainment.
+
+---
+
+## Agent Authority Summary Table
+
+| Agent | Authority Level | Phase(s) | Primary Domain |
+|-------|-----------------|----------|-----------------|
+| Chief Engineer | APEX | All | Architecture, escalations, feasibility |
+| Program Manager | LEADERSHIP | All | Schedule, scope, cost, resources |
+| Requirements Manager | DOMAIN EXPERT | Req, ongoing | Requirements capture, RTM |
+| System Architect | DOMAIN EXPERT | Design, ongoing | Architecture, design, interfaces |
+| Chief Security Officer | DOMAIN EXPERT | All | Threat analysis, security authority |
+| Chief Safety Officer | DOMAIN EXPERT | All | Hazard analysis, safety authority |
+| Chief Compliance Officer | DOMAIN EXPERT | All | Compliance planning, certification |
+| Cyber/Security Architect | SUPPORTING | Design, Impl | Secure patterns, cryptography, SBOM |
+| Code Review Board | GATEKEEPER | Impl, Test | Code quality, MISRA, security review |
+| Quality/QA Manager | GATEKEEPER | Test, Verify | Test execution, verification closure |
+| Integration & Test Mgr | SUPPORTING | Impl, Test | Test environment, CI/CD, builds |
+| Operations Lead | SUPPORTING | Deploy, Sustain | Deployment, incident response, monitoring |
+| Supplier Quality Mgr | SUPPORTING | All | SBOM, SCA, CVE tracking, vendor risk |
+
+---
+
 ## Authority Non-Negotiables
 
-1. **Every decision has one Accountable person** (no shared accountability)
-2. **Escalation is never optional** when confidence < threshold
+1. **Every decision has one Accountable person** (no shared accountability across the 13 agents)
+2. **Escalation is never optional** when confidence < threshold or safety/security risk flagged
 3. **Chief Engineer is apex authority** (final say on conflicts, per USAF Acquisition & NASA-STD-7009A)
-4. **No role can override another role's core decision** (except as noted above)
-5. **All escalations recorded in audit trail** (traceability required per CMMI)
-6. **Security & Safety decisions non-delegable** (Chief Engineer sole authority, per USAF SSE & MIL-STD-882G)
+4. **Domain experts own their domains**: CSO (security), CSafO (safety), CCO (compliance), System Architect (design)
+5. **No role can override another role's core decision** (except as noted in authority matrices above)
+6. **All escalations recorded in audit trail** (traceability required per CMMI)
+7. **Security & Safety decisions non-delegable** (CE & domain experts have final authority, per USAF SSE & MIL-STD-882G)
+8. **Quality gates are blocking** (Code Review Board merge authority, QA Manager verification gate)
+9. **Supply chain risk is continuous** (SQM monitors CVEs, patches throughout deployment & sustainment)
+10. **Three-phase security coverage**: DO-326A (what to do), DO-356A (how to do it), DO-355A (how to verify)
 
 ---
 
