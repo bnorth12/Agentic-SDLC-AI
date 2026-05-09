@@ -14,9 +14,106 @@ from src.agents import (
 )
 from src.boards import ArchitectureReviewBoard
 from src.state.schema import AgentState, Phase
+from src.tools.governance_validation import validate_outputs
 from src.utils.logging import get_logger
 
 logger = get_logger(__name__)
+
+
+def _ensure_messages(updates: dict[str, Any]) -> list[str]:
+    """Ensure updates has a mutable messages list and return it."""
+    messages = updates.get("messages")
+    if not isinstance(messages, list):
+        messages = []
+        updates["messages"] = messages
+    return messages
+
+
+def _build_governance_output(
+    updates: dict[str, Any], source_agent: str
+) -> dict[str, Any]:
+    """Build a governance output payload expected by the validator."""
+    provided = updates.get("governance_output")
+    if isinstance(provided, dict):
+        payload = dict(provided)
+        payload.setdefault("agent", source_agent)
+        return payload
+
+    return {
+        "agent": source_agent,
+        "policy_compliance": updates.get("policy_compliance"),
+        "traceability_links": updates.get("traceability_links"),
+        "gate_readiness": updates.get("gate_readiness"),
+        "evidence_links": updates.get("evidence_links"),
+        "risks_or_blockers": updates.get("risks_or_blockers", []),
+    }
+
+
+def apply_governance_gate_hook(
+    state: AgentState,
+    updates: dict[str, Any],
+    source_agent: str,
+) -> dict[str, Any]:
+    """Validate gate readiness claims before allowing READY transitions."""
+    if not updates:
+        return updates
+
+    candidate = dict(updates)
+    gate_readiness = candidate.get("gate_readiness")
+    if not isinstance(gate_readiness, dict):
+        return candidate
+
+    gate_status = str(gate_readiness.get("status", "")).upper()
+    if gate_status != "READY":
+        return candidate
+
+    output = _build_governance_output(candidate, source_agent)
+    report = validate_outputs(
+        [output],
+        expected_gate=gate_readiness.get("gate"),
+        require_strict_ready=True,
+    )
+    candidate["governance_validation"] = report
+
+    if report["gate_can_be_marked_ready"]:
+        messages = _ensure_messages(candidate)
+        messages.append(
+            f"[governance_hook] {source_agent} passed validation for "
+            f"{report['results'][0]['gate']}"
+        )
+        return candidate
+
+    # Block READY transition and prevent associated phase transition.
+    blocked_readiness = dict(gate_readiness)
+    blocked_readiness["status"] = "NOT_READY"
+    blocked_readiness["reason"] = "Governance evidence validation failed"
+    candidate["gate_readiness"] = blocked_readiness
+    candidate.pop("phase", None)
+    candidate["requires_human_approval"] = True
+
+    details = report["results"][0]
+    issues: list[str] = []
+    if details["missing_fields"]:
+        issues.append("missing fields: " + ", ".join(details["missing_fields"]))
+    if details["invalid_values"]:
+        issues.append("invalid values: " + ", ".join(details["invalid_values"]))
+    if details["missing_evidence_keys"]:
+        issues.append(
+            "missing evidence: " + ", ".join(details["missing_evidence_keys"])
+        )
+
+    messages = _ensure_messages(candidate)
+    messages.append(
+        "[governance_hook] READY transition blocked until governance evidence is complete"
+    )
+    if issues:
+        messages.append("[governance_hook] " + " | ".join(issues))
+
+    logger.warning(
+        "Blocked READY transition for %s due to governance validation failure",
+        source_agent,
+    )
+    return candidate
 
 
 def should_continue(state: AgentState) -> str:
@@ -37,6 +134,12 @@ def should_continue(state: AgentState) -> str:
     if state.requires_human_approval:
         return "human_approval"
 
+    # Stop if current phase artifacts are complete and no review is pending.
+    if state.phase == Phase.REQUIREMENTS and state.requirements:
+        return "END"
+    if state.phase == Phase.ARCHITECTURE and state.architecture:
+        return "END"
+
     # Route based on phase
     if state.phase == Phase.INTAKE:
         return "program_manager"
@@ -51,25 +154,25 @@ def should_continue(state: AgentState) -> str:
 def program_manager_node(state: AgentState) -> dict[str, Any]:
     """Execute program manager agent."""
     agent = ProgramManagerAgent()
-    return agent(state)
+    return apply_governance_gate_hook(state, agent(state), "program_manager")
 
 
 def chief_engineer_node(state: AgentState) -> dict[str, Any]:
     """Execute chief engineer agent."""
     agent = ChiefEngineerAgent()
-    return agent(state)
+    return apply_governance_gate_hook(state, agent(state), "chief_engineer")
 
 
 def requirements_node(state: AgentState) -> dict[str, Any]:
     """Execute requirements agent."""
     agent = RequirementsAgent()
-    return agent(state)
+    return apply_governance_gate_hook(state, agent(state), "requirements_agent")
 
 
 def architecture_node(state: AgentState) -> dict[str, Any]:
     """Execute architecture agent."""
     agent = ArchitectureAgent()
-    return agent(state)
+    return apply_governance_gate_hook(state, agent(state), "architecture_agent")
 
 
 def review_board_node(state: AgentState) -> dict[str, Any]:
@@ -109,7 +212,7 @@ def review_board_node(state: AgentState) -> dict[str, Any]:
         elif state.phase == Phase.ARCHITECTURE:
             updates["phase"] = Phase.IMPLEMENTATION
 
-    return updates
+    return apply_governance_gate_hook(state, updates, "review_board")
 
 
 def human_approval_node(state: AgentState) -> dict[str, Any]:
@@ -121,11 +224,12 @@ def human_approval_node(state: AgentState) -> dict[str, Any]:
     logger.info("Human approval checkpoint")
 
     # For now, auto-approve
-    return {
+    updates = {
         "requires_human_approval": False,
         "human_feedback": "Auto-approved for demo",
         "messages": ["[HUMAN] Approved"],
     }
+    return apply_governance_gate_hook(state, updates, "human_approval")
 
 
 def build_supervisor_graph() -> StateGraph:

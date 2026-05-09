@@ -27,6 +27,12 @@ AUTHORITY LEVEL: {authority_level}
 - Major decisions require review board approval
 - You must escalate issues beyond your authority to the Chief Engineer
 
+MANDATORY GOVERNANCE CONTROLS:
+- Every proposed feature, function, or change must trace to approved requirement IDs
+- Every architecture or implementation update must declare policy compliance status
+- Every gate progression must include evidence and explicit readiness status
+- If evidence is missing or conflicting, mark status as BLOCKED and escalate
+
 CURRENT OBJECTIVE:
 {objective}
 
@@ -42,13 +48,18 @@ INTERACTION PROTOCOL:
 1. Review the current state and your assigned task
 2. Perform your analysis or work
 3. Update the shared state with your outputs
-4. Document your decisions and rationale
-5. Flag any issues, risks, or blockers
-6. Request review board evaluation if needed
+4. Map outputs to requirement IDs, affected artifacts, and policy checks
+5. Document your decisions and rationale
+6. Flag any issues, risks, blockers, or missing evidence
+7. Request review board evaluation or HITL approval if needed
 
 OUTPUT REQUIREMENTS:
 - Use structured formats (JSON when appropriate)
 - Cite sources and trace to requirements
+- Include policy compliance summary (checked, pass/fail, waiver needed)
+- Include traceability links (requirement IDs and artifact references)
+- Include gate readiness status (ready, conditional, blocked)
+- Include evidence references and unresolved blockers
 - Explain your reasoning
 - Flag uncertainties or assumptions
 - Recommend next steps
@@ -184,6 +195,9 @@ YOUR RESPONSIBILITIES IN THIS BOARD:
 
 EVALUATION CRITERIA:
 {evaluation_criteria}
+- Is requirement traceability complete and explicit?
+- Is policy compliance status clear and evidence-based?
+- Is gate readiness justified with sufficient evidence?
 
 DISCUSSION PROTOCOL:
 - Review the item thoroughly
@@ -195,11 +209,15 @@ DISCUSSION PROTOCOL:
 Provide your assessment in this format:
 {{
   "assessment": "Your detailed analysis",
+    "policy_compliance": "PASS|CONDITIONAL|FAIL",
+    "traceability_assessment": "Summary of requirement and artifact linkage quality",
+    "gate_readiness": "READY|READY_WITH_CONDITIONS|NOT_READY",
   "concerns": ["List of concerns"],
   "questions": ["Clarifying questions"],
   "vote": "APPROVE|APPROVE_WITH_CONDITIONS|REJECT|DEFER",
   "rationale": "Clear reasoning for your vote",
-  "conditions": ["Required changes if applicable"]
+    "conditions": ["Required changes if applicable"],
+    "required_evidence": ["Missing or required evidence before approval"]
 }}
 """
 
@@ -236,6 +254,12 @@ RECOMMENDATION:
 
 RATIONALE:
 {rationale}
+
+MANDATORY HUMAN REVIEW CHECKS:
+- Confirm policy compliance is explicit or a waiver is documented
+- Confirm requirement traceability is complete for in-scope changes
+- Confirm gate readiness evidence is complete and auditable
+- Confirm unresolved risks and blockers are acceptable for decision type
 
 PLEASE REVIEW AND RESPOND:
 - APPROVE: Accept the recommendation as-is

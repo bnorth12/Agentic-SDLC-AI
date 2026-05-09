@@ -84,6 +84,27 @@ class ArchitectureAgent(BaseAgent):
                 f"[{self.name}] Developed initial architecture with {len(architecture['components'])} components"
             )
 
+            updates["active_board"] = "architecture_review"
+            updates.update(
+                self.build_governance_output(
+                    gate="gate_3",
+                    policy_ids=["ADP-001", "SEMP-001", "RMP-001"],
+                    traceability_links=[
+                        {
+                            "requirement_id": req_id,
+                            "artifacts": ["architecture_baseline_package"],
+                        }
+                        for req_id in state.requirements.keys()
+                    ],
+                    evidence_links={
+                        "architecture_baseline_package": "in_state:architecture",
+                        "requirement_architecture_trace_matrix": "in_state:architecture.traced_requirements",
+                        "architecture_board_decision": "pending:architecture_review",
+                    },
+                    notes="Architecture baseline package prepared and submitted for ARB",
+                )
+            )
+
             self.logger.log_complete("Architecture development")
 
         return updates

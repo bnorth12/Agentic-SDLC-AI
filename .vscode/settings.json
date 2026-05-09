@@ -1,0 +1,9 @@
+{
+    "chat.tools.terminal.autoApprove": {
+        "pytest": true,
+        "/^python scripts/validate_governance_evidence\\.py --input examples/governance/sample_gate2_outputs\\.json --gate gate_2$/": {
+            "approve": true,
+            "matchCommandLine": true
+        }
+    }
+}

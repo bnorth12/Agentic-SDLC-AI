@@ -165,6 +165,15 @@ class AgentState(BaseModel):
     board_results: dict[str, BoardDecision] = Field(
         default_factory=dict, description="Review board decisions"
     )
+    current_gate: str | None = None
+    gate_readiness: dict[str, Any] = Field(
+        default_factory=dict,
+        description="Current governance gate readiness declaration",
+    )
+    governance_validation: dict[str, Any] = Field(
+        default_factory=dict,
+        description="Latest governance validation report",
+    )
     requires_human_approval: bool = False
     human_feedback: str | None = None
 
