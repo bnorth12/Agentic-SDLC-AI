@@ -27,12 +27,25 @@ from src.gates import (
     evaluate_implementation_gate,
     evaluate_requirements_gate,
 )
+from src.metrics import KPITracker
 from src.state.persistence import get_persistence_manager
 from src.state.schema import AgentState, Phase
 from src.tools.governance_validation import validate_outputs
 from src.utils.logging import get_logger
 
 logger = get_logger(__name__)
+
+
+# Global KPI tracker instance
+_kpi_tracker: KPITracker | None = None
+
+
+def get_kpi_tracker() -> KPITracker:
+    """Get the global KPI tracker instance."""
+    global _kpi_tracker
+    if _kpi_tracker is None:
+        _kpi_tracker = KPITracker()
+    return _kpi_tracker
 
 
 def _save_checkpoint_snapshot(state: AgentState, updates: dict[str, Any]) -> None:
@@ -112,6 +125,32 @@ def apply_governance_gate_hook(
         require_strict_ready=True,
     )
     candidate["governance_validation"] = report
+
+    # Record metrics for this gate evaluation
+    gate_name = report["results"][0]["gate"] if report["results"] else "unknown"
+    evidence_completeness = 1.0 - (
+        len(report["results"][0]["missing_evidence_keys"])
+        / max(1, len(report["results"][0].get("expected_evidence_keys", [])))
+        if report["results"]
+        else 0.0
+    )
+    get_kpi_tracker().record_gate_outcome(
+        gate_name=gate_name,
+        status="READY" if report["gate_can_be_marked_ready"] else "NOT_READY",
+        evidence_completeness=evidence_completeness,
+        was_ready_on_first_attempt=True,
+    )
+    get_kpi_tracker().record_checkpoint_snapshot()
+
+    # Update governance metrics in state
+    governance_metrics = dict(candidate.get("governance_metrics", {}))
+    governance_metrics["last_gate_evaluation"] = {
+        "gate": gate_name,
+        "status": "READY" if report["gate_can_be_marked_ready"] else "NOT_READY",
+        "evidence_completeness": evidence_completeness,
+    }
+    governance_metrics["kpi_report"] = get_kpi_tracker().get_metrics_report()
+    candidate["governance_metrics"] = governance_metrics
 
     if report["gate_can_be_marked_ready"]:
         messages = _ensure_messages(candidate)
@@ -382,6 +421,47 @@ def human_approval_node(state: AgentState) -> dict[str, Any]:
         "messages": ["[HUMAN] Approved"],
     }
     return apply_governance_gate_hook(state, updates, "human_approval")
+
+
+def resume_from_checkpoint(state: AgentState) -> AgentState:
+    """
+    Resume execution from a checkpoint snapshot.
+
+    If the state has a session_id, attempt to load the last saved checkpoint
+    and restore the state to that point. This enables resuming work after
+    interruptions or for incremental progress tracking.
+
+    Args:
+        state: Current state (may be initial or partial)
+
+    Returns:
+        Restored state from checkpoint, or original state if no checkpoint found
+    """
+    session_id = state.metadata.session_id
+    if not session_id:
+        logger.debug("No session_id in state metadata; skipping checkpoint restore")
+        return state
+
+    try:
+        checkpoint = get_persistence_manager().load_checkpoint_snapshot(session_id)
+        if checkpoint:
+            logger.info(f"Restoring state from checkpoint for session {session_id}")
+            # Reconstruct AgentState from checkpoint payload
+            restored = AgentState(**checkpoint)
+            logger.info(
+                f"Restored state: phase={restored.phase}, "
+                f"requirements={len(restored.requirements)}, "
+                f"work_packages={len(restored.work_packages)}"
+            )
+            return restored
+        else:
+            logger.debug(
+                f"No checkpoint found for session {session_id}; using current state"
+            )
+    except Exception as exc:  # pragma: no cover - defensive logging
+        logger.warning(f"Unable to restore checkpoint: {exc}; using current state")
+
+    return state
 
 
 def build_supervisor_graph() -> StateGraph:

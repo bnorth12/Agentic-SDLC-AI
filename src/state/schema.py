@@ -32,6 +32,18 @@ class WorkItemStatus(str, Enum):
     COMPLETED = "completed"
 
 
+class WorkPackageStatus(str, Enum):
+    """Work package status in the orchestration queue."""
+
+    QUEUED = "queued"
+    IN_PROGRESS = "in_progress"
+    AWAITING_GATE = "awaiting_gate"
+    GATE_PASSED = "gate_passed"
+    GATE_FAILED = "gate_failed"
+    COMPLETED = "completed"
+    CANCELLED = "cancelled"
+
+
 class DecisionStatus(str, Enum):
     """Decision approval status."""
 
@@ -101,6 +113,32 @@ class WorkItem(BaseModel):
     updated_at: datetime = Field(default_factory=datetime.utcnow)
 
 
+class WorkPackage(BaseModel):
+    """A work package tracking discrete work units through SDLC phases."""
+
+    id: str = Field(description="Unique work package identifier")
+    title: str = Field(description="Work package title")
+    description: str = Field(description="Detailed description")
+    assigned_to: str = Field(description="Agent or team responsible")
+    status: WorkPackageStatus = Field(
+        default=WorkPackageStatus.QUEUED,
+        description="Current status in orchestration queue",
+    )
+    priority: int = Field(default=0, description="Priority for execution")
+    dependencies: list[str] = Field(
+        default_factory=list, description="IDs of dependent work packages"
+    )
+    traceability_links: list[str] = Field(
+        default_factory=list, description="Linked requirement IDs"
+    )
+    gate_evidence: dict[str, Any] = Field(
+        default_factory=dict, description="Evidence artifacts for gate validation"
+    )
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+    updated_at: datetime = Field(default_factory=datetime.utcnow)
+    completed_at: datetime | None = Field(default=None)
+
+
 class BoardDecision(BaseModel):
     """Result from a review board."""
 
@@ -139,6 +177,9 @@ class AgentState(BaseModel):
     objective: str = ""
     phase: Phase = Phase.INTAKE
     work_queue: list[WorkItem] = Field(default_factory=list)
+    work_packages: dict[str, WorkPackage] = Field(
+        default_factory=dict, description="Work packages indexed by ID"
+    )
     active_board: str | None = None
 
     # Engineering artifacts
@@ -173,6 +214,10 @@ class AgentState(BaseModel):
     governance_validation: dict[str, Any] = Field(
         default_factory=dict,
         description="Latest governance validation report",
+    )
+    governance_metrics: dict[str, Any] = Field(
+        default_factory=dict,
+        description="KPI tracking and gate outcome metrics",
     )
     requires_human_approval: bool = False
     human_feedback: str | None = None
