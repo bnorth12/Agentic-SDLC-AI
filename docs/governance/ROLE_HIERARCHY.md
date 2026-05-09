@@ -362,6 +362,39 @@ Decision Point → Authority → Escalate To
 
 1. **Every decision has one Accountable person** (no shared accountability)
 2. **Escalation is never optional** when confidence < threshold
-3. **Chief Engineer is apex authority** (final say on conflicts)
+3. **Chief Engineer is apex authority** (final say on conflicts, per USAF Acquisition & NASA-STD-7009A)
 4. **No role can override another role's core decision** (except as noted above)
-5. **All escalations recorded in audit trail** (traceability required)
+5. **All escalations recorded in audit trail** (traceability required per CMMI)
+6. **Security & Safety decisions non-delegable** (Chief Engineer sole authority, per USAF SSE & MIL-STD-882G)
+
+---
+
+## Reference Standards
+
+This role hierarchy derives from industry-standard SE processes:
+
+- **INCOSE Systems Engineering Handbook**: Role definitions, responsibilities
+- **NASA-STD-7009A**: Technical review authority, gate decision-making
+- **USAF Acquisition Strategy**: Phase gate authority, program management
+- **USAF System Security Engineering**: Security decision authority
+- **MIL-STD-882G**: Safety decision authority, risk acceptance
+- **CMMI v2.0**: Process ownership clarity, traceability
+
+See [docs/references/REFERENCES.md](../references/REFERENCES.md) for complete standards mapping.
+See [docs/references/USAF_SSE_REFERENCE.md](../references/USAF_SSE_REFERENCE.md) for security role details.
+See [docs/references/SAFETY_STANDARDS_REFERENCE.md](../references/SAFETY_STANDARDS_REFERENCE.md) for safety role details.
+
+---
+
+## Reference Standards
+
+This role hierarchy derives from industry-standard SE processes:
+
+- **INCOSE Systems Engineering Handbook**: Role definitions, responsibilities
+- **NASA-STD-7009A**: Technical review authority, gate decision-making
+- **USAF Acquisition Strategy**: Phase gate authority, program management
+- **USAF System Security Engineering**: Security decision authority
+- **MIL-STD-882G**: Safety decision authority, risk acceptance
+- **CMMI v2.0**: Process ownership clarity, traceability
+
+See [docs/references/REFERENCES.md](../references/REFERENCES.md) for complete standards mapping.

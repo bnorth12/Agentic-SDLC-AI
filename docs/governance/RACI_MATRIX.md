@@ -290,5 +290,22 @@ This RACI aligns with:
 ✅ **INCOSE SE Handbook** (Sections 3-7): Activity definitions, responsibilities  
 ✅ **NASA-STD-7009A**: Technical review gates, role authority  
 ✅ **USAF DAU**: Acquisition phase gating, risk management, CCM  
+✅ **USAF System Security Engineering**: Security decision authority (Risk-010, II-004, Gov-006)  
+✅ **SAE ARP 4752A & MIL-STD-882G**: Safety decision authority (Risk-009, VV-001-010, Gov-005)  
 ✅ **ISO/IEC/IEEE 42010**: Architecture decision records, governance  
 ✅ **CMMI**: Process maturity, responsibility clarity
+
+---
+
+## Detailed Standards References
+
+For expanded guidance on specific domains:
+
+- **Security Domain Details**: See [docs/references/USAF_SSE_REFERENCE.md](../references/USAF_SSE_REFERENCE.md)
+  - Activities: II-004 (Security Scanning), II-006 (Security Code Review), Risk-010 (Security Risk Assessment), Gov-006 (Security Policy Audit)
+  
+- **Safety Domain Details**: See [docs/references/SAFETY_STANDARDS_REFERENCE.md](../references/SAFETY_STANDARDS_REFERENCE.md)
+  - Activities: AD-008 (Threat/Hazard Analysis), Risk-009 (Safety Risk Assessment), VV-001-010 (Safety Verification), Gov-005 (Deployment Readiness Gate)
+  
+- **All Standards Mapping**: See [docs/references/REFERENCES.md](../references/REFERENCES.md)
+  - Cross-reference table showing which standard governs each governance document
