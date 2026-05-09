@@ -4,7 +4,7 @@
 **Date**: May 12, 2026  
 **Gatekeeper**: Code Review Board (chairs), QA Manager (co-gatekeeper)  
 **Phase Transition**: Implementation → Test & Verification  
-**Standards Basis**: DO-178C §5, DO-356A §5, IEEE 1028 (code reviews), MISRA C/C++/Java, CWE-25 (secure coding)
+**Standards Basis**: DO-178C §5, DO-356A §5, IEEE 1028 (code reviews), MISRA C/C++/Java, CWE Top 25 (secure coding)
 
 ---
 
@@ -47,8 +47,8 @@ The Implementation & Code Review Gate determines if a program can proceed from *
 |---|---|---|---|
 | **A1: MISRA Violations** | ≥95% compliant | MISRA scan results <5% violations per module | CRB |
 | **A2: Cyclomatic Complexity** | ≤10 per function | CC analysis; waivers <5% of functions | CRB |
-| **A3: Code Coverage** | To be measured | Basic coverage baseline established | Dev Team |
-| **A4: No High-Risk Violations** | 0 permitted | No CWE-25 top-25 violations (SQL injection, buffer overflow, etc.) | CRB + CSO |
+| **A3: Code Coverage** | ≥80% | Unit test coverage baseline established and verified | Dev Team |
+| **A4: No High-Risk Violations** | 0 permitted | No CWE Top 25 violations (SQL injection, buffer overflow, etc.) | CRB + CSO |
 | **A5: Naming & Documentation** | ≥95% compliant | Consistent naming, function comments present | CRB |
 | **A6: Compiler Warnings** | 0 high-severity | All compiler warnings resolved or documented | Dev Team |
 
@@ -69,7 +69,7 @@ The Implementation & Code Review Gate determines if a program can proceed from *
 | **B5: Error Handling** | Secure error messages | No sensitive info in error messages; exception handling prevents disclosure | CRB |
 | **B6: No Hardcoded Secrets** | 0 found | No passwords, keys, tokens in source code | CSO + CRB |
 
-**Pass Condition**: All security-critical code inspected, secure patterns verified, no CWE-25 violations.
+**Pass Condition**: All security-critical code inspected, secure patterns verified, no CWE Top 25 violations.
 
 **Escalation**: If critical vulnerabilities found → remediate before gate.
 
@@ -228,7 +228,7 @@ Upon PASS decision, document in Gate Archive:
    - Security-critical code inspected
    - Threat-driven secure patterns verified in code
    - Cryptography implementation verified
-   - No CWE-25 vulnerabilities
+   - No CWE Top 25 vulnerabilities
 
 4. **Safety-Critical Code Inspection Report**
    - List of safety-critical modules

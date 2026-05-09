@@ -38,7 +38,7 @@ INCOSE Systems Engineering Handbook (Primary - SE taxonomy)
 - **RACI Mapping**: 50+ activities mapped to R/A/C/I (Sections 3-7)
 - **Role Definitions**: Requirements, Architecture, Implementation coordination (per INCOSE flow)
 
-**Reference Document**: [INCOSE_ACTIVITY_DOMAINS.md](./INCOSE_ACTIVITY_DOMAINS.md)
+**Reference Source**: INCOSE Systems Engineering Handbook activity domains (Sections 3-7)
 
 ---
 
@@ -57,7 +57,7 @@ INCOSE Systems Engineering Handbook (Primary - SE taxonomy)
 - **Authority Levels**: Program Manager as gate authority (Phase Gate Transition approval)
 - **Confidence Thresholds**: ≥70% feasibility, ≥85% test coverage, ≥90% deployment readiness (per NASA review readiness)
 
-**Reference Document**: [NASA_GATES_REFERENCE.md](./NASA_GATES_REFERENCE.md)
+**Reference Source**: NASA-STD-7009A technical review and gate guidance
 
 ---
 
@@ -76,7 +76,7 @@ INCOSE Systems Engineering Handbook (Primary - SE taxonomy)
 - **Escalation Triggers**: Medium and High risk → Chief Engineer (immediate escalation)
 - **Mitigation Authority**: Architecture Agent responsible for design mitigations, Program Manager for schedule mitigations
 
-**Reference Document**: [RISK_MANAGEMENT_REFERENCE.md](./RISK_MANAGEMENT_REFERENCE.md)
+**Reference Source**: NASA-STD-7009D risk management guidance
 
 ---
 
@@ -95,7 +95,7 @@ INCOSE Systems Engineering Handbook (Primary - SE taxonomy)
 - **Resource Allocation**: Program Manager allocates resources, escalates if insufficient capacity
 - **Conflict Resolution**: Chief Engineer as tiebreaker (per USAF authority pyramid)
 
-**Reference Document**: [USAF_ACQUISITION_REFERENCE.md](./USAF_ACQUISITION_REFERENCE.md)
+**Reference Source**: USAF acquisition lifecycle guidance
 
 ---
 
@@ -133,7 +133,7 @@ INCOSE Systems Engineering Handbook (Primary - SE taxonomy)
 - **Functional Decomposition**: Architecture Agent decomposes safety-critical functions (AD-001 through AD-004)
 - **Verification Strategy**: Verification & Validation plan includes safety verification tests (VV-001 through VV-010)
 
-**Reference Document**: [ARP_4752A_SAFETY_REFERENCE.md](./ARP_4752A_SAFETY_REFERENCE.md)
+**Reference Source**: SAE ARP 4752A certification and safety guidance
 
 ---
 
@@ -152,7 +152,7 @@ INCOSE Systems Engineering Handbook (Primary - SE taxonomy)
 - **Safety-Critical Code**: Code Review Board performs enhanced scrutiny (II-004 Security Scanning extended to safety)
 - **Verification**: Explicit safety verification tests in test plan (VV-001 includes safety test cases)
 
-**Reference Document**: [MIL_STD_882G_SAFETY_REFERENCE.md](./MIL_STD_882G_SAFETY_REFERENCE.md)
+**Reference Source**: MIL-STD-882G system safety guidance
 
 ---
 
@@ -166,10 +166,10 @@ INCOSE Systems Engineering Handbook (Primary - SE taxonomy)
 
 **How We Use It**:
 - **Architecture Decisions**: Gov-001 in RACI_MATRIX.md (Architecture Decision Record)
-- **Decision Traceability**: All decisions recorded in GOVERNANCE_DECISION_LOG (Gov-008)
+- **Decision Traceability**: All decisions recorded in logs/AUDIT_TRAIL.jsonl (Gov-008)
 - **Stakeholder Documentation**: Ensures Requirements Agent (stakeholder voice) is consulted on all architecture decisions
 
-**Reference Document**: [ISO_42010_ARCHITECTURE_REFERENCE.md](./ISO_42010_ARCHITECTURE_REFERENCE.md)
+**Reference Source**: ISO/IEC/IEEE 42010 architecture decision guidance
 
 ---
 
@@ -187,7 +187,7 @@ INCOSE Systems Engineering Handbook (Primary - SE taxonomy)
 - **Metrics**: METRICS.md defines KPIs per role (Chief Engineer, Program Manager, etc.)
 - **Process Discipline**: Gate enforcement ensures no skipping phases
 
-**Reference Document**: [CMMI_GOVERNANCE_REFERENCE.md](./CMMI_GOVERNANCE_REFERENCE.md)
+**Reference Source**: CMMI v2.0 process maturity and governance guidance
 
 ---
 
@@ -215,8 +215,8 @@ INCOSE Systems Engineering Handbook (Primary - SE taxonomy)
 
 1. **When creating new governance documents**: Check the "Primary Standard" column above
 2. **When clarifying a role's authority**: Refer to ROLE_HIERARCHY.md + USAF_ACQUISITION_REFERENCE.md
-3. **When defining RACI for an activity**: Check RACI_MATRIX.md + INCOSE_ACTIVITY_DOMAINS.md
-4. **When setting confidence thresholds**: Refer to CONFIDENCE_THRESHOLDS.md + NASA_GATES_REFERENCE.md
+3. **When defining RACI for an activity**: Check RACI_MATRIX.md and the INCOSE activity-domain sections summarized above
+4. **When setting confidence thresholds**: Refer to CONFIDENCE_THRESHOLDS.md and NASA-STD-7009A/7009D gate guidance
 5. **When handling security/safety escalations**: Check USAF_SSE_REFERENCE.md + MIL_STD_882G_SAFETY_REFERENCE.md
 
 ---

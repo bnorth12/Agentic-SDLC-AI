@@ -2,7 +2,7 @@
 
 **Document ID**: GATES-DEPL-001  
 **Date**: May 12, 2026  
-**Gatekeeper**: Program Manager (chairs), Chief Engineer (approval authority)  
+**Gatekeeper**: Deployment Manager (chairs), Chief Engineer (approval authority)  
 **Phase Transition**: Test & Verification → Deployment & Operations  
 **Standards Basis**: DO-178C §6, DO-356A §6, MIL-STD-882G §6, NASA-STD-7009A §6, FAA AC 25.1309-1A
 
@@ -205,7 +205,7 @@ The Deployment Phase Gate determines if a program can proceed from **Test & Veri
 - **Recommendation**: READY, CONDITIONAL, NOT READY
 
 ### Step 5: Deployment Readiness Review (DRR) Gate Meeting (Day 3)
-**Attendees**: PM (chair), CE (approval authority), CSO, CSafO, CCO, Ops Lead
+**Attendees**: Deployment Manager (chair), CE (approval authority), PM, CSO, CSafO, CCO, Ops Lead
 
 **Agenda** (2 hours):
 1. PM presents test results & critical issues (15 min)
@@ -218,7 +218,7 @@ The Deployment Phase Gate determines if a program can proceed from **Test & Veri
 8. If PASS: Deployment authorized; if CONDITIONAL: risk memo signed; if FAIL: recovery actions (5 min)
 
 **Gate Vote Authority**: 
-- **PASS**: PM + CE approval (CSO + CSafO + CCO concurrence)
+- **PASS**: Deployment Manager + CE approval (PM + CSO + CSafO + CCO concurrence)
 - **CONDITIONAL**: Pass with Risk Acceptance Memo (CE + CSO + CSafO + PM signature)
 - **FAIL**: Requires critical issue resolution and re-gating
 
@@ -352,7 +352,7 @@ DEPLOYMENT HOLD UNTIL: [If scheduled hold]
 | VV-009: Test Coverage Analysis | QA Manager | QA Manager | CRB | PM |
 | SEC-021: Residual Threat Assessment | CSO | CSO | CE | PM |
 | SAF-021: Residual Failure Assessment | CSafO | CSafO | CE | PM |
-| SAF-022: Residual Risk Acceptance | CSafO + CE | CSafO + CE | PM | CCO |
+| SAF-022: Residual Risk Acceptance | CSafO | CE | PM | CCO |
 | COMP-014: Residual Risk Documentation | CCO | CCO | CSO, CSafO | RM |
 | COMP-015: Evidence Package Assembly | CCO | CCO | CSO, CSafO, QA | RM |
 | OPS-001: Operational Procedures | Ops Lead | Ops Lead | CSO, CSafO | PM |

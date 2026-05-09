@@ -219,7 +219,7 @@ ARP 4752A and MIL-STD-882G define safety management processes including function
 |----------|------------------|--------------|----------|
 | F1: Capture requirements | User input ignored | Requirements not recorded | Catastrophic |
 | F2: Decompose L1→L2 | Decomposition incomplete | Missing requirements flow through | Critical |
-| F3: Generate architecture | Design infeasible | Unbuilable system designed | Critical |
+| F3: Generate architecture | Design infeasible | Unbuildable system designed | Critical |
 | F4: Route for review | Review skipped | Unsafe design approved | Catastrophic |
 | F5: Approve/reject design | Wrong decision made | Rejected design not re-reviewed; Approved design not checked | Critical |
 | F6: Audit trail | Decisions not logged | Non-repudiation lost; forensic analysis fails | Major |
@@ -538,7 +538,7 @@ GATE DECISION:
 3. **Code Review Board = Safety Implementation Authority**: Safety code review, safe coding practices, safety verification testing
 4. **Every Hazard Has a Mitigation**: No unmitigated hazards allowed (prevent, detect, mitigate, or accept + monitor)
 5. **≥95% Coverage Required**: Safety-critical code must be ≥95% covered by tests
-6. **Audit Trail Required**: All safety decisions logged in GOVERNANCE_DECISION_LOG (traceability)
+6. **Audit Trail Required**: All safety decisions logged in logs/AUDIT_TRAIL.jsonl (traceability)
 7. **Residual Risk Acceptance**: CE signs risk acceptance memo; operational controls (monitoring, patch SLA) in place
 8. **Safety-Critical Components**: Tagged, reviewed ≥2x, tested ≥95%, monitored post-deployment
 

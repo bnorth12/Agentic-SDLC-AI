@@ -450,7 +450,7 @@ PATCH MANAGEMENT:
 3. **Architecture Agent = Security Design Authority**: Threat analysis, security architecture, component allocation
 4. **Escalation Trigger**: Any Critical/High security finding → Chief Engineer immediately
 5. **No Waiver Without CE**: Security requirements cannot be waived without Chief Engineer sign-off
-6. **Audit Trail**: All security decisions recorded in GOVERNANCE_DECISION_LOG (traceability required)
+6. **Audit Trail**: All security decisions recorded in logs/AUDIT_TRAIL.jsonl (traceability required)
 7. **Continuous Monitoring**: Post-deployment security operations (threat monitoring, incident response, patch management)
 
 ---

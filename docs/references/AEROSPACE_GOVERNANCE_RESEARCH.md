@@ -167,7 +167,7 @@ Map comprehensive aerospace/defense governance standards to each agent role and 
 
 **Potential Board Responsibility**:
 - Deployment Manager chairs Deployment Readiness Review (DRR) - release package complete, readiness verified
-- Deployment Manager chairs Release Management Board (RMB) - deployment schedule, rollback criteria
+- Deployment Manager chairs Deployment Management Board (DMB) - deployment schedule, rollback criteria
 
 **Questions for Research**:
 - What deployment package contents are required (source, binaries, test evidence, docs)?
@@ -290,7 +290,7 @@ Map comprehensive aerospace/defense governance standards to each agent role and 
 - Defect management (severity, priority, resolution)
 - Verification closure (all requirements verified, traceability complete)
 
-**Participants**: Code Review Board (Chair - test execution lead), Requirements Agent (traceability), QA manager, CE (escalations)
+**Participants**: QA manager (Chair - test execution lead), Requirements Agent (traceability), Code Review Board, CE (escalations)
 
 **RACI Activity Mappings**:
 - VV-001: Test Plan Development → TVB approval

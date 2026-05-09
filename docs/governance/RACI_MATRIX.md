@@ -95,7 +95,7 @@ RACI is organized by SE domain (per INCOSE/NASA/USAF taxonomy):
 
 | Activity | Requirements Agent | Architecture Agent | Program Manager | Chief Engineer | Code Review Board | Deployment Manager |
 |----------|------|------|------|------|------|------|
-| **II-001: Code Development** | — | C | — | — | **A** (reviews) | — |
+| **II-001: Code Development** | — | **R** | — | **A** | C (reviews) | — |
 | **II-002: Unit Test Development** | — | — | — | — | **R+A** | — |
 | **II-003: Code Quality Checks** | — | — | — | — | **R+A** | — |
 | **II-004: Security Scanning** | — | C | — | — | **R+A** | — |
@@ -155,7 +155,7 @@ RACI is organized by SE domain (per INCOSE/NASA/USAF taxonomy):
 
 | Activity | Requirements Agent | Architecture Agent | Program Manager | Chief Engineer | Code Review Board | Deployment Manager |
 |----------|------|------|------|------|------|------|
-| **Risk-001: Risk Identification** | **R** | **R** | C | — | **R** | **R** |
+| **Risk-001: Risk Identification** | **R** | **R** | C | **A** | **R** | **R** |
 | **Risk-002: Risk Assessment** | C | **R** | — | **A** | C | C |
 | **Risk-003: Risk Prioritization** | C | C | **R+A** | C | — | — |
 | **Risk-004: Risk Mitigation Planning** | C | **R** | **A** | C | — | — |
@@ -164,7 +164,7 @@ RACI is organized by SE domain (per INCOSE/NASA/USAF taxonomy):
 | **Risk-007: Risk Escalation** | **R** (triggers) | **R** (triggers) | — | **A** (decision) | **R** (triggers) | **R** (triggers) |
 | **Risk-008: Risk Documentation** | — | — | **R** | **A** | — | — |
 | **Risk-009: Safety Risk Assessment** | C | C | — | **R+A** | C | C |
-| **Risk-010: Security Risk Assessment** | C | C | — | **R+A** | **R+A** | C |
+| **Risk-010: Security Risk Assessment** | C | C | — | **A** | **R** | C |
 
 **Domain Owner**: Chief Engineer (apex responsibility)  
 **Escalation Point**: Chief Engineer (all risks > Medium severity)

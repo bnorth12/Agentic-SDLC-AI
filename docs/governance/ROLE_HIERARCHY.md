@@ -9,7 +9,7 @@
 
 ## Executive Summary
 
-This document defines the organizational hierarchy for the Agentic-SDLC-AI governance system. Six core roles coordinate across the SDLC lifecycle, with clear authority levels, escalation paths, and success metrics.
+This document defines the organizational hierarchy for the Agentic-SDLC-AI governance system. Thirteen specialized roles coordinate across the SDLC lifecycle, with clear authority levels, escalation paths, and success metrics.
 
 **Principle**: Every decision has an owner (Accountable person). Escalation is triggered by defined confidence thresholds or risk conditions, never by ambiguity.
 
@@ -70,7 +70,7 @@ Chief Engineer (APEX TECHNICAL AUTHORITY)
 **Escalation Procedure**:
 1. Agent flags escalation with evidence (confidence score, risk assessment, conflict description)
 2. Chief Engineer reviews within 24 hours
-3. Decision recorded in AUDIT_TRAIL.jsonl
+3. Decision recorded in logs/AUDIT_TRAIL.jsonl
 4. Decision communicated to all affected parties
 5. Implementation proceeds or rework requested
 
@@ -213,44 +213,7 @@ Chief Engineer (APEX TECHNICAL AUTHORITY)
 
 ### 5. Code Review Board — QUALITY GATES AUTHORITY
 
-**Title**: Quality Assurance & Merge Authority  
-**Authority Level**: MEDIUM (owns code quality, security, merge approval)
-
-**Responsibilities**:
-- Code quality enforcement (linting, complexity, style)
-- Security scanning and vulnerability assessment
-- Test coverage verification (≥85% target)
-- Peer review coordination (2+ approvals required)
-- Merge decision and conflict resolution
-
-**Authority Matrix**:
-| Decision Type | Can Approve? | Can Reject? | Can Override? |
-|---------------|--------------|-------------|---------------|
-| Code Quality (linting/complexity) | ✅ Yes | ✅ Yes | No (CEO for waivers) |
-| Test Coverage Threshold | ✅ Yes (≥85%) | ✅ Yes | No (CE for exceptions) |
-| Security Issues | ✅ Yes (critical) | ✅ Yes | ✅ Yes (blocking) |
-| Merge Approval | ✅ Yes (2+ reviewers) | ✅ Yes | No (CE if safety) |
-| Code Review Waivers | No (escalates) | No (escalates) | No (CE decides) |
-
-**Escalation Triggers**:
-- Code quality threshold violations (complexity > 10, coverage < 85%)
-- Security vulnerability found (any severity)
-- Disagreement between reviewers (2+ approvals required, reviewer holds)
-- High-risk code pattern (database schema change, auth bypass, etc.)
-- Test coverage unexpectedly low (regression)
-
-**Escalation Procedure**:
-1. Code Review Board flags issue with evidence (metric violation, security scan result, reviewer disagreement)
-2. If security issue → escalate to Chief Engineer immediately (blocking)
-3. If coverage/complexity → author refactors and resubmits
-4. If reviewer disagreement → third reviewer arbitrates
-5. If unresolved → escalate to Chief Engineer
-
-**Success Metrics**:
-- Defect escape rate: <5% bugs reaching production
-- Code review turnaround: ≤24 hours per review
-- Merge success rate: ≥98% (minimal rollback)
-- Security issue rate: 0 critical security issues merged
+See Section 11, "Code Review Board — QUALITY & SECURITY GATEKEEPER (EXPANDED)", for the single authoritative definition of Code Review Board responsibilities, thresholds, and escalation paths.
 
 ---
 
@@ -756,18 +719,3 @@ This role hierarchy derives from industry-standard SE processes:
 See [docs/references/REFERENCES.md](../references/REFERENCES.md) for complete standards mapping.
 See [docs/references/USAF_SSE_REFERENCE.md](../references/USAF_SSE_REFERENCE.md) for security role details.
 See [docs/references/SAFETY_STANDARDS_REFERENCE.md](../references/SAFETY_STANDARDS_REFERENCE.md) for safety role details.
-
----
-
-## Reference Standards
-
-This role hierarchy derives from industry-standard SE processes:
-
-- **INCOSE Systems Engineering Handbook**: Role definitions, responsibilities
-- **NASA-STD-7009A**: Technical review authority, gate decision-making
-- **USAF Acquisition Strategy**: Phase gate authority, program management
-- **USAF System Security Engineering**: Security decision authority
-- **MIL-STD-882G**: Safety decision authority, risk acceptance
-- **CMMI v2.0**: Process ownership clarity, traceability
-
-See [docs/references/REFERENCES.md](../references/REFERENCES.md) for complete standards mapping.

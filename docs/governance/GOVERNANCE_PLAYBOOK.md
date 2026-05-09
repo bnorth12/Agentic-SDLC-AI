@@ -12,7 +12,7 @@
 
 1. **Executive Summary** - Overview & key principles
 2. **Framework Architecture** - Organizational structure & agent roles
-3. **Phase Gate Framework** - All 4 gates (Requirements → Architecture → Implementation → Deployment)
+3. **Phase Gate Framework** - 4 primary gates + TVB verification authority (Requirements → Architecture → Implementation → Deployment)
 4. **Agent Communication** - How agents interact & escalate
 5. **Conflict Resolution** - Process for resolving disagreements
 6. **Human Intervention** - When & how humans override agent decisions
@@ -91,6 +91,8 @@ Deployment phase:       ✓ Residual risks formally accepted
 | **DRB** | Architecture | Arch | "Design achievable?" | Decomposed, feasibility ≥70%, mitigations designed |
 | **CIB** | Implementation | CRB | "Code production-ready?" | MISRA ≥95%, CC ≤10, security/safety review done |
 | **DRR** | Deployment | PM/CE | "Ready to deploy?" | Tests ≥95% coverage, residual risks accepted, ops ready |
+
+**TVB Clarification**: TVB (Test & Verification Board) is an explicit governance board that operates during verification and provides pass/fail evidence into DRR; it is not a separate fifth primary phase gate in this playbook.
 
 ---
 

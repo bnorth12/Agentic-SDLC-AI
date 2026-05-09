@@ -32,7 +32,7 @@ We've transformed the Agentic-SDLC-AI governance model from a basic 6-agent soft
 
 ### Phase 1A: Foundation (8 documents, ~7000 lines)
 
-1. **[ROLE_HIERARCHY.md](docs/governance/ROLE_HIERARCHY.md)** → **EXPANDED**
+1. **[ROLE_HIERARCHY.md](ROLE_HIERARCHY.md)** → **EXPANDED**
    - **Original**: 6 agents
    - **Updated**: 13 agents with full authority matrices
    - **New Content**: 
@@ -46,7 +46,7 @@ We've transformed the Agentic-SDLC-AI governance model from a basic 6-agent soft
      - Supplier Quality Manager (SBOM, SCA, CVE, vendor assessment)
    - **For each agent**: role, authority level, responsibilities, authority matrix, escalation triggers, standards basis, governance boards
 
-2. **[RACI_MATRIX.md](docs/governance/RACI_MATRIX.md)** → **EXPANDED**
+2. **[RACI_MATRIX.md](RACI_MATRIX.md)** → **EXPANDED**
    - **Original**: 7 SE domains, 6 agents
    - **Updated**: 13 domains (130+ activities), 13 agents in RACI columns
    - **New Domains**:
@@ -58,19 +58,19 @@ We've transformed the Agentic-SDLC-AI governance model from a basic 6-agent soft
      - INT (Integration): 10 activities (strategy → build metrics)
    - **Key Rule**: Every activity has ONE Accountable person (A), no shared accountability
 
-3. **[GOVERNANCE_BOARDS.md](docs/governance/GOVERNANCE_BOARDS.md)** (1,300 lines)
+3. **[GOVERNANCE_BOARDS.md](../references/GOVERNANCE_BOARDS.md)**
    - 8 boards defined: TAB, RRB, DRB, CIB, TVB, CCB, RMB, DRR
    - Board charters, decision authorities, escalation triggers
    - Frequency and documentation requirements
 
-4. **[REFERENCES.md](docs/references/REFERENCES.md)** (740 lines)
+4. **[REFERENCES.md](../references/REFERENCES.md)**
    - Master index of 25+ standards
    - Purpose, sections, how-used for each standard
    - Cross-reference table
    - Standards version history (all current 2024)
    - SDLC phase flow diagram
 
-5. **[USAF_SSE_REFERENCE.md](docs/references/USAF_SSE_REFERENCE.md)** (640 lines)
+5. **[USAF_SSE_REFERENCE.md](../references/USAF_SSE_REFERENCE.md)**
    - Security governance framework (USAF System Security Engineering)
    - Threat-driven security architecture model
    - Threat categories (access, data, crypto, interface, supply chain, deployment)
@@ -79,7 +79,7 @@ We've transformed the Agentic-SDLC-AI governance model from a basic 6-agent soft
    - A&A gate checklist, operational security monitoring
    - RACI mapping (8 security activities)
 
-6. **[SAFETY_STANDARDS_REFERENCE.md](docs/references/SAFETY_STANDARDS_REFERENCE.md)** (750 lines)
+6. **[SAFETY_STANDARDS_REFERENCE.md](../references/SAFETY_STANDARDS_REFERENCE.md)**
    - Safety governance framework (ARP 4752A & MIL-STD-882G)
    - Safety framework (functions → hazards → requirements → design → verify)
    - FHA with severity scale (Catastrophic, Critical, Major, Minor)
@@ -89,20 +89,20 @@ We've transformed the Agentic-SDLC-AI governance model from a basic 6-agent soft
    - Residual risk acceptance framework
    - RACI mapping (15 safety activities)
 
-7. **[AEROSPACE_GOVERNANCE_RESEARCH.md](docs/references/AEROSPACE_GOVERNANCE_RESEARCH.md)** (1,100+ lines)
+7. **[AEROSPACE_GOVERNANCE_RESEARCH.md](../references/AEROSPACE_GOVERNANCE_RESEARCH.md)**
    - Research framework identifying standards per agent role
    - 8 governance boards identified
    - Board integration, RACI pattern, aerospace deep-dives
    - DO-178C, certification, configuration mgmt, EVM, maturity
 
-8. **[SPRINT_0_P1_COMPLETE.md](docs/project-plan/SPRINT_0_P1_COMPLETE.md)** (494 lines)
+8. **[SPRINT_0_P1_COMPLETE.md](../project-plan/SPRINT_0_P1_COMPLETE.md)**
    - Phase 1A completion summary
    - 5 work items completed
    - Standards coverage verified
 
 ### Phase 1B: Agent Expansion (2 documents, ~5200 lines)
 
-9. **[AGENT_DEFINITIONS_COMPREHENSIVE.md](docs/governance/AGENT_DEFINITIONS_COMPREHENSIVE.md)** (2,400 lines)
+9. **[AGENT_DEFINITIONS_COMPREHENSIVE.md](AGENT_DEFINITIONS_COMPREHENSIVE.md)**
    - **13 agents fully defined**:
      - 7 Core agents (throughout SDLC)
      - 6 Specialized agents (phase/domain-specific)
@@ -117,7 +117,7 @@ We've transformed the Agentic-SDLC-AI governance model from a basic 6-agent soft
      - Governance boards led/co-led
    - **Summary tables**: Phase participation, authority hierarchy, decision authority matrix
 
-10. **[AGENT_TO_STANDARDS_MAPPING.md](docs/governance/AGENT_TO_STANDARDS_MAPPING.md)** (2,800 lines)
+10. **[AGENT_TO_STANDARDS_MAPPING.md](AGENT_TO_STANDARDS_MAPPING.md)**
     - **Each of 13 agents mapped to standards**:
       - DO-326A, DO-356A, DO-355A, DO-178C, ARP 4754A, ARP 4761, MIL-STD-882G
       - NIST SP 800-30/39/53/61/40/175B, IEEE 830/1016/1220/1233/1028/1729
@@ -127,7 +127,7 @@ We've transformed the Agentic-SDLC-AI governance model from a basic 6-agent soft
 
 ### Phase 1C: Governance Expansion (3 documents expanded, ~1600 lines added)
 
-11. **[AGENT_PHASE_PARTICIPATION.md](docs/governance/AGENT_PHASE_PARTICIPATION.md)** ✨ NEW (1,000+ lines)
+11. **[AGENT_PHASE_PARTICIPATION.md](AGENT_PHASE_PARTICIPATION.md)** ✨ NEW
     - **Phase-by-phase engagement model for all 13 agents**
     - **6 SDLC phases**: Requirements → Architecture → Implementation → Test → Deployment → Sustainment
     - **For each phase**:

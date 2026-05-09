@@ -243,7 +243,7 @@ Aerospace/defense organizations use **structured governance boards** to enforce 
 - ✅ All unit tests pass? (≥95% pass rate)
 - ✅ All integration tests pass? (≥95% pass rate)
 - ✅ All system tests pass? (≥95% pass rate)
-- ✅ Coverage metrics met? (statement ≥100%, branch ≥95%)
+- ✅ Coverage metrics met? (statement = 100%, branch ≥95%)
 - ✅ No critical/high defects open? (all resolved or accepted)
 - ✅ Regression suite passes? (no regressions detected)
 
@@ -255,7 +255,7 @@ Aerospace/defense organizations use **structured governance boards** to enforce 
 **Verification Closure** (VV-010):
 - ✅ All requirements tested? (RTM 100% linked to test cases)
 - ✅ All tests passed? (pass rate ≥99%)
-- ✅ Coverage metrics met? (statement ≥100%, branch ≥95%)
+- ✅ Coverage metrics met? (statement = 100%, branch ≥95%)
 - ✅ Traceability verified? (req → test → code → test result)
 - ✅ No outstanding defects? (all closed or accepted risks)
 
@@ -531,7 +531,7 @@ If Unresolved → Escalate to Chief Engineer (or Program Manager for schedule/co
        ↓
 CE/PM Makes Final Decision
        ↓
-Decision Recorded in GOVERNANCE_DECISION_LOG (audit trail)
+Decision Recorded in logs/AUDIT_TRAIL.jsonl (audit trail)
 ```
 
 ---

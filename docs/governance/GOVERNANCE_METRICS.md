@@ -50,7 +50,7 @@ Governance metrics track:
 **Success Criteria**:
 - ≥75% of gates PASS on first submission
 - ≤20% CONDITIONAL passes (accepted risks)
-- ≤5% outright FACILs requiring rework
+- ≤5% outright FAILs requiring rework
 
 **Failure Triggers**:
 - FAIL rate >10% → Governance process broken (root cause analysis needed)
