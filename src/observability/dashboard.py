@@ -181,6 +181,80 @@ def render_kpi_metrics():
         )
         st.plotly_chart(fig, use_container_width=True)
 
+    # Agent execution times
+    agent_times = report.get("average_agent_execution_times", {})
+    if agent_times:
+        st.subheader("Agent Execution Duration (Average)")
+        agent_time_data = [
+            {"Agent": agent, "Duration (seconds)": float(value.rstrip("s"))}
+            for agent, value in agent_times.items()
+        ]
+        fig = px.bar(
+            agent_time_data,
+            x="Agent",
+            y="Duration (seconds)",
+            title="Average Agent Execution Duration",
+            height=400,
+        )
+        st.plotly_chart(fig, use_container_width=True)
+
+
+def render_historical_metrics():
+    """Render historical health and event trend metrics."""
+    st.header("Historical Metrics")
+
+    manager = get_persistence_manager()
+    health_events = manager.list_observability_events(event_type="health_snapshot")
+    agent_events = manager.list_observability_events(event_type="agent_execution")
+
+    if not health_events and not agent_events:
+        st.info("No historical observability events found yet.")
+        return
+
+    if health_events:
+        st.subheader("Health Check History")
+        health_data = []
+        for event in health_events:
+            payload = event.get("payload", {})
+            health_data.append(
+                {
+                    "Timestamp": event.get("created_at", ""),
+                    "Overall Healthy": "yes"
+                    if payload.get("all_healthy")
+                    else "no",
+                    "Docker": "ok" if payload.get("docker_ok") else "fail",
+                    "Ollama": "ok" if payload.get("ollama_ok") else "fail",
+                    "Postgres": "ok" if payload.get("postgres_ok") else "fail",
+                    "Dependencies": "ok" if payload.get("deps_ok") else "fail",
+                }
+            )
+        st.dataframe(health_data, use_container_width=True)
+
+    if agent_events:
+        st.subheader("Agent Execution Event History")
+        event_data = []
+        for event in agent_events:
+            payload = event.get("payload", {})
+            event_data.append(
+                {
+                    "Timestamp": event.get("created_at", ""),
+                    "Agent": payload.get("agent", "unknown"),
+                    "Duration (seconds)": payload.get("duration_seconds", 0.0),
+                }
+            )
+
+        st.dataframe(event_data[:200], use_container_width=True)
+
+        fig = px.line(
+            event_data,
+            x="Timestamp",
+            y="Duration (seconds)",
+            color="Agent",
+            title="Agent Execution Duration Over Time",
+            height=400,
+        )
+        st.plotly_chart(fig, use_container_width=True)
+
 
 def render_about():
     """Render about section in sidebar."""
@@ -210,7 +284,7 @@ def main():
     setup_page()
     render_about()
 
-    tab1, tab2, tab3 = st.tabs(["Status", "Metrics", "Sessions"])
+    tab1, tab2, tab3, tab4 = st.tabs(["Status", "Metrics", "Sessions", "History"])
 
     with tab1:
         render_runtime_status()
@@ -220,6 +294,9 @@ def main():
 
     with tab3:
         render_checkpoint_sessions()
+
+    with tab4:
+        render_historical_metrics()
 
 
 if __name__ == "__main__":

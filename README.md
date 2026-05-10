@@ -120,6 +120,8 @@ See [`docs/getting-started.md`](docs/getting-started.md) for complete Windows + 
 
 See [`docs/hardware-requirements.md`](docs/hardware-requirements.md)
 
+For Ubuntu hardware bring-up and cloud rental guidance, see [`docs/operations/LOCAL_AND_CLOUD_DEPLOYMENT_GUIDE.md`](docs/operations/LOCAL_AND_CLOUD_DEPLOYMENT_GUIDE.md).
+
 **Recommended for good performance**: RTX 4090 (or equivalent) + 64GB+ RAM.
 
 ---

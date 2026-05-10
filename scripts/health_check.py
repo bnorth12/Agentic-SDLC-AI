@@ -10,6 +10,7 @@ from rich.console import Console
 from rich.table import Table
 
 from src.config import get_settings
+from src.state.persistence import get_persistence_manager
 
 console = Console()
 
@@ -121,6 +122,20 @@ def main() -> None:
     console.print(table)
 
     # Print summary
+    try:
+        get_persistence_manager().record_observability_event(
+            "health_snapshot",
+            {
+                "all_healthy": all_healthy,
+                "docker_ok": docker_ok,
+                "ollama_ok": ollama_ok,
+                "postgres_ok": postgres_ok,
+                "deps_ok": deps_ok,
+            },
+        )
+    except Exception:
+        pass
+
     if all_healthy:
         console.print("\n[bold green]✅ All systems operational![/]")
         console.print("\n[dim]You're ready to run examples:[/]")

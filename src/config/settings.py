@@ -117,6 +117,20 @@ class Settings(BaseSettings):
         description="LangSmith project name",
     )
 
+    # Observability backend stub
+    enable_observability_backend: bool = Field(
+        default=False,
+        description="Enable structured logging backend integration stub",
+    )
+    observability_backend_url: str | None = Field(
+        default=None,
+        description="Optional backend endpoint for observability log forwarding",
+    )
+    observability_backend_token: str | None = Field(
+        default=None,
+        description="Optional bearer token for backend log forwarding",
+    )
+
     def get_model_for_role(self, role: str) -> str:
         """Get the appropriate model for a specific agent role."""
         role_model = getattr(self, f"model_{role.lower()}", None)

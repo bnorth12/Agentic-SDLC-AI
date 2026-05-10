@@ -198,6 +198,7 @@ class StateMetadata(BaseModel):
     last_updated: datetime = Field(default_factory=datetime.utcnow)
     iteration_count: int = 0
     active_agents: list[str] = Field(default_factory=list)
+    resume_point: str | None = None
 
 
 class AgentState(BaseModel):

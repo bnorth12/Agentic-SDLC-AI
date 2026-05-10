@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import time
+from collections.abc import Callable
 from typing import Any
 
 from langgraph.graph import StateGraph
@@ -61,9 +63,65 @@ def _save_checkpoint_snapshot(state: AgentState, updates: dict[str, Any]) -> Non
     try:
         payload = state.model_dump(mode="python")
         payload.update(updates)
-        get_persistence_manager().save_checkpoint_snapshot(session_id, payload)
+        get_persistence_manager().save_checkpoint_snapshot(session_id, payload, label="auto")
     except Exception as exc:  # pragma: no cover - defensive logging only
         logger.warning("Unable to save checkpoint snapshot: %s", exc)
+
+
+def _run_with_metrics(
+    state: AgentState,
+    source_name: str,
+    producer: Callable[[], dict[str, Any]],
+) -> dict[str, Any]:
+    """Execute a node producer and record execution metrics and observability events."""
+    start = time.perf_counter()
+    initial_phase = state.phase
+    manager = get_persistence_manager()
+
+    try:
+        updates = apply_governance_gate_hook(state, producer(), source_name)
+        elapsed = time.perf_counter() - start
+
+        get_kpi_tracker().record_agent_execution(source_name, elapsed)
+        manager.record_observability_event(
+            "agent_execution",
+            {
+                "agent": source_name,
+                "duration_seconds": round(elapsed, 4),
+                "result_keys": sorted(list(updates.keys())),
+            },
+            session_id=state.metadata.session_id or None,
+        )
+
+        next_phase = updates.get("phase", initial_phase)
+        if next_phase != initial_phase:
+            get_kpi_tracker().record_phase_transition(
+                from_phase=str(initial_phase),
+                to_phase=str(next_phase),
+                duration_seconds=elapsed,
+            )
+            manager.record_observability_event(
+                "phase_transition",
+                {
+                    "from_phase": str(initial_phase),
+                    "to_phase": str(next_phase),
+                    "duration_seconds": round(elapsed, 4),
+                },
+                session_id=state.metadata.session_id or None,
+            )
+
+        return updates
+    except Exception as exc:
+        get_kpi_tracker().record_error(source_name)
+        manager.record_observability_event(
+            "agent_error",
+            {
+                "agent": source_name,
+                "error": str(exc),
+            },
+            session_id=state.metadata.session_id or None,
+        )
+        raise
 
 
 def _ensure_messages(updates: dict[str, Any]) -> list[str]:
@@ -279,134 +337,140 @@ def should_continue(state: AgentState) -> str:
 def program_manager_node(state: AgentState) -> dict[str, Any]:
     """Execute program manager agent."""
     agent = ProgramManagerAgent()
-    return apply_governance_gate_hook(state, agent(state), "program_manager")
+    return _run_with_metrics(state, "program_manager", lambda: agent(state))
 
 
 def chief_engineer_node(state: AgentState) -> dict[str, Any]:
     """Execute chief engineer agent."""
     agent = ChiefEngineerAgent()
-    return apply_governance_gate_hook(state, agent(state), "chief_engineer")
+    return _run_with_metrics(state, "chief_engineer", lambda: agent(state))
 
 
 def requirements_node(state: AgentState) -> dict[str, Any]:
     """Execute requirements agent."""
     agent = RequirementsAgent()
-    return apply_governance_gate_hook(state, agent(state), "requirements_agent")
+    return _run_with_metrics(state, "requirements_agent", lambda: agent(state))
 
 
 def architecture_node(state: AgentState) -> dict[str, Any]:
     """Execute architecture agent."""
     agent = ArchitectureAgent()
-    return apply_governance_gate_hook(state, agent(state), "architecture_agent")
+    return _run_with_metrics(state, "architecture_agent", lambda: agent(state))
 
 
 def cyber_architect_node(state: AgentState) -> dict[str, Any]:
     """Execute cyber architect agent."""
     agent = CyberArchitectAgent()
-    return apply_governance_gate_hook(state, agent(state), "cyber_architect")
+    return _run_with_metrics(state, "cyber_architect", lambda: agent(state))
 
 
 def chief_security_officer_node(state: AgentState) -> dict[str, Any]:
     """Execute chief security officer agent."""
     agent = ChiefSecurityOfficerAgent()
-    return apply_governance_gate_hook(state, agent(state), "chief_security_officer")
+    return _run_with_metrics(state, "chief_security_officer", lambda: agent(state))
 
 
 def chief_safety_officer_node(state: AgentState) -> dict[str, Any]:
     """Execute chief safety officer agent."""
     agent = ChiefSafetyOfficerAgent()
-    return apply_governance_gate_hook(state, agent(state), "chief_safety_officer")
+    return _run_with_metrics(state, "chief_safety_officer", lambda: agent(state))
 
 
 def chief_reliability_officer_node(state: AgentState) -> dict[str, Any]:
     """Execute chief reliability officer agent."""
     agent = ChiefReliabilityOfficerAgent()
-    return apply_governance_gate_hook(state, agent(state), "chief_reliability_officer")
+    return _run_with_metrics(state, "chief_reliability_officer", lambda: agent(state))
 
 
 def chief_compliance_officer_node(state: AgentState) -> dict[str, Any]:
     """Execute chief compliance officer agent."""
     agent = ChiefComplianceOfficerAgent()
-    return apply_governance_gate_hook(state, agent(state), "chief_compliance_officer")
+    return _run_with_metrics(state, "chief_compliance_officer", lambda: agent(state))
 
 
 def software_development_agent_node(state: AgentState) -> dict[str, Any]:
     """Execute software development agent."""
     agent = SoftwareDevelopmentAgent()
-    return apply_governance_gate_hook(state, agent(state), "software_development_agent")
+    return _run_with_metrics(state, "software_development_agent", lambda: agent(state))
 
 
 def configuration_management_agent_node(state: AgentState) -> dict[str, Any]:
     """Execute configuration management agent."""
     agent = ConfigurationManagementAgent()
-    return apply_governance_gate_hook(state, agent(state), "configuration_management_agent")
+    return _run_with_metrics(
+        state,
+        "configuration_management_agent",
+        lambda: agent(state),
+    )
 
 
 def integration_manager_node(state: AgentState) -> dict[str, Any]:
     """Execute integration manager agent."""
     agent = IntegrationManagerAgent()
-    return apply_governance_gate_hook(state, agent(state), "integration_manager")
+    return _run_with_metrics(state, "integration_manager", lambda: agent(state))
 
 
 def qa_manager_node(state: AgentState) -> dict[str, Any]:
     """Execute QA manager agent."""
     agent = QAManagerAgent()
-    return apply_governance_gate_hook(state, agent(state), "qa_manager")
+    return _run_with_metrics(state, "qa_manager", lambda: agent(state))
 
 
 def verification_validation_agent_node(state: AgentState) -> dict[str, Any]:
     """Execute verification and validation agent."""
     agent = VerificationValidationAgent()
-    return apply_governance_gate_hook(
-        state, agent(state), "verification_validation_agent"
+    return _run_with_metrics(
+        state,
+        "verification_validation_agent",
+        lambda: agent(state),
     )
 
 
 def operations_lead_node(state: AgentState) -> dict[str, Any]:
     """Execute operations lead agent."""
     agent = OperationsLeadAgent()
-    return apply_governance_gate_hook(state, agent(state), "operations_lead")
+    return _run_with_metrics(state, "operations_lead", lambda: agent(state))
 
 
 def software_quality_manager_node(state: AgentState) -> dict[str, Any]:
     """Execute software quality manager agent."""
     agent = SoftwareQualityManagerAgent()
-    return apply_governance_gate_hook(state, agent(state), "software_quality_manager")
+    return _run_with_metrics(state, "software_quality_manager", lambda: agent(state))
 
 
 def requirements_gate_node(state: AgentState) -> dict[str, Any]:
     """Execute requirements gate evaluation."""
-    return apply_governance_gate_hook(
+    return _run_with_metrics(
         state,
-        evaluate_requirements_gate(state),
         "requirements_gate",
+        lambda: evaluate_requirements_gate(state),
     )
 
 
 def architecture_gate_node(state: AgentState) -> dict[str, Any]:
     """Execute architecture gate evaluation."""
-    return apply_governance_gate_hook(
+    return _run_with_metrics(
         state,
-        evaluate_architecture_gate(state),
         "architecture_gate",
+        lambda: evaluate_architecture_gate(state),
     )
 
 
 def implementation_gate_node(state: AgentState) -> dict[str, Any]:
     """Execute implementation gate evaluation."""
-    return apply_governance_gate_hook(
+    return _run_with_metrics(
         state,
-        evaluate_implementation_gate(state),
         "implementation_gate",
+        lambda: evaluate_implementation_gate(state),
     )
 
 
 def deployment_gate_node(state: AgentState) -> dict[str, Any]:
     """Execute deployment gate evaluation."""
-    return apply_governance_gate_hook(
+    return _run_with_metrics(
         state,
-        evaluate_deployment_gate(state),
         "deployment_gate",
+        lambda: evaluate_deployment_gate(state),
     )
 
 
@@ -459,7 +523,7 @@ def review_board_node(state: AgentState) -> dict[str, Any]:
                 "[review_board] Architecture board did not approve; human review required"
             )
 
-    return apply_governance_gate_hook(state, updates, "review_board")
+    return _run_with_metrics(state, "review_board", lambda: updates)
 
 
 def human_approval_node(state: AgentState) -> dict[str, Any]:
@@ -476,7 +540,7 @@ def human_approval_node(state: AgentState) -> dict[str, Any]:
         "human_feedback": "Auto-approved for demo",
         "messages": ["[HUMAN] Approved"],
     }
-    return apply_governance_gate_hook(state, updates, "human_approval")
+    return _run_with_metrics(state, "human_approval", lambda: updates)
 
 
 def resume_from_checkpoint(state: AgentState) -> AgentState:
@@ -498,8 +562,13 @@ def resume_from_checkpoint(state: AgentState) -> AgentState:
         logger.debug("No session_id in state metadata; skipping checkpoint restore")
         return state
 
+    resume_point = state.metadata.resume_point
+
     try:
-        checkpoint = get_persistence_manager().load_checkpoint_snapshot(session_id)
+        checkpoint = get_persistence_manager().load_checkpoint_snapshot(
+            session_id,
+            resume_point=resume_point,
+        )
         if checkpoint:
             logger.info(f"Restoring state from checkpoint for session {session_id}")
             # Reconstruct AgentState from checkpoint payload

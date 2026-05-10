@@ -28,6 +28,9 @@ class KPITracker:
             "verified_requirements": 0,
             "total_requirements": 0,
             "agent_contribution_count": {},  # agent_name -> count
+            "agent_execution_times": {},  # agent_name -> [duration_seconds]
+            "error_count": 0,
+            "error_count_by_agent": {},  # agent_name -> count
             "checkpoint_snapshot_count": 0,
             "gate_evidence_completeness": {},  # gate_name -> score (0.0-1.0)
         }
@@ -118,6 +121,20 @@ class KPITracker:
             f"Recorded {agent_name} contribution: {self.metrics['agent_contribution_count'][agent_name]}"
         )
 
+    def record_agent_execution(self, agent_name: str, duration_seconds: float) -> None:
+        """Record agent execution duration and contribution count."""
+        self.record_agent_contribution(agent_name)
+        if agent_name not in self.metrics["agent_execution_times"]:
+            self.metrics["agent_execution_times"][agent_name] = []
+        self.metrics["agent_execution_times"][agent_name].append(duration_seconds)
+
+    def record_error(self, agent_name: str) -> None:
+        """Record an agent execution error."""
+        self.metrics["error_count"] += 1
+        if agent_name not in self.metrics["error_count_by_agent"]:
+            self.metrics["error_count_by_agent"][agent_name] = 0
+        self.metrics["error_count_by_agent"][agent_name] += 1
+
     def record_checkpoint_snapshot(self) -> None:
         """Record a checkpoint snapshot creation."""
         self.metrics["checkpoint_snapshot_count"] += 1
@@ -140,6 +157,13 @@ class KPITracker:
                 "traceability_coverage": f"{self.metrics['requirement_traceability_coverage']*100:.1f}%",
             },
             "agents": self.metrics["agent_contribution_count"],
+            "errors": {
+                "total": self.metrics["error_count"],
+                "by_agent": self.metrics["error_count_by_agent"],
+                "error_rate_per_gate": (
+                    f"{(self.metrics['error_count'] / max(1, self.metrics['gates_attempted']))*100:.1f}%"
+                ),
+            },
             "checkpoints": self.metrics["checkpoint_snapshot_count"],
             "gate_evidence_completeness": {
                 gate: f"{score*100:.1f}%"
@@ -162,6 +186,12 @@ class KPITracker:
             ].items():
                 avg_board_times[board_name] = f"{sum(times) / len(times):.2f}s"
             report["average_review_board_times"] = avg_board_times
+
+        if self.metrics["agent_execution_times"]:
+            avg_agent_times = {}
+            for agent_name, times in self.metrics["agent_execution_times"].items():
+                avg_agent_times[agent_name] = f"{sum(times) / len(times):.2f}s"
+            report["average_agent_execution_times"] = avg_agent_times
 
         return report
 

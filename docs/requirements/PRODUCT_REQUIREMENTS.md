@@ -245,6 +245,26 @@ The system SHALL generate verification-phase artifacts that map all active requi
 - Parent: SYS-0005
 - Work Item: Sprint 5
 - Verification: `tests/integration/test_e2e_intake_to_gate5.py`
+
+### PERS-0400 — Checkpoint Restore Points and Rollback Semantics
+
+**Requirement Text**  
+The system SHALL persist checkpoint restore points per workflow session and support rollback to an arbitrary restore point without losing subsequent session continuity.
+
+**Traceability**  
+- Parent: SYS-0002
+- Work Item: Sprint 6
+- Verification: `tests/integration/test_persistence_snapshots.py`
+
+### OBS-0400 — Historical Observability Metrics and Structured Logging Stub
+
+**Requirement Text**  
+The system SHALL record agent execution metrics, phase transition timing, error-rate data, and structured observability events to a backend stub that can be visualized in a historical dashboard view.
+
+**Traceability**  
+- Parent: SYS-0006
+- Work Item: Sprint 6
+- Verification: `tests/unit/test_kpi_tracker.py`
 | **Trace: Parent** | SH-0001 |
 | **Trace: Children** | AGT-0001, INFRA-0001 |
 | **Trace: Work Item** | Sprint 0 (complete) |

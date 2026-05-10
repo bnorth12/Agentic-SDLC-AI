@@ -3,9 +3,12 @@
 from __future__ import annotations
 
 import logging
+import json
 import sys
 from pathlib import Path
 from typing import Any
+
+import requests
 
 from rich.console import Console
 from rich.logging import RichHandler
@@ -14,6 +17,52 @@ from src.config import get_settings
 
 # Rich console for pretty output
 console = Console()
+
+
+class StructuredBackendHandler(logging.Handler):
+    """Structured logging backend integration stub (JSONL + optional HTTP forward)."""
+
+    def __init__(self, output_file: Path, endpoint: str | None, token: str | None):
+        super().__init__(level=logging.INFO)
+        self.output_file = output_file
+        self.endpoint = endpoint
+        self.token = token
+
+    def emit(self, record: logging.LogRecord) -> None:
+        event = {
+            "timestamp": self.formatTime(record),
+            "level": record.levelname,
+            "logger": record.name,
+            "message": record.getMessage(),
+        }
+
+        try:
+            with self.output_file.open("a", encoding="utf-8") as fp:
+                fp.write(json.dumps(event) + "\n")
+        except Exception:
+            return
+
+        if not self.endpoint:
+            return
+
+        headers = {"Content-Type": "application/json"}
+        if self.token:
+            headers["Authorization"] = f"Bearer {self.token}"
+
+        try:
+            requests.post(
+                self.endpoint,
+                json=event,
+                headers=headers,
+                timeout=2,
+            )
+        except Exception:
+            # Stub integration is best-effort only.
+            return
+
+    @staticmethod
+    def formatTime(record: logging.LogRecord) -> str:
+        return logging.Formatter().formatTime(record, datefmt="%Y-%m-%dT%H:%M:%S")
 
 
 def setup_logging() -> logging.Logger:
@@ -60,6 +109,14 @@ def setup_logging() -> logging.Logger:
     # Add handlers
     root_logger.addHandler(console_handler)
     root_logger.addHandler(file_handler)
+
+    if settings.enable_observability_backend:
+        backend_handler = StructuredBackendHandler(
+            output_file=log_dir / "observability_backend_stub.jsonl",
+            endpoint=settings.observability_backend_url,
+            token=settings.observability_backend_token,
+        )
+        root_logger.addHandler(backend_handler)
 
     # Suppress noisy third-party loggers
     logging.getLogger("httpx").setLevel(logging.WARNING)
