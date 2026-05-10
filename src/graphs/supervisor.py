@@ -13,12 +13,14 @@ from src.agents import (
     ChiefReliabilityOfficerAgent,
     ChiefSafetyOfficerAgent,
     ChiefSecurityOfficerAgent,
+    ConfigurationManagementAgent,
     CyberArchitectAgent,
     IntegrationManagerAgent,
     OperationsLeadAgent,
     ProgramManagerAgent,
     QAManagerAgent,
     RequirementsAgent,
+    SoftwareDevelopmentAgent,
     SoftwareQualityManagerAgent,
 )
 from src.boards import ArchitectureReviewBoard
@@ -241,8 +243,14 @@ def should_continue(state: AgentState) -> str:
             return "chief_security_officer"
         if "safety_assessment" not in assessments:
             return "chief_safety_officer"
+        if "reliability_assessment" not in assessments:
+            return "chief_reliability_officer"
         if "compliance_assessment" not in assessments:
             return "chief_compliance_officer"
+        if "software_development_package" not in assessments:
+            return "software_development_agent"
+        if "configuration_management_package" not in assessments:
+            return "configuration_management_agent"
         if "implementation_package" not in assessments:
             return "integration_manager"
         return "implementation_gate"
@@ -317,6 +325,18 @@ def chief_compliance_officer_node(state: AgentState) -> dict[str, Any]:
     """Execute chief compliance officer agent."""
     agent = ChiefComplianceOfficerAgent()
     return apply_governance_gate_hook(state, agent(state), "chief_compliance_officer")
+
+
+def software_development_agent_node(state: AgentState) -> dict[str, Any]:
+    """Execute software development agent."""
+    agent = SoftwareDevelopmentAgent()
+    return apply_governance_gate_hook(state, agent(state), "software_development_agent")
+
+
+def configuration_management_agent_node(state: AgentState) -> dict[str, Any]:
+    """Execute configuration management agent."""
+    agent = ConfigurationManagementAgent()
+    return apply_governance_gate_hook(state, agent(state), "configuration_management_agent")
 
 
 def integration_manager_node(state: AgentState) -> dict[str, Any]:
@@ -508,6 +528,10 @@ def build_supervisor_graph() -> StateGraph:
     workflow.add_node("chief_safety_officer", chief_safety_officer_node)
     workflow.add_node("chief_reliability_officer", chief_reliability_officer_node)
     workflow.add_node("chief_compliance_officer", chief_compliance_officer_node)
+    workflow.add_node("software_development_agent", software_development_agent_node)
+    workflow.add_node(
+        "configuration_management_agent", configuration_management_agent_node
+    )
     workflow.add_node("integration_manager", integration_manager_node)
     workflow.add_node("qa_manager", qa_manager_node)
     workflow.add_node("operations_lead", operations_lead_node)
@@ -531,6 +555,8 @@ def build_supervisor_graph() -> StateGraph:
         "chief_safety_officer": "chief_safety_officer",
         "chief_reliability_officer": "chief_reliability_officer",
         "chief_compliance_officer": "chief_compliance_officer",
+        "software_development_agent": "software_development_agent",
+        "configuration_management_agent": "configuration_management_agent",
         "integration_manager": "integration_manager",
         "qa_manager": "qa_manager",
         "operations_lead": "operations_lead",
@@ -554,6 +580,8 @@ def build_supervisor_graph() -> StateGraph:
         "chief_safety_officer",
         "chief_reliability_officer",
         "chief_compliance_officer",
+        "software_development_agent",
+        "configuration_management_agent",
         "integration_manager",
         "qa_manager",
         "operations_lead",

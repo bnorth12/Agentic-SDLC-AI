@@ -82,11 +82,37 @@ class SupervisorRoutingIntegrationTest(unittest.TestCase):
         state.agent_outputs = {
             "security_assessment": {},
             "safety_assessment": {},
+            "reliability_assessment": {},
             "compliance_assessment": {},
+            "software_development_package": {},
+            "configuration_management_package": {},
             "implementation_package": {},
         }
 
         self.assertEqual(should_continue(state), "implementation_gate")
+
+    def test_implementation_routes_software_development_after_compliance(self) -> None:
+        state = AgentState(objective="route test", phase=Phase.IMPLEMENTATION)
+        state.agent_outputs = {
+            "security_assessment": {},
+            "safety_assessment": {},
+            "reliability_assessment": {},
+            "compliance_assessment": {},
+        }
+
+        self.assertEqual(should_continue(state), "software_development_agent")
+
+    def test_implementation_routes_configuration_after_development(self) -> None:
+        state = AgentState(objective="route test", phase=Phase.IMPLEMENTATION)
+        state.agent_outputs = {
+            "security_assessment": {},
+            "safety_assessment": {},
+            "reliability_assessment": {},
+            "compliance_assessment": {},
+            "software_development_package": {},
+        }
+
+        self.assertEqual(should_continue(state), "configuration_management_agent")
 
     def test_maintenance_routes_end_after_quality_package(self) -> None:
         state = AgentState(objective="route test", phase=Phase.MAINTENANCE)

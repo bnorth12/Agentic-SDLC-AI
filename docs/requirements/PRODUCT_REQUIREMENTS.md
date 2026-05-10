@@ -215,6 +215,26 @@ The system SHALL generate an architecture-phase reliability risk artifact includ
 - Parent: SYS-0006
 - Work Item: Sprint 3
 - Verification: `tests/integration/test_e2e_intake_to_gate3.py`
+
+### DEV-0200 — Requirement-Linked Code Stub Generation
+
+**Requirement Text**  
+The system SHALL generate requirement-linked implementation stubs during the implementation phase and include them in Gate 4 evidence.
+
+**Traceability**  
+- Parent: SYS-0005
+- Work Item: Sprint 4
+- Verification: `tests/integration/test_e2e_intake_to_gate4.py`
+
+### CM-0200 — Configuration Baseline and Change Log Evidence
+
+**Requirement Text**  
+The system SHALL produce configuration baseline updates, configuration tags, and change control log entries before Gate 4 readiness evaluation.
+
+**Traceability**  
+- Parent: SYS-0006
+- Work Item: Sprint 4
+- Verification: `tests/integration/test_e2e_intake_to_gate4.py`
 | **Trace: Parent** | SH-0001 |
 | **Trace: Children** | AGT-0001, INFRA-0001 |
 | **Trace: Work Item** | Sprint 0 (complete) |

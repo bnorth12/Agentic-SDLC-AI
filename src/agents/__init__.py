@@ -7,12 +7,14 @@ from src.agents.chief_engineer import ChiefEngineerAgent
 from src.agents.chief_reliability_officer import ChiefReliabilityOfficerAgent
 from src.agents.chief_safety_officer import ChiefSafetyOfficerAgent
 from src.agents.chief_security_officer import ChiefSecurityOfficerAgent
+from src.agents.configuration_management_agent import ConfigurationManagementAgent
 from src.agents.cyber_architect import CyberArchitectAgent
 from src.agents.integration_manager import IntegrationManagerAgent
 from src.agents.operations_lead import OperationsLeadAgent
 from src.agents.program_manager import ProgramManagerAgent
 from src.agents.qa_manager import QAManagerAgent
 from src.agents.requirements_agent import RequirementsAgent
+from src.agents.software_development_agent import SoftwareDevelopmentAgent
 from src.agents.software_quality_manager import SoftwareQualityManagerAgent
 
 __all__ = [
@@ -23,11 +25,13 @@ __all__ = [
     "ChiefReliabilityOfficerAgent",
     "ChiefSafetyOfficerAgent",
     "ChiefSecurityOfficerAgent",
+    "ConfigurationManagementAgent",
     "CyberArchitectAgent",
     "IntegrationManagerAgent",
     "OperationsLeadAgent",
     "ProgramManagerAgent",
     "QAManagerAgent",
     "RequirementsAgent",
+    "SoftwareDevelopmentAgent",
     "SoftwareQualityManagerAgent",
 ]

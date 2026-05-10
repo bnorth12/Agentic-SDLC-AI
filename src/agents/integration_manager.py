@@ -29,14 +29,42 @@ class IntegrationManagerAgent(BaseAgent):
             return {}
 
         outputs = dict(state.agent_outputs)
+
+        if "software_development_package" not in outputs:
+            return {
+                "messages": [
+                    "[integration_manager] Waiting on software development package"
+                ]
+            }
+
+        if "configuration_management_package" not in outputs:
+            return {
+                "messages": [
+                    "[integration_manager] Waiting on configuration management package"
+                ]
+            }
+
         if "implementation_package" in outputs:
             return {}
 
+        dev_package = outputs["software_development_package"]
+        cm_package = outputs["configuration_management_package"]
+
         outputs["implementation_package"] = {
-            "change_set_summary": "in_state:implementation:core_components_integrated",
-            "test_report": "in_state:tests:integration_smoke_pass",
-            "lint_report": "in_state:quality:lint_pass",
-            "configuration_baseline_update": "in_state:cm:baseline_v2",
+            "change_set_summary": dev_package.get(
+                "change_set_summary", "in_state:implementation:core_components_integrated"
+            ),
+            "test_report": dev_package.get(
+                "test_report", "in_state:tests:integration_smoke_pass"
+            ),
+            "lint_report": dev_package.get("lint_report", "in_state:quality:lint_pass"),
+            "configuration_baseline_update": cm_package.get(
+                "configuration_baseline_update", "in_state:cm:baseline_v2"
+            ),
+            "requirement_linked_stubs": dev_package.get("requirement_linked_stubs", []),
+            "configuration_tags": cm_package.get("baseline_register", {}).get(
+                "configuration_tags", []
+            ),
         }
 
         updates = {
