@@ -29,6 +29,10 @@ class KPITracker:
             "total_requirements": 0,
             "agent_contribution_count": {},  # agent_name -> count
             "agent_execution_times": {},  # agent_name -> [duration_seconds]
+            "model_routing_count_by_agent": {},  # agent_name -> count
+            "model_usage_count": {},  # model_name -> count
+            "model_fallback_count": 0,
+            "model_performance": {},  # model_name -> {calls, errors, durations[]}
             "error_count": 0,
             "error_count_by_agent": {},  # agent_name -> count
             "checkpoint_snapshot_count": 0,
@@ -135,6 +139,45 @@ class KPITracker:
             self.metrics["error_count_by_agent"][agent_name] = 0
         self.metrics["error_count_by_agent"][agent_name] += 1
 
+    def record_model_routing(
+        self,
+        agent_name: str,
+        model_name: str,
+        complexity: str,
+        fallback_used: bool = False,
+        duration_seconds: float | None = None,
+        failed: bool = False,
+    ) -> None:
+        """Record model-routing telemetry for adaptive selection analysis."""
+        if agent_name not in self.metrics["model_routing_count_by_agent"]:
+            self.metrics["model_routing_count_by_agent"][agent_name] = 0
+        self.metrics["model_routing_count_by_agent"][agent_name] += 1
+
+        if model_name not in self.metrics["model_usage_count"]:
+            self.metrics["model_usage_count"][model_name] = 0
+        self.metrics["model_usage_count"][model_name] += 1
+
+        if fallback_used:
+            self.metrics["model_fallback_count"] += 1
+
+        if model_name not in self.metrics["model_performance"]:
+            self.metrics["model_performance"][model_name] = {
+                "calls": 0,
+                "errors": 0,
+                "durations": [],
+                "complexity_mix": {},
+            }
+
+        perf = self.metrics["model_performance"][model_name]
+        perf["calls"] += 1
+        if failed:
+            perf["errors"] += 1
+        if duration_seconds is not None:
+            perf["durations"].append(duration_seconds)
+        if complexity not in perf["complexity_mix"]:
+            perf["complexity_mix"][complexity] = 0
+        perf["complexity_mix"][complexity] += 1
+
     def record_checkpoint_snapshot(self) -> None:
         """Record a checkpoint snapshot creation."""
         self.metrics["checkpoint_snapshot_count"] += 1
@@ -169,6 +212,11 @@ class KPITracker:
                 gate: f"{score*100:.1f}%"
                 for gate, score in self.metrics["gate_evidence_completeness"].items()
             },
+            "model_routing": {
+                "by_agent": self.metrics["model_routing_count_by_agent"],
+                "model_usage": self.metrics["model_usage_count"],
+                "fallback_count": self.metrics["model_fallback_count"],
+            },
         }
 
         # Add average phase transition times
@@ -192,6 +240,25 @@ class KPITracker:
             for agent_name, times in self.metrics["agent_execution_times"].items():
                 avg_agent_times[agent_name] = f"{sum(times) / len(times):.2f}s"
             report["average_agent_execution_times"] = avg_agent_times
+
+        if self.metrics["model_performance"]:
+            model_performance: dict[str, Any] = {}
+            for model_name, perf in self.metrics["model_performance"].items():
+                calls = perf["calls"]
+                errors = perf["errors"]
+                durations = perf["durations"]
+                model_performance[model_name] = {
+                    "calls": calls,
+                    "errors": errors,
+                    "error_rate": f"{((errors / max(1, calls)) * 100):.1f}%",
+                    "avg_duration": (
+                        f"{(sum(durations) / len(durations)):.2f}s"
+                        if durations
+                        else "n/a"
+                    ),
+                    "complexity_mix": perf["complexity_mix"],
+                }
+            report["model_performance"] = model_performance
 
         return report
 

@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import time
 from abc import ABC, abstractmethod
 from typing import Any
 
@@ -9,6 +10,8 @@ from langchain_core.language_models import BaseChatModel
 from langchain_ollama import ChatOllama
 
 from src.config import get_settings
+from src.routing import ModelRouter
+from src.routing.model_router import ModelRoutingDecision, serialize_routing_payload
 from src.state.schema import AgentState
 from src.utils.logging import AgentLogger
 
@@ -38,10 +41,17 @@ class BaseAgent(ABC):
         self.logger = AgentLogger(name)
 
         settings = get_settings()
+        self._settings = settings
+        self._router = ModelRouter(settings)
+        self._runtime_metrics: dict[str, dict[str, float | int]] = {}
+        self._uses_custom_model = model is not None
+        self._active_model_name = "custom"
 
         # Get model for this agent's role
         if model is None:
-            model_name = settings.get_model_for_role(name)
+            decision = self._router.choose_model(name, None, self._runtime_metrics)
+            model_name = decision.selected_model
+            self._active_model_name = model_name
             self.model = ChatOllama(
                 base_url=settings.ollama_base_url,
                 model=model_name,
@@ -173,13 +183,86 @@ class BaseAgent(ABC):
             State updates
         """
         self.logger.log_start(f"Processing in phase: {state.phase}")
+        routing_decision = self._resolve_model_for_state(state)
+        started = time.perf_counter()
 
         try:
             updates = self.process(state)
+            elapsed = time.perf_counter() - started
+            if routing_decision is not None:
+                self._record_runtime_result(routing_decision.selected_model, elapsed, False)
+                self._attach_routing_metrics(
+                    updates,
+                    serialize_routing_payload(
+                        agent=self.name,
+                        decision=routing_decision,
+                        duration_seconds=elapsed,
+                        failed=False,
+                    ),
+                )
             self.logger.log_complete("Processing", updates.keys())
             return updates
         except Exception as e:
+            elapsed = time.perf_counter() - started
+            payload: dict[str, Any] | None = None
+            if routing_decision is not None:
+                self._record_runtime_result(routing_decision.selected_model, elapsed, True)
+                payload = serialize_routing_payload(
+                    agent=self.name,
+                    decision=routing_decision,
+                    duration_seconds=elapsed,
+                    failed=True,
+                )
             self.logger.log_error("Processing", e)
-            return {
+            error_updates = {
                 "messages": [f"[{self.name}] Error: {str(e)}"],
             }
+            if payload is not None:
+                self._attach_routing_metrics(error_updates, payload)
+            return error_updates
+
+    def _resolve_model_for_state(
+        self,
+        state: AgentState,
+    ) -> ModelRoutingDecision | None:
+        """Resolve and activate model policy for this execution."""
+        if self._uses_custom_model:
+            return None
+
+        decision = self._router.choose_model(self.name, state, self._runtime_metrics)
+        if decision.selected_model != self._active_model_name:
+            self.model = ChatOllama(
+                base_url=self._settings.ollama_base_url,
+                model=decision.selected_model,
+                temperature=self._settings.temperature,
+            )
+            self._active_model_name = decision.selected_model
+        return decision
+
+    def _record_runtime_result(self, model_name: str, elapsed: float, failed: bool) -> None:
+        """Maintain lightweight runtime telemetry used for adaptive routing."""
+        metrics = self._runtime_metrics.setdefault(
+            model_name,
+            {
+                "calls": 0,
+                "errors": 0,
+                "total_duration": 0.0,
+                "avg_duration": 0.0,
+            },
+        )
+        metrics["calls"] = int(metrics["calls"]) + 1
+        metrics["total_duration"] = float(metrics["total_duration"]) + elapsed
+        metrics["avg_duration"] = float(metrics["total_duration"]) / int(metrics["calls"])
+        if failed:
+            metrics["errors"] = int(metrics["errors"]) + 1
+
+    def _attach_routing_metrics(
+        self,
+        updates: dict[str, Any],
+        payload: dict[str, Any],
+    ) -> None:
+        """Attach model-routing telemetry to state updates for supervisor aggregation."""
+        updates["model_routing"] = payload
+        governance_metrics = dict(updates.get("governance_metrics", {}))
+        governance_metrics["model_routing"] = payload
+        updates["governance_metrics"] = governance_metrics

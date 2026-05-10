@@ -265,6 +265,16 @@ The system SHALL record agent execution metrics, phase transition timing, error-
 - Parent: SYS-0006
 - Work Item: Sprint 6
 - Verification: `tests/unit/test_kpi_tracker.py`
+
+### MMR-0500 — Role and Complexity Aware Model Routing with Adaptive Fallback
+
+**Requirement Text**  
+The system SHALL select inference models per agent role and estimated task complexity, record model-selection telemetry, and adaptively fallback to alternate configured models when runtime error or latency thresholds are exceeded.
+
+**Traceability**  
+- Parent: SYS-0004
+- Work Item: Sprint 7
+- Verification: `tests/unit/test_model_router.py`, `tests/unit/test_kpi_tracker.py`
 | **Trace: Parent** | SH-0001 |
 | **Trace: Children** | AGT-0001, INFRA-0001 |
 | **Trace: Work Item** | Sprint 0 (complete) |

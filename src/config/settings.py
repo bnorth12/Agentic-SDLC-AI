@@ -47,6 +47,23 @@ class Settings(BaseSettings):
     model_safety: str | None = None
     model_development: str | None = None
     model_verification: str | None = None
+    model_low_complexity: str | None = None
+    model_medium_complexity: str | None = None
+    model_high_complexity: str | None = None
+    enable_adaptive_model_routing: bool = Field(
+        default=True,
+        description="Enable adaptive model routing based on execution telemetry",
+    )
+    adaptive_latency_threshold_seconds: float = Field(
+        default=2.5,
+        description="Latency threshold used for adaptive model routing",
+        ge=0.1,
+    )
+    adaptive_error_threshold: int = Field(
+        default=2,
+        description="Consecutive error threshold before model fallback",
+        ge=1,
+    )
 
     # Persistence
     postgres_url: str = Field(
@@ -131,10 +148,67 @@ class Settings(BaseSettings):
         description="Optional bearer token for backend log forwarding",
     )
 
-    def get_model_for_role(self, role: str) -> str:
-        """Get the appropriate model for a specific agent role."""
-        role_model = getattr(self, f"model_{role.lower()}", None)
-        return role_model or self.ollama_model
+    def get_model_for_role(self, role: str, complexity: str | None = None) -> str:
+        """Get the preferred model for an agent role and optional complexity."""
+        return self.get_model_candidates_for_role(role, complexity)[0]
+
+    def get_model_candidates_for_role(
+        self, role: str, complexity: str | None = None
+    ) -> list[str]:
+        """Return ordered model candidates for a role and optional complexity tier."""
+        candidates: list[str] = []
+        role_fields = self._role_model_field_candidates(role)
+
+        for field_name in role_fields:
+            model_name = getattr(self, field_name, None)
+            if model_name and model_name not in candidates:
+                candidates.append(model_name)
+
+        complexity_map = {
+            "low": self.model_low_complexity,
+            "medium": self.model_medium_complexity,
+            "high": self.model_high_complexity,
+        }
+        complexity_key = (complexity or "").strip().lower()
+        complexity_model = complexity_map.get(complexity_key)
+        if complexity_model and complexity_model not in candidates:
+            candidates.append(complexity_model)
+
+        if self.ollama_model not in candidates:
+            candidates.append(self.ollama_model)
+
+        return candidates
+
+    @staticmethod
+    def _role_model_field_candidates(role: str) -> list[str]:
+        """Return candidate settings fields for a role name."""
+        normalized = role.strip().lower().replace("-", "_").replace(" ", "_")
+        candidates = [f"model_{normalized}"]
+
+        aliases = {
+            "requirements_agent": "model_requirements",
+            "architecture_agent": "model_architecture",
+            "cyber_architect": "model_architecture",
+            "chief_safety_officer": "model_safety",
+            "software_development_agent": "model_development",
+            "configuration_management_agent": "model_development",
+            "integration_manager": "model_development",
+            "verification_validation_agent": "model_verification",
+            "qa_manager": "model_verification",
+        }
+
+        mapped = aliases.get(normalized)
+        if mapped and mapped not in candidates:
+            candidates.append(mapped)
+
+        if normalized.endswith("_agent"):
+            trimmed = normalized[: -len("_agent")]
+            if trimmed:
+                trimmed_field = f"model_{trimmed}"
+                if trimmed_field not in candidates:
+                    candidates.append(trimmed_field)
+
+        return candidates
 
 
 @lru_cache

@@ -35,6 +35,34 @@ class KPITrackerUnitTest(unittest.TestCase):
             "2.00s",
         )
 
+    def test_records_model_routing_telemetry(self) -> None:
+        tracker = KPITracker()
+
+        tracker.record_model_routing(
+            agent_name="requirements_agent",
+            model_name="llama-medium",
+            complexity="medium",
+            fallback_used=False,
+            duration_seconds=1.2,
+            failed=False,
+        )
+        tracker.record_model_routing(
+            agent_name="requirements_agent",
+            model_name="llama-medium",
+            complexity="high",
+            fallback_used=True,
+            duration_seconds=2.4,
+            failed=True,
+        )
+
+        report = tracker.get_metrics_report()
+
+        self.assertEqual(report["model_routing"]["by_agent"]["requirements_agent"], 2)
+        self.assertEqual(report["model_routing"]["model_usage"]["llama-medium"], 2)
+        self.assertEqual(report["model_routing"]["fallback_count"], 1)
+        self.assertIn("model_performance", report)
+        self.assertEqual(report["model_performance"]["llama-medium"]["calls"], 2)
+
 
 if __name__ == "__main__":
     unittest.main()

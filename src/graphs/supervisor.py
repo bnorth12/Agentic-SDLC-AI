@@ -93,6 +93,25 @@ def _run_with_metrics(
             session_id=state.metadata.session_id or None,
         )
 
+        model_routing = updates.get("model_routing")
+        if isinstance(model_routing, dict):
+            get_kpi_tracker().record_model_routing(
+                agent_name=source_name,
+                model_name=str(model_routing.get("selected_model", "unknown")),
+                complexity=str(model_routing.get("complexity", "unknown")),
+                fallback_used=bool(model_routing.get("fallback_used", False)),
+                duration_seconds=float(model_routing.get("duration_seconds", elapsed)),
+                failed=bool(model_routing.get("failed", False)),
+            )
+            manager.record_observability_event(
+                "model_routing",
+                {
+                    "agent": source_name,
+                    **model_routing,
+                },
+                session_id=state.metadata.session_id or None,
+            )
+
         next_phase = updates.get("phase", initial_phase)
         if next_phase != initial_phase:
             get_kpi_tracker().record_phase_transition(
