@@ -53,6 +53,15 @@ class GateNodeIntegrationTest(unittest.TestCase):
         state = self._build_state()
         state.phase = Phase.ARCHITECTURE
         state.architecture = {"components": ["supervisor", "agents"]}
+        state.agent_outputs["architecture_security_assessment"] = {
+            "threat_model_status": "completed"
+        }
+        state.agent_outputs["architecture_safety_assessment"] = {
+            "hazard_analysis_status": "completed"
+        }
+        state.agent_outputs["architecture_reliability_assessment"] = {
+            "reliability_analysis_status": "completed"
+        }
         state.agent_outputs["architecture_agent"] = {
             "agent": "architecture_agent",
             "policy_compliance": {"status": "PASS", "policies": ["ADP-001"]},

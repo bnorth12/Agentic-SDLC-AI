@@ -29,6 +29,54 @@ class SupervisorRoutingIntegrationTest(unittest.TestCase):
 
         self.assertEqual(should_continue(state), "chief_security_officer")
 
+    def test_architecture_routes_security_after_baseline(self) -> None:
+        state = AgentState(objective="route test", phase=Phase.ARCHITECTURE)
+        state.architecture = {"components": ["supervisor", "agents"]}
+
+        self.assertEqual(should_continue(state), "chief_security_officer")
+
+    def test_architecture_routes_safety_after_security(self) -> None:
+        state = AgentState(objective="route test", phase=Phase.ARCHITECTURE)
+        state.architecture = {"components": ["supervisor", "agents"]}
+        state.agent_outputs = {
+            "architecture_security_assessment": {
+                "threat_model_status": "completed"
+            }
+        }
+
+        self.assertEqual(should_continue(state), "chief_safety_officer")
+
+    def test_architecture_routes_reliability_after_safety(self) -> None:
+        state = AgentState(objective="route test", phase=Phase.ARCHITECTURE)
+        state.architecture = {"components": ["supervisor", "agents"]}
+        state.agent_outputs = {
+            "architecture_security_assessment": {
+                "threat_model_status": "completed"
+            },
+            "architecture_safety_assessment": {
+                "hazard_analysis_status": "completed"
+            },
+        }
+
+        self.assertEqual(should_continue(state), "chief_reliability_officer")
+
+    def test_architecture_routes_gate_after_all_assessments(self) -> None:
+        state = AgentState(objective="route test", phase=Phase.ARCHITECTURE)
+        state.architecture = {"components": ["supervisor", "agents"]}
+        state.agent_outputs = {
+            "architecture_security_assessment": {
+                "threat_model_status": "completed"
+            },
+            "architecture_safety_assessment": {
+                "hazard_analysis_status": "completed"
+            },
+            "architecture_reliability_assessment": {
+                "reliability_analysis_status": "completed"
+            },
+        }
+
+        self.assertEqual(should_continue(state), "architecture_gate")
+
     def test_implementation_routes_gate_after_all_packages(self) -> None:
         state = AgentState(objective="route test", phase=Phase.IMPLEMENTATION)
         state.agent_outputs = {

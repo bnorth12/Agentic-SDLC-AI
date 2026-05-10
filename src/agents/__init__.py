@@ -4,6 +4,7 @@ from src.agents.architecture_agent import ArchitectureAgent
 from src.agents.base_agent import BaseAgent
 from src.agents.chief_compliance_officer import ChiefComplianceOfficerAgent
 from src.agents.chief_engineer import ChiefEngineerAgent
+from src.agents.chief_reliability_officer import ChiefReliabilityOfficerAgent
 from src.agents.chief_safety_officer import ChiefSafetyOfficerAgent
 from src.agents.chief_security_officer import ChiefSecurityOfficerAgent
 from src.agents.cyber_architect import CyberArchitectAgent
@@ -19,6 +20,7 @@ __all__ = [
     "BaseAgent",
     "ChiefComplianceOfficerAgent",
     "ChiefEngineerAgent",
+    "ChiefReliabilityOfficerAgent",
     "ChiefSafetyOfficerAgent",
     "ChiefSecurityOfficerAgent",
     "CyberArchitectAgent",

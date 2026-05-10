@@ -10,6 +10,7 @@ from src.agents import (
     ArchitectureAgent,
     ChiefComplianceOfficerAgent,
     ChiefEngineerAgent,
+    ChiefReliabilityOfficerAgent,
     ChiefSafetyOfficerAgent,
     ChiefSecurityOfficerAgent,
     CyberArchitectAgent,
@@ -223,6 +224,12 @@ def should_continue(state: AgentState) -> str:
     if state.phase == Phase.ARCHITECTURE:
         if not state.architecture:
             return "architecture_agent"
+        if "architecture_security_assessment" not in state.agent_outputs:
+            return "chief_security_officer"
+        if "architecture_safety_assessment" not in state.agent_outputs:
+            return "chief_safety_officer"
+        if "architecture_reliability_assessment" not in state.agent_outputs:
+            return "chief_reliability_officer"
         return "architecture_gate"
 
     if state.phase == Phase.DESIGN:
@@ -298,6 +305,12 @@ def chief_safety_officer_node(state: AgentState) -> dict[str, Any]:
     """Execute chief safety officer agent."""
     agent = ChiefSafetyOfficerAgent()
     return apply_governance_gate_hook(state, agent(state), "chief_safety_officer")
+
+
+def chief_reliability_officer_node(state: AgentState) -> dict[str, Any]:
+    """Execute chief reliability officer agent."""
+    agent = ChiefReliabilityOfficerAgent()
+    return apply_governance_gate_hook(state, agent(state), "chief_reliability_officer")
 
 
 def chief_compliance_officer_node(state: AgentState) -> dict[str, Any]:
@@ -389,19 +402,31 @@ def review_board_node(state: AgentState) -> dict[str, Any]:
     updates = {
         "board_results": board_results,
         "active_board": None,
-        "requires_human_approval": True,  # Boards require human review
+        "requires_human_approval": False,
         "messages": [
             f"[{state.active_board}] Decision: {decision.decision}",
             f"Rationale: {decision.rationale}",
         ],
     }
 
-    # If approved, transition to next phase
-    if decision.decision == "approve":
-        if state.phase == Phase.REQUIREMENTS:
-            updates["phase"] = Phase.ARCHITECTURE
-        elif state.phase == Phase.ARCHITECTURE:
-            updates["phase"] = Phase.IMPLEMENTATION
+    if state.phase == Phase.ARCHITECTURE and isinstance(
+        state.agent_outputs.get("architecture_agent"), dict
+    ):
+        outputs = dict(state.agent_outputs)
+        architecture_payload = dict(outputs["architecture_agent"])
+        evidence_links = dict(architecture_payload.get("evidence_links", {}))
+        evidence_links["architecture_board_decision"] = (
+            f"in_state:architecture_review:{decision.decision}"
+        )
+        architecture_payload["evidence_links"] = evidence_links
+        outputs["architecture_agent"] = architecture_payload
+        updates["agent_outputs"] = outputs
+
+        if decision.decision in {"reject", "defer"}:
+            updates["requires_human_approval"] = True
+            updates["messages"].append(
+                "[review_board] Architecture board did not approve; human review required"
+            )
 
     return apply_governance_gate_hook(state, updates, "review_board")
 
@@ -481,6 +506,7 @@ def build_supervisor_graph() -> StateGraph:
     workflow.add_node("cyber_architect", cyber_architect_node)
     workflow.add_node("chief_security_officer", chief_security_officer_node)
     workflow.add_node("chief_safety_officer", chief_safety_officer_node)
+    workflow.add_node("chief_reliability_officer", chief_reliability_officer_node)
     workflow.add_node("chief_compliance_officer", chief_compliance_officer_node)
     workflow.add_node("integration_manager", integration_manager_node)
     workflow.add_node("qa_manager", qa_manager_node)
@@ -503,6 +529,7 @@ def build_supervisor_graph() -> StateGraph:
         "cyber_architect": "cyber_architect",
         "chief_security_officer": "chief_security_officer",
         "chief_safety_officer": "chief_safety_officer",
+        "chief_reliability_officer": "chief_reliability_officer",
         "chief_compliance_officer": "chief_compliance_officer",
         "integration_manager": "integration_manager",
         "qa_manager": "qa_manager",
@@ -525,6 +552,7 @@ def build_supervisor_graph() -> StateGraph:
         "cyber_architect",
         "chief_security_officer",
         "chief_safety_officer",
+        "chief_reliability_officer",
         "chief_compliance_officer",
         "integration_manager",
         "qa_manager",

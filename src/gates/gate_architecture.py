@@ -13,6 +13,22 @@ def evaluate_architecture_gate(state: AgentState) -> dict[str, Any]:
     if state.phase != Phase.ARCHITECTURE or not state.architecture:
         return {}
 
+    required_assessments = [
+        "architecture_security_assessment",
+        "architecture_safety_assessment",
+        "architecture_reliability_assessment",
+    ]
+    missing_assessments = [
+        key for key in required_assessments if key not in state.agent_outputs
+    ]
+    if missing_assessments:
+        return {
+            "messages": [
+                "[architecture_gate] Awaiting architecture assessments: "
+                + ", ".join(missing_assessments)
+            ]
+        }
+
     output = state.agent_outputs.get("architecture_agent")
     if not isinstance(output, dict):
         return {

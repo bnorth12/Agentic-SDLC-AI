@@ -160,6 +160,36 @@ class VerificationStatus(BaseModel):
     last_updated: datetime = Field(default_factory=datetime.utcnow)
 
 
+class ThreatFinding(BaseModel):
+    """A threat model finding generated during architecture or implementation."""
+
+    id: str
+    title: str
+    scenario: str
+    severity: str
+    mitigations: list[str] = Field(default_factory=list)
+
+
+class HazardItem(BaseModel):
+    """A safety hazard entry tracked for architecture and implementation reviews."""
+
+    id: str
+    description: str
+    severity: str
+    likelihood: str
+    mitigations: list[str] = Field(default_factory=list)
+
+
+class ReliabilityRisk(BaseModel):
+    """A reliability risk captured for architecture readiness."""
+
+    id: str
+    failure_mode: str
+    impact: str
+    detection: str
+    mitigations: list[str] = Field(default_factory=list)
+
+
 class StateMetadata(BaseModel):
     """Metadata about the state."""
 
@@ -188,6 +218,18 @@ class AgentState(BaseModel):
     )
     architecture: dict[str, Any] = Field(
         default_factory=dict, description="Architecture documents and diagrams"
+    )
+    architecture_security_findings: list[ThreatFinding] = Field(
+        default_factory=list,
+        description="Threat findings identified during architecture assessment",
+    )
+    architecture_hazard_log: list[HazardItem] = Field(
+        default_factory=list,
+        description="Safety hazard log entries used for architecture gate readiness",
+    )
+    architecture_reliability_risks: list[ReliabilityRisk] = Field(
+        default_factory=list,
+        description="Reliability risks identified for architecture decisions",
     )
     risks: dict[str, Risk] = Field(default_factory=dict, description="Risk register")
     decisions: dict[str, Decision] = Field(

@@ -181,6 +181,40 @@ Verified when child SYS-0006 is in VERIFIED status.
 | **Status** | APPROVED |
 | **Priority** | P1-Critical |
 | **Source** | README.md, docs/architecture.md |
+
+---
+
+## Sprint 3 Derived Requirements (Execution Update)
+
+### SEC-0100 — Architecture Threat Model Artifact
+
+**Requirement Text**  
+The system SHALL generate an architecture-phase threat model artifact containing at least one identified threat scenario, severity, and mitigation linkage before Gate 3 readiness evaluation.
+
+**Traceability**  
+- Parent: SYS-0006
+- Work Item: Sprint 3
+- Verification: `tests/integration/test_e2e_intake_to_gate3.py`
+
+### SAF-0100 — Architecture Hazard Log Artifact
+
+**Requirement Text**  
+The system SHALL generate an architecture-phase hazard log containing hazard identifiers, likelihood, severity, and mitigations before Gate 3 readiness evaluation.
+
+**Traceability**  
+- Parent: SYS-0006
+- Work Item: Sprint 3
+- Verification: `tests/integration/test_e2e_intake_to_gate3.py`
+
+### REL-0100 — Architecture Reliability Assessment Artifact
+
+**Requirement Text**  
+The system SHALL generate an architecture-phase reliability risk artifact including failure modes, detection strategy, and resilience controls before Gate 3 readiness evaluation.
+
+**Traceability**  
+- Parent: SYS-0006
+- Work Item: Sprint 3
+- Verification: `tests/integration/test_e2e_intake_to_gate3.py`
 | **Trace: Parent** | SH-0001 |
 | **Trace: Children** | AGT-0001, INFRA-0001 |
 | **Trace: Work Item** | Sprint 0 (complete) |
