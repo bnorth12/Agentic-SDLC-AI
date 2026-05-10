@@ -14,4 +14,8 @@ RUN useradd --create-home --shell /usr/sbin/nologin appuser && chown -R appuser:
 
 USER appuser
 
+# Health check: verify the app CLI can execute successfully
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+	CMD python -m src.cli.main version || exit 1
+
 CMD ["python", "-c", "from src.state.schema import AgentState; print(AgentState())"]

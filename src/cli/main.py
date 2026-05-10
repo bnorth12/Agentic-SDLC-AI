@@ -145,5 +145,27 @@ def status() -> None:
     )
 
 
+@app.command()
+def dashboard() -> None:
+    """Launch the observability dashboard."""
+    setup_logging()
+
+    try:
+        from src.observability import run_dashboard
+
+        console.print("[cyan]Launching observability dashboard...[/]")
+        console.print("[dim]Dashboard available at: http://localhost:8501[/]\n")
+        run_dashboard()
+    except ImportError as e:
+        console.print(
+            f"[bold red]❌ Dashboard dependencies not installed[/]\n"
+            "[yellow]Install with:[/] pip install -e '.[ui]'"
+        )
+        sys.exit(1)
+    except Exception as e:
+        console.print(f"[bold red]❌ Error launching dashboard:[/] {e}")
+        sys.exit(1)
+
+
 if __name__ == "__main__":
     app()

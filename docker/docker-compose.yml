@@ -27,6 +27,21 @@ services:
       - ollama
       - postgres
 
+  dashboard:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    env_file:
+      - ../.env
+    ports:
+      - "8501:8501"
+    environment:
+      STREAMLIT_SERVER_PORT: 8501
+      STREAMLIT_SERVER_ADDRESS: 0.0.0.0
+    command: python -m streamlit run src/observability/dashboard.py --logger.level=info
+    depends_on:
+      - postgres
+
 volumes:
   ollama_data:
   postgres_data:
