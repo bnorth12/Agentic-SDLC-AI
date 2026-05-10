@@ -1,5 +1,17 @@
 # Roadmap
 
+## Current Repo State
+
+The repository has moved beyond the original Phase 0 baseline. The current codebase already includes:
+
+- A working LangGraph supervisor with governance hooks and checkpoint snapshots
+- 12 implemented agents, including the expanded security, safety, compliance, integration, QA, operations, and maintenance roles
+- Governance gates for requirements, architecture, implementation, and deployment
+- WorkPackage queue/resume support plus KPI tracking scaffolding
+- Integration and end-to-end tests covering the expanded workflow
+
+The roadmap below is the forward-looking plan from this point onward.
+
 ## Phase 1 — MVP Foundation
 
 - Establish shared state schema

@@ -61,31 +61,33 @@ Build a **production-quality, multi-agent AI system** that automates systems eng
 
 ---
 
-## 3. Current State Assessment (Sprint 0 Complete)
+## 3. Current State Assessment (Replan Snapshot)
 
-### What Exists (Baseline)
+### What Exists Now
 
 | Area | Status | Notes |
 |------|--------|-------|
 | Core infrastructure (state, config, CLI) | ✅ Done | Pydantic v2, Typer, Rich |
 | Base agent class | ✅ Done | Authority levels, governance output contract |
 | Supervisor graph | ✅ Done | LangGraph, gate hook, HITL wiring |
-| 4 agents (PM, CE, Requirements, Architecture) | ✅ Done | Governance outputs wired |
-| Architecture Review Board | ✅ Done | Board subgraph |
-| Governance policies (6 policies) | ✅ Done | SEMP, PMP, RMP, ADP, CMP, DMP |
-| Engineering plans (10 plans) | ✅ Done | SDP, SSMP, SEP, VVP, QAP, DMP, RISK, HITL, IRP |
-| Policy-to-agent enforcement matrix | ✅ Done | Gaps documented |
+| Core + specialist agents | ✅ Done | 12 agents total, including security/safety/compliance/integration/QA/ops/maintenance |
+| Governance gates | ✅ Done | Requirements, architecture, implementation, deployment gate nodes wired |
+| Governance policies and plans | ✅ Done | Baseline policy and engineering-plan corpus in place |
 | Governance evidence validator | ✅ Done | Module + CLI + tests |
-| Supervisor gate hook | ✅ Done | Blocks invalid READY transitions |
-| 10 governance unit tests | ✅ Done | All passing |
-| Docker compose (Ollama + PostgreSQL) | ✅ Done | |
-| Database setup script | ✅ Done | |
-| CI/CD pipeline | ❌ Not done | GitHub Actions needed |
-| 7 planned agents | ❌ Not done | Safety, Dev, V&V, CM, DM, Integration, QA |
-| End-to-end workflow test | ❌ Not done | |
-| HITL interactive testing | ❌ Not done | |
-| Metrics / observability dashboard | ❌ Not done | |
-| Multi-model routing | ❌ Not done | Advanced capability |
+| Checkpoint persistence | ✅ Done | Postgres checkpointer with optional dependency handling |
+| WorkPackage orchestration | ✅ Done | Queue model plus checkpoint resume semantics |
+| KPI / metrics scaffolding | ✅ Done | Gate outcome aggregation and report generation |
+| Integration and E2E tests | ✅ Done | Gate routing, persistence, and implementation-to-maintenance traceability |
+| Docker compose (Ollama + PostgreSQL) | ✅ Done | Local stack definition exists |
+| CI workflow | ⚠️ Partial | GitHub Actions exists, but it still needs coverage/lint hardening |
+| Production Docker hardening | ❌ Not done | Non-root image, health checks, and runtime polish still pending |
+
+### Remaining Gaps
+
+1. **CI/CD hardening** — add lint and coverage enforcement, and broaden workflow validation.
+2. **Production Docker config** — harden the app image and add container health checks.
+3. **Observability dashboard** — turn KPI scaffolding into a human-readable status view.
+4. **Remaining governance depth** — finish the broader compliance and model-routing items from the historical plan.
 
 ### Known Backlog (Capability Gaps from Enforcement Matrix)
 
@@ -116,10 +118,10 @@ The roadmap phases align directly to sprint groups:
 | Phase | Description | Sprints | Exit Condition |
 |-------|-------------|---------|----------------|
 | Phase 0 | Foundation (DONE) | Sprint 0 | Core infra + 4 agents + governance baseline |
-| Phase 1 | MVP Completion | Sprints 1-3 | All 11 agents implemented, CI/CD running, Gates 1-7 defined |
-| Phase 2 | SDLC Expansion | Sprints 4-5 | End-to-end workflow, HITL tested, boards complete |
-| Phase 3 | Persistent Multi-Run | Sprint 6 | Checkpointing, recovery, long-horizon planning |
-| Phase 4 | Advanced Capabilities | Sprints 7-8 | Multi-model routing, metrics, compliance evidence |
+| Phase 1 | MVP Completion | Sprints 1-3 | Expanded agents, gates, and baseline workflow now delivered in code |
+| Phase 2 | SDLC Expansion | Sprints 4-5 | End-to-end workflow, HITL, and traceability have working coverage |
+| Phase 3 | Persistent Multi-Run | Sprint 6 | Checkpointing, recovery, work packages, and metrics scaffolding are in place |
+| Phase 4 | Advanced Capabilities | Sprints 7-8 | Remaining productionization and multi-model features |
 
 ---
 

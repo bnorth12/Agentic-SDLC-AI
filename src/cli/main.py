@@ -8,7 +8,7 @@ import typer
 from rich.console import Console
 
 from src.config import get_settings
-from src.graphs.supervisor import build_supervisor_graph
+from src.graphs.supervisor import build_supervisor_graph, get_kpi_tracker
 from src.state.schema import AgentState
 from src.utils.logging import setup_logging
 from src.utils.tracing import setup_tracing
@@ -107,8 +107,42 @@ def config() -> None:
 def version() -> None:
     """Display version information."""
     console.print("[bold]Agentic SDLC AI[/]")
-    console.print("Version: 0.1.0 (Phase 0 - Foundation)")
-    console.print("Status: Early Development")
+    console.print("Version: 0.1.0")
+    console.print("Status: Active development beyond the original Phase 0 baseline")
+
+
+@app.command()
+def status() -> None:
+    """Display runtime status, checkpoint sessions, and KPI summary."""
+    setup_logging()
+    settings = get_settings()
+
+    from src.state.persistence import get_persistence_manager
+
+    manager = get_persistence_manager()
+    tracker = get_kpi_tracker()
+
+    console.print("[bold]Runtime Status:[/]")
+    console.print(f"Environment: {settings.app_env}")
+    console.print(f"HITL Enabled: {settings.enable_hitl}")
+    console.print(f"Tracing Enabled: {settings.enable_tracing}")
+
+    sessions = manager.list_checkpoint_sessions()
+    console.print(f"Checkpoint Sessions: {len(sessions)}")
+    if sessions:
+        for session_id in sessions:
+            console.print(f"  • {session_id}")
+
+    report = tracker.get_metrics_report()
+    summary = report.get("summary", {})
+    console.print("\n[bold]Governance KPI Summary:[/]")
+    console.print(f"Gate Pass Rate: {summary.get('gate_pass_rate', '0.0%')}")
+    console.print(
+        f"First Attempt Success: {summary.get('first_attempt_success_rate', '0.0%')}"
+    )
+    console.print(
+        f"Gates Attempted: {summary.get('gates_attempted', 0)}"
+    )
 
 
 if __name__ == "__main__":

@@ -135,7 +135,7 @@ Start here to understand what Agentic-SDLC-AI does and how the multi-agent conce
 
 ## Roadmap
 
-See [`docs/roadmap.md`](docs/roadmap.md) — currently in **Phase 0 (Foundation)**.
+See [`docs/roadmap.md`](docs/roadmap.md) for the current repo state and forward roadmap. The codebase has moved beyond the original Phase 0 baseline.
 
 See also [`docs/project-plan/PROJECT_PLAN.md`](docs/project-plan/PROJECT_PLAN.md) and [`docs/project-plan/SPRINT_SUCCESSION.md`](docs/project-plan/SPRINT_SUCCESSION.md) for detailed 8-sprint delivery plan.
 
@@ -219,10 +219,10 @@ MIT License — see [LICENSE](LICENSE) file.
 ## Success Metrics & Goals
 
 We measure progress by:
-- ✅ **Working agents**: 4/12 core agents implemented
-- ✅ **Review boards**: 1/4 primary boards working
-- ✅ **Test coverage**: Targeting 80%+ overall
-- ⚠️ **End-to-end workflows**: Basic flow working, needs refinement
+- ✅ **Working agents**: 12 agents implemented
+- ✅ **Review boards**: Governance gates and board routing working across the core flow
+- ⚠️ **Test coverage**: Integration and E2E coverage are in place, but CI coverage enforcement still needs hardening
+- ✅ **End-to-end workflows**: Implementation-to-maintenance traceability test passes
 - ❌ **UI**: Not yet started
 - ❌ **Real-world validation**: Needs production testing
 
@@ -245,11 +245,11 @@ A: Not currently, but support could be added. The focus is on self-hosted, priva
 A: Depends on model size and complexity. With an 8B model on RTX 4090: basic requirements workflow ~30-60 seconds. With 32B model: 2-5 minutes.
 
 **Q: Is this production-ready?**  
-A: No. This is Phase 0 (Foundation). Use for experimentation and research. Production readiness is Phase 4 goal (8+ months out).
+A: No. The foundation and major workflow slices are in place, but production hardening, observability, and deployment polish still remain.
 
 ---
 
-**Project Status**: Phase 0 - Foundation (Active Development)  
+**Project Status**: Active development beyond Phase 0 foundation
 **Version**: 0.1.0  
 **License**: MIT
 

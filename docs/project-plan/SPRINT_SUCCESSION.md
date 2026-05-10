@@ -10,6 +10,22 @@
 
 The Agentic-SDLC-AI project spans **8 development sprints** grouped into **4 phases**, each culminating in a major capability release. Each sprint is 2 weeks and includes explicit Gate readiness checks.
 
+## Replan Snapshot (May 9, 2026)
+
+The original sprint table below is retained as the baseline plan, but the repository has already moved ahead of the Phase 0 assumptions. Current delivered code includes the expanded agent set, gate nodes, checkpoint snapshot support, WorkPackage orchestration, KPI scaffolding, and end-to-end traceability tests.
+
+Current immediate focus:
+
+- CI/CD hardening with lint and coverage enforcement
+- Production Docker polish and health checks
+- Observability dashboards for governance KPIs
+
+Remaining forward-looking roadmap items after that:
+
+- Broader compliance evidence generation
+- Multi-model routing and role-based policies
+- Any remaining governance-depth work from the historical plan
+
 ---
 
 ## Phase 0 → Phase 1 Transition (Sprint 0 Complete, Sprint 1 Starting)
