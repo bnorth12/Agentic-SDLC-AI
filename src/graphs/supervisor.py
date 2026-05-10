@@ -22,6 +22,7 @@ from src.agents import (
     RequirementsAgent,
     SoftwareDevelopmentAgent,
     SoftwareQualityManagerAgent,
+    VerificationValidationAgent,
 )
 from src.boards import ArchitectureReviewBoard
 from src.gates import (
@@ -256,6 +257,8 @@ def should_continue(state: AgentState) -> str:
         return "implementation_gate"
 
     if state.phase == Phase.VERIFICATION:
+        if "verification_validation_package" not in state.agent_outputs:
+            return "verification_validation_agent"
         if "verification_package" not in state.agent_outputs:
             return "qa_manager"
         return "END"
@@ -349,6 +352,14 @@ def qa_manager_node(state: AgentState) -> dict[str, Any]:
     """Execute QA manager agent."""
     agent = QAManagerAgent()
     return apply_governance_gate_hook(state, agent(state), "qa_manager")
+
+
+def verification_validation_agent_node(state: AgentState) -> dict[str, Any]:
+    """Execute verification and validation agent."""
+    agent = VerificationValidationAgent()
+    return apply_governance_gate_hook(
+        state, agent(state), "verification_validation_agent"
+    )
 
 
 def operations_lead_node(state: AgentState) -> dict[str, Any]:
@@ -533,6 +544,9 @@ def build_supervisor_graph() -> StateGraph:
         "configuration_management_agent", configuration_management_agent_node
     )
     workflow.add_node("integration_manager", integration_manager_node)
+    workflow.add_node(
+        "verification_validation_agent", verification_validation_agent_node
+    )
     workflow.add_node("qa_manager", qa_manager_node)
     workflow.add_node("operations_lead", operations_lead_node)
     workflow.add_node("software_quality_manager", software_quality_manager_node)
@@ -558,6 +572,7 @@ def build_supervisor_graph() -> StateGraph:
         "software_development_agent": "software_development_agent",
         "configuration_management_agent": "configuration_management_agent",
         "integration_manager": "integration_manager",
+        "verification_validation_agent": "verification_validation_agent",
         "qa_manager": "qa_manager",
         "operations_lead": "operations_lead",
         "software_quality_manager": "software_quality_manager",
@@ -583,6 +598,7 @@ def build_supervisor_graph() -> StateGraph:
         "software_development_agent",
         "configuration_management_agent",
         "integration_manager",
+        "verification_validation_agent",
         "qa_manager",
         "operations_lead",
         "software_quality_manager",

@@ -235,6 +235,16 @@ The system SHALL produce configuration baseline updates, configuration tags, and
 - Parent: SYS-0006
 - Work Item: Sprint 4
 - Verification: `tests/integration/test_e2e_intake_to_gate4.py`
+
+### VNV-0300 — Requirement-to-Test Traceability and Coverage Evidence
+
+**Requirement Text**  
+The system SHALL generate verification-phase artifacts that map all active requirements to test cases, report coverage of at least 80 percent, and include V&V sign-off before Gate 5 readiness declaration.
+
+**Traceability**  
+- Parent: SYS-0005
+- Work Item: Sprint 5
+- Verification: `tests/integration/test_e2e_intake_to_gate5.py`
 | **Trace: Parent** | SH-0001 |
 | **Trace: Children** | AGT-0001, INFRA-0001 |
 | **Trace: Work Item** | Sprint 0 (complete) |

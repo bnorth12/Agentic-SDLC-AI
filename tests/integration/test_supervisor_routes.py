@@ -114,6 +114,21 @@ class SupervisorRoutingIntegrationTest(unittest.TestCase):
 
         self.assertEqual(should_continue(state), "configuration_management_agent")
 
+    def test_verification_routes_vnv_agent_first(self) -> None:
+        state = AgentState(objective="route test", phase=Phase.VERIFICATION)
+
+        self.assertEqual(should_continue(state), "verification_validation_agent")
+
+    def test_verification_routes_qa_after_vnv(self) -> None:
+        state = AgentState(objective="route test", phase=Phase.VERIFICATION)
+        state.agent_outputs = {
+            "verification_validation_package": {
+                "coverage_tracking": {"coverage_percent": 90.0}
+            }
+        }
+
+        self.assertEqual(should_continue(state), "qa_manager")
+
     def test_maintenance_routes_end_after_quality_package(self) -> None:
         state = AgentState(objective="route test", phase=Phase.MAINTENANCE)
         state.agent_outputs = {"maintenance_quality_package": {}}

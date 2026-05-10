@@ -26,13 +26,27 @@ class QAManagerAgent(BaseAgent):
             return {}
 
         outputs = dict(state.agent_outputs)
+        if "verification_validation_package" not in outputs:
+            return {
+                "messages": ["[qa_manager] Waiting on verification validation package"]
+            }
+
         if "verification_package" in outputs:
             return {}
 
+        vv_package = outputs["verification_validation_package"]
+        coverage = vv_package.get("coverage_tracking", {})
+        coverage_percent = coverage.get("coverage_percent", 0.0)
+        coverage_summary = f"in_state:vnv:coverage_{int(coverage_percent)}_percent"
+
         outputs["verification_package"] = {
-            "verification_validation_report": "in_state:vnv:report_v1",
-            "coverage_summary": "in_state:vnv:coverage_90_percent",
+            "verification_validation_report": "in_state:vnv:report_v2",
+            "coverage_summary": coverage_summary,
             "defect_disposition_log": "in_state:vnv:defects_closed",
+            "requirements_to_test_mapping": vv_package.get(
+                "requirements_to_test_mapping", []
+            ),
+            "vnv_signoff": vv_package.get("vnv_signoff", {}),
         }
 
         updates = {

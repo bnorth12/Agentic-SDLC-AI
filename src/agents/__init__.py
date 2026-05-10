@@ -16,6 +16,7 @@ from src.agents.qa_manager import QAManagerAgent
 from src.agents.requirements_agent import RequirementsAgent
 from src.agents.software_development_agent import SoftwareDevelopmentAgent
 from src.agents.software_quality_manager import SoftwareQualityManagerAgent
+from src.agents.verification_validation_agent import VerificationValidationAgent
 
 __all__ = [
     "ArchitectureAgent",
@@ -34,4 +35,5 @@ __all__ = [
     "RequirementsAgent",
     "SoftwareDevelopmentAgent",
     "SoftwareQualityManagerAgent",
+    "VerificationValidationAgent",
 ]
