@@ -237,6 +237,16 @@ class AgentState(BaseModel):
         default_factory=dict, description="Decision log"
     )
 
+    # Compliance waivers and risk acceptance
+    waivers: list[dict[str, Any]] = Field(
+        default_factory=list,
+        description="Approved waivers from compliance policies with justification",
+    )
+    risk_acceptances: list[dict[str, Any]] = Field(
+        default_factory=list,
+        description="Explicitly accepted risks with owner and approval date",
+    )
+
     # Communication
     messages: list[str] = Field(
         default_factory=list, description="Inter-agent messages"

@@ -17,6 +17,8 @@ from src.agents import (
     ChiefSecurityOfficerAgent,
     ConfigurationManagementAgent,
     CyberArchitectAgent,
+    DataManagementAgentStub,
+    IntegrationAndTestAgentStub,
     IntegrationManagerAgent,
     OperationsLeadAgent,
     ProgramManagerAgent,
@@ -457,6 +459,18 @@ def software_quality_manager_node(state: AgentState) -> dict[str, Any]:
     return _run_with_metrics(state, "software_quality_manager", lambda: agent(state))
 
 
+def integration_and_test_agent_node(state: AgentState) -> dict[str, Any]:
+    """Execute integration and test agent."""
+    agent = IntegrationAndTestAgentStub()
+    return _run_with_metrics(state, "integration_and_test_agent", lambda: agent(state))
+
+
+def data_management_agent_node(state: AgentState) -> dict[str, Any]:
+    """Execute data management agent."""
+    agent = DataManagementAgentStub()
+    return _run_with_metrics(state, "data_management_agent", lambda: agent(state))
+
+
 def requirements_gate_node(state: AgentState) -> dict[str, Any]:
     """Execute requirements gate evaluation."""
     return _run_with_metrics(
@@ -638,6 +652,8 @@ def build_supervisor_graph() -> StateGraph:
     workflow.add_node("qa_manager", qa_manager_node)
     workflow.add_node("operations_lead", operations_lead_node)
     workflow.add_node("software_quality_manager", software_quality_manager_node)
+    workflow.add_node("integration_and_test_agent", integration_and_test_agent_node)
+    workflow.add_node("data_management_agent", data_management_agent_node)
     workflow.add_node("requirements_gate", requirements_gate_node)
     workflow.add_node("architecture_gate", architecture_gate_node)
     workflow.add_node("implementation_gate", implementation_gate_node)
@@ -664,6 +680,8 @@ def build_supervisor_graph() -> StateGraph:
         "qa_manager": "qa_manager",
         "operations_lead": "operations_lead",
         "software_quality_manager": "software_quality_manager",
+        "integration_and_test_agent": "integration_and_test_agent",
+        "data_management_agent": "data_management_agent",
         "requirements_gate": "requirements_gate",
         "architecture_gate": "architecture_gate",
         "implementation_gate": "implementation_gate",
@@ -690,6 +708,8 @@ def build_supervisor_graph() -> StateGraph:
         "qa_manager",
         "operations_lead",
         "software_quality_manager",
+        "integration_and_test_agent",
+        "data_management_agent",
         "requirements_gate",
         "architecture_gate",
         "implementation_gate",

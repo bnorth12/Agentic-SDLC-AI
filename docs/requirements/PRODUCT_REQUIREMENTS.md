@@ -275,15 +275,26 @@ The system SHALL select inference models per agent role and estimated task compl
 - Parent: SYS-0004
 - Work Item: Sprint 7
 - Verification: `tests/unit/test_model_router.py`, `tests/unit/test_kpi_tracker.py`
-| **Trace: Parent** | SH-0001 |
-| **Trace: Children** | AGT-0001, INFRA-0001 |
-| **Trace: Work Item** | Sprint 0 (complete) |
-| **Trace: Test** | tests/test_starter_modules.py |
+
+### AC8-0600 — Quality Assurance, Integration and Test, and Data Management Agents
 
 **Requirement Text**  
-The Agentic-SDLC-AI system SHALL orchestrate multiple specialized AI agents through a directed LangGraph supervisor graph to execute end-to-end SDLC workflows.
+The system SHALL execute Quality Assurance, Integration and Test, and Data Management agents within the multi-agent orchestration to extend specialist role coverage to 12 agents supporting advanced compliance evidence generation (waivers, risk acceptance) and multi-team orchestration patterns.
 
-**Rationale**  
+**Traceability**  
+- Parent: SYS-0001
+- Work Item: Sprint 8
+- Verification: `tests/unit/test_sprint8_agents.py`
+
+### AC8-0610 — Advanced Compliance Waivers and Risk Acceptance
+
+**Requirement Text**  
+The system SHALL persist and report approved compliance waivers with justification and explicit risk acceptances with owner signature, enabling organizations to document intentional policy deviations with accountability.
+
+**Traceability**  
+- Parent: SYS-0006
+- Work Item: Sprint 8
+- Verification: `src/state/schema.py` (waivers, risk_acceptances fields)
 Derived from SH-0001 to address the orchestration mechanism. A single monolithic agent cannot provide the role separation, authority delegation, and specialization required for rigorous systems engineering.
 
 **Verification Method(s)**  
