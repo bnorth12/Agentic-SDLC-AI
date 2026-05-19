@@ -12,10 +12,10 @@ Workflow Source: docs/project-plan/ASYNC_STANDUP_WORKFLOW.md
 |-------|----------------------|--------|-------|-------------|-------------|
 | SKILL-4001 | AGT-0100 | DONE | Developer | 2026-05-18 16:15 | Keep stable while SKILL-4003 starts |
 | SKILL-4002 | AGT-0101 | DONE | Developer | 2026-05-19 10:20 | Keep stable during integration hook rollout |
-| SKILL-4003 | INT-0100 | DONE | Developer | 2026-05-19 10:20 | Start SKILL-4004 requirements quality skill |
-| SKILL-4004 | AGT-0110 | NOT STARTED | Developer | - | Start once SKILL-4001 stable |
-| SKILL-4005 | AGT-0113 | NOT STARTED | Developer | - | Start after SKILL-4003 partial integration |
-| SKILL-4090 | TEST-0100 | NOT STARTED | Developer | - | Prepare smoke fixtures |
+| SKILL-4003 | INT-0100 | DONE | Developer | 2026-05-19 10:20 | Begin final sprint closure checks |
+| SKILL-4004 | AGT-0110 | DONE | Developer | 2026-05-19 11:05 | Keep stable while closure checks run |
+| SKILL-4005 | AGT-0113 | DONE | Developer | 2026-05-19 11:05 | Keep stable while closure checks run |
+| SKILL-4090 | TEST-0100 | DONE | Developer | 2026-05-19 11:05 | Finalize trace/work item updates |
 
 ---
 
@@ -43,6 +43,13 @@ Workflow Source: docs/project-plan/ASYNC_STANDUP_WORKFLOW.md
 - Evidence: src/config/skills.py, src/graphs/supervisor.py, tests/integration/test_agent_skill_binding.py
 - Blockers: None
 - Next: Begin SKILL-4004 reusable requirements quality skill implementation.
+
+- Timestamp: 2026-05-19 11:05
+- Stories: SKILL-4004, SKILL-4005, SKILL-4090
+- Update: Implemented concrete requirements quality and traceability skill modules, wired supervisor default executors to concrete implementations, and added Sprint 4 smoke integration coverage.
+- Evidence: src/skills/requirements_quality.py, src/skills/traceability_synthesis.py, tests/unit/test_skill_requirements_quality.py, tests/unit/test_skill_traceability_synthesis.py, tests/integration/test_skills_smoke.py
+- Blockers: None
+- Next: Close out Sprint 4 traceability and prepare sprint closure commit.
 
 ### Day 2 - Jun 22
 

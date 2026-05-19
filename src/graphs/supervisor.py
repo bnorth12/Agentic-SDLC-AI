@@ -43,7 +43,13 @@ from src.gates import (
 from src.metrics import KPITracker
 from src.state.persistence import get_persistence_manager
 from src.state.schema import AgentState, Phase
-from src.skills import SkillBinding, SkillRegistry, validate_skill_contract
+from src.skills import (
+    SkillBinding,
+    SkillRegistry,
+    run_requirements_quality_skill,
+    run_traceability_synthesis_skill,
+    validate_skill_contract,
+)
 from src.tools.governance_validation import validate_outputs
 from src.utils.logging import get_logger
 
@@ -93,38 +99,10 @@ def get_skill_registry() -> SkillRegistry:
 
 
 def _default_skill_executors() -> dict[str, SkillExecutor]:
-    """Default skill executors used until domain skill modules are integrated."""
-
-    def requirements_quality_executor(
-        _state: AgentState,
-        updates: dict[str, Any],
-        _policy: SkillBindingPolicy,
-    ) -> dict[str, Any]:
-        requirements = updates.get("requirements")
-        requirement_count = len(requirements) if isinstance(requirements, dict) else 0
-        return {
-            "status": "executed",
-            "checks": ["noun_shall_verb", "attribute_completeness"],
-            "requirement_count": requirement_count,
-            "violations": [],
-        }
-
-    def traceability_executor(
-        _state: AgentState,
-        updates: dict[str, Any],
-        _policy: SkillBindingPolicy,
-    ) -> dict[str, Any]:
-        links = updates.get("traceability_links")
-        link_count = len(links) if isinstance(links, list) else 0
-        return {
-            "status": "executed",
-            "trace_links_count": link_count,
-            "missing_links": [],
-        }
-
+    """Default skill executors mapped to concrete skill implementations."""
     return {
-        "SKILL-REQ-QUALITY": requirements_quality_executor,
-        "SKILL-TRACEABILITY": traceability_executor,
+        "SKILL-REQ-QUALITY": run_requirements_quality_skill,
+        "SKILL-TRACEABILITY": run_traceability_synthesis_skill,
     }
 
 
