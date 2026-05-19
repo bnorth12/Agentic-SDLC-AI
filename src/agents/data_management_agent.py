@@ -5,7 +5,7 @@ from __future__ import annotations
 from typing import Any
 
 from src.agents.base_agent import BaseAgent
-from src.state.schema import AgentState, Phase
+from src.state.schema import AgentState
 
 
 class DataManagementAgentStub(BaseAgent):

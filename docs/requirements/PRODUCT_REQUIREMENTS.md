@@ -1440,8 +1440,8 @@ Inspection SHALL confirm skills architecture artifacts and binding configuration
 | **Source** | SYS-0010 |
 | **Trace: Parent** | SYS-0010 |
 | **Trace: Children** | NONE |
-| **Trace: Work Item** | Sprint 4 |
-| **Trace: Test** | tests/unit/test_skill_contract_schema.py (planned) |
+| **Trace: Work Item** | SKILL-4001 |
+| **Trace: Test** | tests/unit/test_skill_contract_schema.py |
 
 **Requirement Text**  
 The skills subsystem SHALL define a versioned skill contract containing skill metadata, input schema, output schema, policy checks, traceability links, confidence score, and escalation conditions.
@@ -1469,8 +1469,8 @@ Unit tests SHALL validate required fields and schema rejection behavior for inco
 | **Source** | SYS-0010 |
 | **Trace: Parent** | SYS-0010 |
 | **Trace: Children** | NONE |
-| **Trace: Work Item** | Sprint 4 |
-| **Trace: Test** | tests/unit/test_skill_registry.py (planned) |
+| **Trace: Work Item** | SKILL-4002 |
+| **Trace: Test** | tests/unit/test_skill_registry.py |
 
 **Requirement Text**  
 The system SHALL maintain a runtime skill registry that supports unique skill identifiers, semantic versioning, activation status, and backward-compatible lookup by agent role and gate.
@@ -1498,8 +1498,8 @@ Unit tests SHALL verify registry add/get/deprecate operations, duplicate version
 | **Source** | SYS-0010, ARCH-0005 |
 | **Trace: Parent** | SYS-0010 |
 | **Trace: Children** | NONE |
-| **Trace: Work Item** | Sprint 4-5 |
-| **Trace: Test** | tests/integration/test_agent_skill_binding.py (planned) |
+| **Trace: Work Item** | SKILL-4003 |
+| **Trace: Test** | tests/integration/test_agent_skill_binding.py |
 
 **Requirement Text**  
 The supervisor workflow SHALL bind mandatory and optional skills to each agent invocation by phase and gate policy, and SHALL execute mandatory skills before gate readiness evaluation.
@@ -1614,8 +1614,8 @@ Performance tests SHALL report median and P95 overhead and fail when configured 
 | **Source** | SYS-0010 |
 | **Trace: Parent** | SYS-0010 |
 | **Trace: Children** | NONE |
-| **Trace: Work Item** | Sprint 5-6 |
-| **Trace: Test** | tests/integration/test_skills_layer_end_to_end.py (planned) |
+| **Trace: Work Item** | SKILL-4090 (Sprint 4 smoke), SKILL-5090 (Sprint 5 end-to-end) |
+| **Trace: Test** | tests/integration/test_skills_smoke.py, tests/integration/test_skills_layer_end_to_end.py (planned) |
 
 **Requirement Text**  
 The project SHALL maintain automated unit and integration test suites that verify skill contracts, binding behavior, gate blocking logic, persistence, and telemetry coverage before release readiness declaration.
@@ -1645,8 +1645,8 @@ CI SHALL execute skills test suites and fail when any required scenario is not c
 | **Source** | SYS-0010, AGT-0002, AGT-0005 |
 | **Trace: Parent** | SYS-0010 |
 | **Trace: Children** | NONE |
-| **Trace: Work Item** | Sprint 4 |
-| **Trace: Test** | tests/unit/test_skill_requirements_quality.py (planned) |
+| **Trace: Work Item** | SKILL-4004 |
+| **Trace: Test** | tests/unit/test_skill_requirements_quality.py |
 
 **Requirement Text**  
 The Requirements Quality Skill SHALL validate noun-SHALL-verb conformance, attribute completeness, and hierarchy integrity for all candidate requirements before Gate 2 readiness evaluation.
@@ -1732,8 +1732,8 @@ Tests SHALL verify required artifact fields and mitigation links are produced an
 | **Source** | SYS-0010, GOV-0002 |
 | **Trace: Parent** | SYS-0010 |
 | **Trace: Children** | NONE |
-| **Trace: Work Item** | Sprint 4 |
-| **Trace: Test** | tests/unit/test_skill_traceability_synthesis.py (planned) |
+| **Trace: Work Item** | SKILL-4005 |
+| **Trace: Test** | tests/unit/test_skill_traceability_synthesis.py |
 
 **Requirement Text**  
 The Traceability Synthesis Skill SHALL generate forward and backward trace links across requirements, architecture elements, work items, and tests for gate evidence packaging.

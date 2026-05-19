@@ -1,0 +1,28 @@
+#!/bin/sh
+# Pre-push hook: run CI-equivalent checks before push.
+
+VENV_PY=".venv/Scripts/python.exe"
+if [ ! -f "$VENV_PY" ]; then
+    echo "Virtual environment not found. Please create .venv and install dependencies."
+    exit 1
+fi
+
+# Set CI=true to match CI environment
+export CI=true
+
+# Run the same lint check as CI
+$VENV_PY -m ruff check src tests
+if [ $? -ne 0 ]; then
+    echo "Lint failed. Push aborted."
+    exit 1
+fi
+
+# Run the same test command as CI
+$VENV_PY -m pytest tests/ -v --cov=src --cov-report=term-missing --cov-fail-under=70
+if [ $? -ne 0 ]; then
+    echo "Tests failed. Push aborted."
+    exit 1
+fi
+
+echo "All checks passed. Proceeding with push."
+exit 0

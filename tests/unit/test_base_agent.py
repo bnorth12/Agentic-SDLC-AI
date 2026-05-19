@@ -1,7 +1,5 @@
 """Unit tests for base agent functionality."""
 
-import pytest
-
 from src.agents.base_agent import BaseAgent
 from src.state.schema import AgentState
 

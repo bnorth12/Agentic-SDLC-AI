@@ -29,6 +29,11 @@ from src.agents import (
     VerificationValidationAgent,
 )
 from src.boards import ArchitectureReviewBoard
+from src.config.skills import (
+    DEFAULT_SKILL_CONTRACTS,
+    SkillBindingPolicy,
+    get_skill_binding_policies,
+)
 from src.gates import (
     evaluate_architecture_gate,
     evaluate_deployment_gate,
@@ -38,6 +43,13 @@ from src.gates import (
 from src.metrics import KPITracker
 from src.state.persistence import get_persistence_manager
 from src.state.schema import AgentState, Phase
+from src.skills import (
+    SkillBinding,
+    SkillRegistry,
+    run_requirements_quality_skill,
+    run_traceability_synthesis_skill,
+    validate_skill_contract,
+)
 from src.tools.governance_validation import validate_outputs
 from src.utils.logging import get_logger
 
@@ -46,6 +58,10 @@ logger = get_logger(__name__)
 
 # Global KPI tracker instance
 _kpi_tracker: KPITracker | None = None
+_skill_registry: SkillRegistry | None = None
+
+
+SkillExecutor = Callable[[AgentState, dict[str, Any], SkillBindingPolicy], dict[str, Any]]
 
 
 def get_kpi_tracker() -> KPITracker:
@@ -54,6 +70,142 @@ def get_kpi_tracker() -> KPITracker:
     if _kpi_tracker is None:
         _kpi_tracker = KPITracker()
     return _kpi_tracker
+
+
+def get_skill_registry() -> SkillRegistry:
+    """Get the global skill registry seeded with default contracts and bindings."""
+    global _skill_registry
+    if _skill_registry is not None:
+        return _skill_registry
+
+    registry = SkillRegistry()
+    for payload in DEFAULT_SKILL_CONTRACTS:
+        contract = validate_skill_contract(payload)
+        registry.register(contract)
+
+    for policy in get_skill_binding_policies("requirements_agent", "gate_2"):
+        registry.bind(
+            SkillBinding(
+                agent_role=policy.agent_role,
+                gate=policy.gate,
+                discipline=policy.discipline,
+                skill_id=policy.skill_id,
+                version=policy.version,
+            )
+        )
+
+    _skill_registry = registry
+    return _skill_registry
+
+
+def _default_skill_executors() -> dict[str, SkillExecutor]:
+    """Default skill executors mapped to concrete skill implementations."""
+    return {
+        "SKILL-REQ-QUALITY": run_requirements_quality_skill,
+        "SKILL-TRACEABILITY": run_traceability_synthesis_skill,
+    }
+
+
+def apply_skill_binding_hook(
+    state: AgentState,
+    updates: dict[str, Any],
+    source_agent: str,
+    registry: SkillRegistry | None = None,
+    executors: dict[str, SkillExecutor] | None = None,
+    policies: list[SkillBindingPolicy] | None = None,
+) -> dict[str, Any]:
+    """Apply bound skills before governance gate evaluation and capture execution order."""
+    if not updates:
+        return updates
+
+    candidate = dict(updates)
+    gate_readiness = candidate.get("gate_readiness")
+    if not isinstance(gate_readiness, dict):
+        return candidate
+
+    gate = gate_readiness.get("gate")
+    if not gate:
+        return candidate
+
+    active_policies = (
+        list(policies)
+        if policies is not None
+        else get_skill_binding_policies(source_agent, str(gate))
+    )
+    if not active_policies:
+        return candidate
+
+    ordered_policies = sorted(active_policies, key=lambda policy: (not policy.required))
+    active_registry = registry or get_skill_registry()
+    active_executors = executors or _default_skill_executors()
+
+    execution_log: list[dict[str, Any]] = []
+    skill_outputs = dict(candidate.get("skill_outputs", {}))
+
+    for index, policy in enumerate(ordered_policies, start=1):
+        contract = active_registry.resolve(
+            policy.agent_role,
+            policy.gate,
+            policy.discipline,
+        )
+
+        if contract is None:
+            execution_log.append(
+                {
+                    "order": index,
+                    "skill_id": policy.skill_id,
+                    "required": policy.required,
+                    "status": "missing_binding",
+                }
+            )
+            continue
+
+        executor = active_executors.get(contract.metadata.skill_id)
+        if executor is None:
+            execution_log.append(
+                {
+                    "order": index,
+                    "skill_id": contract.metadata.skill_id,
+                    "required": policy.required,
+                    "status": "skipped_no_executor",
+                }
+            )
+            continue
+
+        result = executor(state, candidate, policy)
+        skill_outputs[contract.metadata.skill_id] = result
+        execution_log.append(
+            {
+                "order": index,
+                "skill_id": contract.metadata.skill_id,
+                "required": policy.required,
+                "status": "executed",
+            }
+        )
+
+    candidate["skill_outputs"] = skill_outputs
+    candidate["skill_execution"] = execution_log
+
+    governance_metrics = dict(state.governance_metrics)
+    governance_metrics.update(dict(candidate.get("governance_metrics", {})))
+    existing_log = governance_metrics.get("skill_execution_log", [])
+    if not isinstance(existing_log, list):
+        existing_log = []
+    governance_metrics["skill_execution_log"] = [*existing_log, *execution_log]
+    candidate["governance_metrics"] = governance_metrics
+
+    evidence_links = dict(candidate.get("evidence_links", {}))
+    evidence_links["skill_execution_log"] = (
+        f"in_state:skill_execution:{source_agent}:{str(gate)}"
+    )
+    candidate["evidence_links"] = evidence_links
+
+    messages = _ensure_messages(candidate)
+    messages.append(
+        f"[skill_hook] Executed {len(execution_log)} bound skill(s) for {source_agent}"
+    )
+
+    return candidate
 
 
 def _save_checkpoint_snapshot(state: AgentState, updates: dict[str, Any]) -> None:
@@ -81,7 +233,9 @@ def _run_with_metrics(
     manager = get_persistence_manager()
 
     try:
-        updates = apply_governance_gate_hook(state, producer(), source_name)
+        produced_updates = producer()
+        skill_augmented = apply_skill_binding_hook(state, produced_updates, source_name)
+        updates = apply_governance_gate_hook(state, skill_augmented, source_name)
         elapsed = time.perf_counter() - start
 
         get_kpi_tracker().record_agent_execution(source_name, elapsed)
