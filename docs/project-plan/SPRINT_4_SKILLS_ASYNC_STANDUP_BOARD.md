@@ -156,8 +156,8 @@ Workflow Source: docs/project-plan/ASYNC_STANDUP_WORKFLOW.md
 
 | ID | Story | Description | Impact | Owner | Mitigation | Status |
 |----|-------|-------------|--------|-------|------------|--------|
-| R-4-001 | SKILL-4003 | Supervisor binding complexity may delay integration test stabilization | High | Developer | Build integration scaffolding early and freeze binding contract | Open |
-| R-4-002 | SKILL-4005 | Traceability link generation scope creep | Medium | Developer | Restrict Sprint 4 to link generation + blocker reporting only | Open |
+| R-4-001 | SKILL-4003 | Supervisor binding complexity may delay integration test stabilization | High | Developer | Build integration scaffolding early and freeze binding contract | Closed |
+| R-4-002 | SKILL-4005 | Traceability link generation scope creep | Medium | Developer | Restrict Sprint 4 to link generation + blocker reporting only | Closed |
 
 ---
 
