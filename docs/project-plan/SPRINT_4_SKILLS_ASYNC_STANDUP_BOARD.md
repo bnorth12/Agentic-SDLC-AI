@@ -10,8 +10,8 @@ Workflow Source: docs/project-plan/ASYNC_STANDUP_WORKFLOW.md
 
 | Story | Requirement Link(s) | Status | Owner | Last Update | Next Action |
 |-------|----------------------|--------|-------|-------------|-------------|
-| SKILL-4001 | AGT-0100 | IN PROGRESS | Developer | 2026-05-18 15:40 | Finish SKILL-4001 and open PR |
-| SKILL-4002 | AGT-0101 | NOT STARTED | Developer | - | Start after SKILL-4001 interface freeze |
+| SKILL-4001 | AGT-0100 | DONE | Developer | 2026-05-18 16:15 | Keep stable while SKILL-4003 starts |
+| SKILL-4002 | AGT-0101 | IN REVIEW | Developer | 2026-05-18 16:15 | Prepare SKILL-4003 binding hook integration |
 | SKILL-4003 | INT-0100 | NOT STARTED | Developer | - | Prepare supervisor binding hooks |
 | SKILL-4004 | AGT-0110 | NOT STARTED | Developer | - | Start once SKILL-4001 stable |
 | SKILL-4005 | AGT-0113 | NOT STARTED | Developer | - | Start after SKILL-4003 partial integration |
@@ -29,6 +29,13 @@ Workflow Source: docs/project-plan/ASYNC_STANDUP_WORKFLOW.md
 - Evidence: src/skills/contracts.py, src/skills/__init__.py, tests/unit/test_skill_contract_schema.py
 - Blockers: None
 - Next: Build SKILL-4002 skill registry and resolution engine.
+
+- Timestamp: 2026-05-18 16:15
+- Stories: SKILL-4001, SKILL-4002
+- Update: Completed SKILL-4001 and implemented SKILL-4002 runtime registry with deterministic semver resolution and deprecation behavior.
+- Evidence: src/skills/registry.py, tests/unit/test_skill_registry.py, tests/unit/test_skill_contract_schema.py
+- Blockers: None
+- Next: Begin SKILL-4003 agent-skill binding hook in supervisor.
 
 ### Day 2 - Jun 22
 
