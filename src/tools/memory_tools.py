@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-from typing import Any
-
 from src.utils.logging import get_logger
 
 logger = get_logger(__name__)

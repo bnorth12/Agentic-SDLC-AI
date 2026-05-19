@@ -156,9 +156,9 @@ def dashboard() -> None:
         console.print("[cyan]Launching observability dashboard...[/]")
         console.print("[dim]Dashboard available at: http://localhost:8501[/]\n")
         run_dashboard()
-    except ImportError as e:
+    except ImportError:
         console.print(
-            f"[bold red]❌ Dashboard dependencies not installed[/]\n"
+            "[bold red]❌ Dashboard dependencies not installed[/]\n"
             "[yellow]Install with:[/] pip install -e '.[ui]'"
         )
         sys.exit(1)

@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import logging
 import json
-import sys
 from pathlib import Path
 from typing import Any
 
