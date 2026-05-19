@@ -28,6 +28,35 @@
 
 ## Work Items (Kanban Board)
 
+## Skills Active Tracking Overlay (Sprint 4+)
+
+This overlay adds direct requirement cross-links for skill work items so they can be tracked immediately in active sprint boards.
+
+| Work Item | Sprint | Requirement Cross-Links | Backlog Item | Status |
+|-----------|--------|-------------------------|--------------|--------|
+| SKILL-4001 | 4 | [AGT-0100](../requirements/PRODUCT_REQUIREMENTS.md#L1431) | [Skill Contract Schema and Model](SKILLS_BACKLOG_DECOMPOSITION.md#sprint-4--skills-foundation-and-first-p0-skills) | 🔴 NOT STARTED |
+| SKILL-4002 | 4 | [AGT-0101](../requirements/PRODUCT_REQUIREMENTS.md#L1460) | [Skill Registry and Resolution Engine](SKILLS_BACKLOG_DECOMPOSITION.md#sprint-4--skills-foundation-and-first-p0-skills) | 🔴 NOT STARTED |
+| SKILL-4003 | 4 | [INT-0100](../requirements/PRODUCT_REQUIREMENTS.md#L1489) | [Agent-Skill Binding Hook in Supervisor](SKILLS_BACKLOG_DECOMPOSITION.md#sprint-4--skills-foundation-and-first-p0-skills) | 🔴 NOT STARTED |
+| SKILL-4004 | 4 | [AGT-0110](../requirements/PRODUCT_REQUIREMENTS.md#L1636) | [Requirements Quality Skill](SKILLS_BACKLOG_DECOMPOSITION.md#sprint-4--skills-foundation-and-first-p0-skills) | 🔴 NOT STARTED |
+| SKILL-4005 | 4 | [AGT-0113](../requirements/PRODUCT_REQUIREMENTS.md#L1723) | [Traceability Synthesis Skill](SKILLS_BACKLOG_DECOMPOSITION.md#sprint-4--skills-foundation-and-first-p0-skills) | 🔴 NOT STARTED |
+| SKILL-4090 | 4 | [TEST-0100](../requirements/PRODUCT_REQUIREMENTS.md#L1605) | [Sprint 4 Skills Smoke Suite](SKILLS_BACKLOG_DECOMPOSITION.md#sprint-4--skills-foundation-and-first-p0-skills) | 🔴 NOT STARTED |
+| SKILL-5001 | 5 | [GOV-0101](../requirements/PRODUCT_REQUIREMENTS.md#L1518) | [Mandatory Skill Evidence Fail-Closed Validator](SKILLS_BACKLOG_DECOMPOSITION.md#sprint-5--gate-enforcement-and-p0-completion) | 🔴 NOT STARTED |
+| SKILL-5002 | 5 | [AGT-0111](../requirements/PRODUCT_REQUIREMENTS.md#L1665) | [Architecture Allocation Skill](SKILLS_BACKLOG_DECOMPOSITION.md#sprint-5--gate-enforcement-and-p0-completion) | 🔴 NOT STARTED |
+| SKILL-5003 | 5 | [AGT-0112](../requirements/PRODUCT_REQUIREMENTS.md#L1694) | [Threat and Hazard Skill](SKILLS_BACKLOG_DECOMPOSITION.md#sprint-5--gate-enforcement-and-p0-completion) | 🔴 NOT STARTED |
+| SKILL-5004 | 5 | [AGT-0114](../requirements/PRODUCT_REQUIREMENTS.md#L1752) | [Test Design Skill](SKILLS_BACKLOG_DECOMPOSITION.md#sprint-5--gate-enforcement-and-p0-completion) | 🔴 NOT STARTED |
+| SKILL-5005 | 5 | [AGT-0115](../requirements/PRODUCT_REQUIREMENTS.md#L1781) | [Configuration Baseline Skill](SKILLS_BACKLOG_DECOMPOSITION.md#sprint-5--gate-enforcement-and-p0-completion) | 🔴 NOT STARTED |
+| SKILL-5090 | 5 | [TEST-0100](../requirements/PRODUCT_REQUIREMENTS.md#L1605), [GOV-0101](../requirements/PRODUCT_REQUIREMENTS.md#L1518) | [Gate 2-5 Skills Integration Suite](SKILLS_BACKLOG_DECOMPOSITION.md#sprint-5--gate-enforcement-and-p0-completion) | 🔴 NOT STARTED |
+| SKILL-6001 | 6 | [DATA-0100](../requirements/PRODUCT_REQUIREMENTS.md#L1547) | [Skill Evidence Persistence Integration](SKILLS_BACKLOG_DECOMPOSITION.md#sprint-6--persistence-and-telemetry-hardening) | 🔴 NOT STARTED |
+| SKILL-6002 | 6 | [PERF-0100](../requirements/PRODUCT_REQUIREMENTS.md#L1576) | [Skills Performance and Telemetry Instrumentation](SKILLS_BACKLOG_DECOMPOSITION.md#sprint-6--persistence-and-telemetry-hardening) | 🔴 NOT STARTED |
+| SKILL-6003 | 6 | [AGT-0116](../requirements/PRODUCT_REQUIREMENTS.md#L1810) | [Release Readiness Skill](SKILLS_BACKLOG_DECOMPOSITION.md#sprint-6--persistence-and-telemetry-hardening) | 🔴 NOT STARTED |
+| SKILL-8001 | 8 | [AGT-0117](../requirements/PRODUCT_REQUIREMENTS.md#L1839) | [Data Governance Skill](SKILLS_BACKLOG_DECOMPOSITION.md#sprint-8--advanced-skills) | 🔴 NOT STARTED |
+| SKILL-8002 | 8 | [AGT-0118](../requirements/PRODUCT_REQUIREMENTS.md#L1868) | [Operational Reliability Skill](SKILLS_BACKLOG_DECOMPOSITION.md#sprint-8--advanced-skills) | 🔴 NOT STARTED |
+| SKILL-8003 | 8 | [AGT-0119](../requirements/PRODUCT_REQUIREMENTS.md#L1897) | [Compliance Packaging Skill](SKILLS_BACKLOG_DECOMPOSITION.md#sprint-8--advanced-skills) | 🔴 NOT STARTED |
+
+Tracking note:
+- Requirement IDs above are the authoritative linkage for gate readiness evidence and sprint closure.
+- When a skill item is moved to IN PROGRESS, update both this board row and the corresponding `Trace: Work Item`/`Status` fields in `docs/requirements/PRODUCT_REQUIREMENTS.md`.
+
 ### 📋 SPRINT0-P1-001: Role Hierarchy & Authority Matrix
 
 **Status**: 🔴 NOT STARTED  

@@ -25,12 +25,15 @@ The roadmap below is the forward-looking plan from this point onward.
 - Add configuration management workflows
 - Add review board subgraphs and governance checkpoints
 - Introduce artifact traceability views
+- Introduce skills architecture layer (discipline skills overlaid on agents)
+- Implement first P0 skills: requirements quality, traceability synthesis, threat/hazard, architecture allocation
 
 ## Phase 3 — Persistent Multi-Run Operations
 
 - Add robust checkpointing and recovery
 - Add long-horizon planning and work package queues
 - Add metrics and observability dashboards
+- Add skill telemetry (execution time, confidence, escalation, missing-evidence counters)
 
 ## Phase 4 — Advanced Capabilities
 
@@ -38,3 +41,4 @@ The roadmap below is the forward-looking plan from this point onward.
 - Risk-aware planning and automated trade studies
 - Deeper compliance evidence generation
 - Scalable multi-team orchestration
+- Advanced skills set: release readiness, data governance, operational reliability, compliance packaging

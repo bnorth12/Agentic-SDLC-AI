@@ -1,0 +1,148 @@
+# Sprint 4 Skills Async Standup Board
+
+Sprint Window: June 21 - July 4, 2026  
+Execution Plan Source: docs/project-plan/SPRINT_4_SKILLS_DETAILS.md  
+Workflow Source: docs/project-plan/ASYNC_STANDUP_WORKFLOW.md
+
+---
+
+## Story Status Snapshot
+
+| Story | Requirement Link(s) | Status | Owner | Last Update | Next Action |
+|-------|----------------------|--------|-------|-------------|-------------|
+| SKILL-4001 | AGT-0100 | NOT STARTED | Developer | - | Start contract model skeleton |
+| SKILL-4002 | AGT-0101 | NOT STARTED | Developer | - | Start after SKILL-4001 interface freeze |
+| SKILL-4003 | INT-0100 | NOT STARTED | Developer | - | Prepare supervisor binding hooks |
+| SKILL-4004 | AGT-0110 | NOT STARTED | Developer | - | Start once SKILL-4001 stable |
+| SKILL-4005 | AGT-0113 | NOT STARTED | Developer | - | Start after SKILL-4003 partial integration |
+| SKILL-4090 | TEST-0100 | NOT STARTED | Developer | - | Prepare smoke fixtures |
+
+---
+
+## Daily Delta Log
+
+### Day 1 - Jun 21
+
+- Timestamp:
+- Stories:
+- Update:
+- Evidence:
+- Blockers:
+- Next:
+
+### Day 2 - Jun 22
+
+- Timestamp:
+- Stories:
+- Update:
+- Evidence:
+- Blockers:
+- Next:
+
+### Day 3 - Jun 23
+
+- Timestamp:
+- Stories:
+- Update:
+- Evidence:
+- Blockers:
+- Next:
+
+### Day 4 - Jun 24
+
+- Timestamp:
+- Stories:
+- Update:
+- Evidence:
+- Blockers:
+- Next:
+
+### Day 5 - Jun 25
+
+- Timestamp:
+- Stories:
+- Update:
+- Evidence:
+- Blockers:
+- Next:
+
+### Day 6 - Jun 28
+
+- Timestamp:
+- Stories:
+- Update:
+- Evidence:
+- Blockers:
+- Next:
+
+### Day 7 - Jun 29
+
+- Timestamp:
+- Stories:
+- Update:
+- Evidence:
+- Blockers:
+- Next:
+
+### Day 8 - Jun 30
+
+- Timestamp:
+- Stories:
+- Update:
+- Evidence:
+- Blockers:
+- Next:
+
+### Day 9 - Jul 1
+
+- Timestamp:
+- Stories:
+- Update:
+- Evidence:
+- Blockers:
+- Next:
+
+### Day 10 - Jul 2
+
+- Timestamp:
+- Stories:
+- Update:
+- Evidence:
+- Blockers:
+- Next:
+
+### Day 11 - Jul 3
+
+- Timestamp:
+- Stories:
+- Update:
+- Evidence:
+- Blockers:
+- Next:
+
+### Day 12 - Jul 4
+
+- Timestamp:
+- Stories:
+- Update:
+- Evidence:
+- Blockers:
+- Next:
+
+---
+
+## Blocker and Risk Register
+
+| ID | Story | Description | Impact | Owner | Mitigation | Status |
+|----|-------|-------------|--------|-------|------------|--------|
+| R-4-001 | SKILL-4003 | Supervisor binding complexity may delay integration test stabilization | High | Developer | Build integration scaffolding early and freeze binding contract | Open |
+| R-4-002 | SKILL-4005 | Traceability link generation scope creep | Medium | Developer | Restrict Sprint 4 to link generation + blocker reporting only | Open |
+
+---
+
+## Session Close Checklist
+
+- Any status changes reflected in Story Status Snapshot.
+- New artifacts listed in Daily Delta Log.
+- New blockers recorded in Blocker and Risk Register.
+- Next action set for all IN PROGRESS stories.

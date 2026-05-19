@@ -162,3 +162,105 @@ Since this is a small repo with one active developer, roles collapse:
 | Requirements / Architecture | Developer + GitHub Copilot |
 | HITL Reviewer | Developer (deliberate review pauses) |
 | All specialist agents | Implemented in code; exercised in tests |
+
+---
+
+## 8. Skills Architecture Layer (Agent Overlay)
+
+### Why This Layer Is Needed
+
+The current product architecture is role-centric (agents map to SDLC roles). To increase capability depth without multiplying agent count, we introduce a **Skills Layer** that is composed onto agents at runtime.
+
+**Definition**: A skill is a reusable, discipline-specific capability module that can be attached to one or more agents to produce policy-conformant outputs.
+
+Examples:
+- Requirements quality checks attached to Requirements + Chief Engineer agents
+- Threat modeling attached to Safety/Security + Architecture agents
+- Traceability synthesis attached to Requirements + V&V + QA agents
+
+### Architectural Position
+
+Layer relationship:
+
+1. Workflow Layer: supervisor graph, gate transitions, HITL pauses
+2. Agent Layer: role authority and decision ownership
+3. Skills Layer: reusable technical competencies (this addition)
+4. Tooling Layer: file/code/memory/integration tool adapters
+5. Evidence Layer: artifacts, trace links, gate evidence payloads
+
+### Skill Contract (Governance-Critical)
+
+Each skill module shall implement:
+
+- `skill_id`, `name`, `discipline`, `version`
+- `inputs_required` and `artifacts_produced`
+- `policy_checks` mapped to gate criteria
+- `traceability_links` generation (requirement, risk, decision, test refs)
+- `confidence_score` and `escalation_conditions`
+- deterministic `output_schema` for linting and validation
+
+### Integration Rules
+
+1. Skills augment agent outputs but do not change authority ownership.
+2. Gate readiness is evaluated on agent output plus required skill evidence.
+3. A gate cannot transition to READY if any mandatory skill evidence is missing.
+4. Skills remain reusable across agents; no duplicate discipline logic in agent prompts.
+
+---
+
+## 9. Skills Backlog (Initial Implementation Set)
+
+The following skills are prioritized around core engineering disciplines.
+
+| Priority | Skill | Discipline | Primary Agents | Primary Gates | Core Outputs |
+|----------|-------|------------|----------------|---------------|--------------|
+| P0 | Requirements Quality Skill | Requirements Engineering | Requirements Dev, Chief Engineer | Gate 2 | noun-SHALL-verb checks, hierarchy integrity, orphan report |
+| P0 | Architecture Allocation Skill | Systems Architecture | Architecture, Chief Engineer | Gate 3 | requirement-to-component allocation matrix, interface completeness report |
+| P0 | Threat & Hazard Skill | Safety/Security Engineering | Safety/Security/Reliability, Architecture | Gate 3 | STRIDE model, hazard log, mitigation linkage |
+| P0 | Traceability Synthesis Skill | Systems Integration | Requirements Dev, V&V, QA | Gates 2-6 | RTM rollup, forward/backward trace validation |
+| P1 | Test Design Skill | Verification and Validation | V&V / Test Agent | Gate 5 | requirement-linked test cases, verification method coverage map |
+| P1 | Configuration Baseline Skill | Configuration Management | Configuration Manager | Gate 4, Gate 6 | baseline register, change-set impact report |
+| P1 | Release Readiness Skill | Integration and Release | Integration Agent, QA | Gate 6, Gate 7 | release checklist, unresolved defect waiver set |
+| P1 | Data Governance Skill | Data Engineering / Governance | Data Management | Gates 3-7 | data inventory, quality constraints, data control evidence |
+| P2 | Operational Reliability Skill | Operations Engineering | Integration Agent, Maintenance Agent | Gate 7 | SLO checks, deployment risk score, rollback readiness |
+| P2 | Compliance Packaging Skill | Quality/Compliance | QA, Program Manager | Gates 6-7 | audit package bundle, policy compliance manifest |
+
+---
+
+## 10. Sprint Placement Recommendation for Skills
+
+Because the concept is critical and cross-cutting, skills should start as a dedicated stream in **Sprint 4** (not deferred to Sprint 7-8).
+
+Recommended rollout:
+
+1. Sprint 4: Skills framework foundation
+	- skill contract schema
+	- runtime skill registry
+	- mandatory skill-to-gate mapping table
+	- P0 implementation for Requirements Quality + Traceability Synthesis
+2. Sprint 5: Verification-centered expansion
+	- P0 completion for Architecture Allocation + Threat & Hazard
+	- P1 Test Design + Configuration Baseline
+	- gate validators consume skill evidence directly
+3. Sprint 6: Observability + reliability hardening
+	- skill execution metrics, confidence trends, escalation rates
+	- Release Readiness skill integration to dashboard
+4. Sprint 7-8: advanced skills and optimization
+	- Data Governance, Operational Reliability, Compliance Packaging
+	- model-policy coupling for skill selection
+
+Rationale:
+- Sprint 4 is the first implementation-heavy point where reusable discipline logic prevents prompt duplication.
+- Introducing skills before full release hardening prevents late rework across multiple agents.
+
+---
+
+## 11. Exit Criteria Additions (Skills)
+
+In addition to existing Definition of Done:
+
+1. Required skills for targeted gates are registered and versioned.
+2. Skill outputs pass schema validation and policy lint checks.
+3. Skill-to-requirement and skill-to-test trace links are generated.
+4. Missing mandatory skill evidence blocks gate READY transition.
+5. Skill execution telemetry is captured for observability.

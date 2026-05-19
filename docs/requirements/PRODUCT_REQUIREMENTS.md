@@ -1390,3 +1390,533 @@ Test
 
 **Verification Statement**  
 The full unit test suite SHALL be executed with `OLLAMA_BASE_URL` unset or pointing to an invalid address, and all tests SHALL pass. Total test execution time SHALL be measured and confirmed below 60 seconds.
+
+---
+
+## Skills Requirements Addendum (Draft)
+
+This addendum captures requirements for the skills layer that overlays agent roles. Architecture-impact requirements are listed first, followed by individual skill requirements.
+
+### Architecture-Impact Requirements
+
+### SYS-0010 — Skills Layer Overlay Architecture
+
+| Field | Value |
+|-------|-------|
+| **ID** | SYS-0010 |
+| **Short Name** | Skills Layer Overlay Architecture |
+| **Level** | L1-System |
+| **Status** | DRAFT |
+| **Priority** | P1-Critical |
+| **Source** | docs/project-plan/PROJECT_PLAN.md §8-11 |
+| **Trace: Parent** | SH-0001, SH-0004 |
+| **Trace: Children** | AGT-0100, AGT-0101, INT-0100, GOV-0101, DATA-0100, PERF-0100, TEST-0100 |
+| **Trace: Work Item** | Sprint 4-6 |
+| **Trace: Test** | tests/integration/test_skills_layer_end_to_end.py (planned) |
+
+**Requirement Text**  
+The system SHALL implement a reusable skills layer that composes engineering-discipline capabilities onto agents at runtime while preserving existing agent authority and gate governance behavior.
+
+**Rationale**  
+Derived from SH-0001 and SH-0004 to address capability depth without multiplying role agents and to ensure auditable evidence generation remains consistent.
+
+**Verification Method(s)**  
+Inspection, Test
+
+**Verification Statement**  
+Inspection SHALL confirm skills architecture artifacts and binding configuration exist. Integration test SHALL show required skills executing for a gate and producing auditable evidence without bypassing authority controls.
+
+---
+
+### AGT-0100 — Skill Contract Schema
+
+| Field | Value |
+|-------|-------|
+| **ID** | AGT-0100 |
+| **Short Name** | Skill Contract Schema |
+| **Level** | L2-Subsystem |
+| **Status** | DRAFT |
+| **Priority** | P1-Critical |
+| **Source** | SYS-0010 |
+| **Trace: Parent** | SYS-0010 |
+| **Trace: Children** | NONE |
+| **Trace: Work Item** | Sprint 4 |
+| **Trace: Test** | tests/unit/test_skill_contract_schema.py (planned) |
+
+**Requirement Text**  
+The skills subsystem SHALL define a versioned skill contract containing skill metadata, input schema, output schema, policy checks, traceability links, confidence score, and escalation conditions.
+
+**Rationale**  
+Derived from SYS-0010 to enforce deterministic behavior and consistent evidence payloads across all skills.
+
+**Verification Method(s)**  
+Test, Inspection
+
+**Verification Statement**  
+Unit tests SHALL validate required fields and schema rejection behavior for incomplete skill definitions. Inspection SHALL confirm contract documentation in code and docs.
+
+---
+
+### AGT-0101 — Skill Registry and Version Control
+
+| Field | Value |
+|-------|-------|
+| **ID** | AGT-0101 |
+| **Short Name** | Skill Registry and Version Control |
+| **Level** | L2-Subsystem |
+| **Status** | DRAFT |
+| **Priority** | P1-Critical |
+| **Source** | SYS-0010 |
+| **Trace: Parent** | SYS-0010 |
+| **Trace: Children** | NONE |
+| **Trace: Work Item** | Sprint 4 |
+| **Trace: Test** | tests/unit/test_skill_registry.py (planned) |
+
+**Requirement Text**  
+The system SHALL maintain a runtime skill registry that supports unique skill identifiers, semantic versioning, activation status, and backward-compatible lookup by agent role and gate.
+
+**Rationale**  
+Derived from SYS-0010. Skills require explicit lifecycle control to avoid silent behavior drift.
+
+**Verification Method(s)**  
+Test
+
+**Verification Statement**  
+Unit tests SHALL verify registry add/get/deprecate operations, duplicate version rejection, and deterministic skill resolution for role and gate combinations.
+
+---
+
+### INT-0100 — Agent-Skill Binding and Execution Order
+
+| Field | Value |
+|-------|-------|
+| **ID** | INT-0100 |
+| **Short Name** | Agent-Skill Binding and Execution Order |
+| **Level** | L2-Subsystem |
+| **Status** | DRAFT |
+| **Priority** | P1-Critical |
+| **Source** | SYS-0010, ARCH-0005 |
+| **Trace: Parent** | SYS-0010 |
+| **Trace: Children** | NONE |
+| **Trace: Work Item** | Sprint 4-5 |
+| **Trace: Test** | tests/integration/test_agent_skill_binding.py (planned) |
+
+**Requirement Text**  
+The supervisor workflow SHALL bind mandatory and optional skills to each agent invocation by phase and gate policy, and SHALL execute mandatory skills before gate readiness evaluation.
+
+**Rationale**  
+Derived from SYS-0010 to ensure required discipline logic is consistently applied before transition decisions.
+
+**Verification Method(s)**  
+Test, Analysis
+
+**Verification Statement**  
+Integration tests SHALL assert mandatory skills execute before readiness computation and that execution order is traceable in run artifacts.
+
+---
+
+### GOV-0101 — Mandatory Skill Evidence Gate Enforcement
+
+| Field | Value |
+|-------|-------|
+| **ID** | GOV-0101 |
+| **Short Name** | Mandatory Skill Evidence Gate Enforcement |
+| **Level** | L2-Subsystem |
+| **Status** | DRAFT |
+| **Priority** | P1-Critical |
+| **Source** | SYS-0010, GOV-0001 |
+| **Trace: Parent** | SYS-0010 |
+| **Trace: Children** | NONE |
+| **Trace: Work Item** | Sprint 5 |
+| **Trace: Test** | tests/integration/test_gate_skill_evidence_blocking.py (planned) |
+
+**Requirement Text**  
+The gate validator SHALL fail CLOSED and set gate readiness to NOT_READY when any mandatory skill evidence artifact is missing, invalid, or below configured confidence threshold.
+
+**Rationale**  
+Derived from SYS-0010 and GOV-0001 to prevent silent phase advancement with incomplete discipline evidence.
+
+**Verification Method(s)**  
+Test
+
+**Verification Statement**  
+Integration tests SHALL intentionally omit mandatory skill outputs and assert gate transition is blocked with explicit blocker reasons in governance evidence.
+
+---
+
+### DATA-0100 — Skill Evidence Persistence and Traceability
+
+| Field | Value |
+|-------|-------|
+| **ID** | DATA-0100 |
+| **Short Name** | Skill Evidence Persistence and Traceability |
+| **Level** | L2-Subsystem |
+| **Status** | DRAFT |
+| **Priority** | P2-High |
+| **Source** | SYS-0010, SYS-0002, GOV-0002 |
+| **Trace: Parent** | SYS-0010 |
+| **Trace: Children** | NONE |
+| **Trace: Work Item** | Sprint 5-6 |
+| **Trace: Test** | tests/integration/test_skill_evidence_persistence.py (planned) |
+
+**Requirement Text**  
+The system SHALL persist skill outputs and their traceability links to requirements, risks, decisions, and tests in shared state and checkpoint storage for all gate-relevant runs.
+
+**Rationale**  
+Derived from SYS-0010 to support audit replay and independent verification.
+
+**Verification Method(s)**  
+Test, Inspection
+
+**Verification Statement**  
+Integration tests SHALL resume from checkpoint and confirm skill evidence and links remain intact and queryable for gate package generation.
+
+---
+
+### PERF-0100 — Skills Execution Overhead Budget
+
+| Field | Value |
+|-------|-------|
+| **ID** | PERF-0100 |
+| **Short Name** | Skills Execution Overhead Budget |
+| **Level** | L2-Subsystem |
+| **Status** | DRAFT |
+| **Priority** | P2-High |
+| **Source** | SYS-0010, OBS-0400 |
+| **Trace: Parent** | SYS-0010 |
+| **Trace: Children** | NONE |
+| **Trace: Work Item** | Sprint 6 |
+| **Trace: Test** | tests/performance/test_skill_overhead.py (planned) |
+
+**Requirement Text**  
+The skills subsystem SHALL keep median end-to-end gate preparation overhead within an approved performance budget and SHALL emit per-skill execution telemetry for threshold monitoring.
+
+**Rationale**  
+Derived from SYS-0010. Additional capability must not make gate workflows operationally unusable.
+
+**Verification Method(s)**  
+Test, Analysis
+
+**Verification Statement**  
+Performance tests SHALL report median and P95 overhead and fail when configured thresholds are exceeded.
+
+---
+
+### TEST-0100 — Skills Integration Verification Suite
+
+| Field | Value |
+|-------|-------|
+| **ID** | TEST-0100 |
+| **Short Name** | Skills Integration Verification Suite |
+| **Level** | L2-Subsystem |
+| **Status** | DRAFT |
+| **Priority** | P1-Critical |
+| **Source** | SYS-0010 |
+| **Trace: Parent** | SYS-0010 |
+| **Trace: Children** | NONE |
+| **Trace: Work Item** | Sprint 5-6 |
+| **Trace: Test** | tests/integration/test_skills_layer_end_to_end.py (planned) |
+
+**Requirement Text**  
+The project SHALL maintain automated unit and integration test suites that verify skill contracts, binding behavior, gate blocking logic, persistence, and telemetry coverage before release readiness declaration.
+
+**Rationale**  
+Derived from SYS-0010 to ensure skills behavior remains stable as new disciplines are added.
+
+**Verification Method(s)**  
+Test
+
+**Verification Statement**  
+CI SHALL execute skills test suites and fail when any required scenario is not covered or fails assertions.
+
+---
+
+### Individual Skill Requirements
+
+### AGT-0110 — Requirements Quality Skill
+
+| Field | Value |
+|-------|-------|
+| **ID** | AGT-0110 |
+| **Short Name** | Requirements Quality Skill |
+| **Level** | L3-Implementation |
+| **Status** | DRAFT |
+| **Priority** | P1-Critical |
+| **Source** | SYS-0010, AGT-0002, AGT-0005 |
+| **Trace: Parent** | SYS-0010 |
+| **Trace: Children** | NONE |
+| **Trace: Work Item** | Sprint 4 |
+| **Trace: Test** | tests/unit/test_skill_requirements_quality.py (planned) |
+
+**Requirement Text**  
+The Requirements Quality Skill SHALL validate noun-SHALL-verb conformance, attribute completeness, and hierarchy integrity for all candidate requirements before Gate 2 readiness evaluation.
+
+**Rationale**  
+Derived from SYS-0010 to centralize requirements quality checks as reusable discipline logic.
+
+**Verification Method(s)**  
+Test
+
+**Verification Statement**  
+Unit and integration tests SHALL demonstrate that malformed or incomplete requirements trigger blockers and prevent READY declaration.
+
+---
+
+### AGT-0111 — Architecture Allocation Skill
+
+| Field | Value |
+|-------|-------|
+| **ID** | AGT-0111 |
+| **Short Name** | Architecture Allocation Skill |
+| **Level** | L3-Implementation |
+| **Status** | DRAFT |
+| **Priority** | P1-Critical |
+| **Source** | SYS-0010, ARCH-0004 |
+| **Trace: Parent** | SYS-0010 |
+| **Trace: Children** | NONE |
+| **Trace: Work Item** | Sprint 5 |
+| **Trace: Test** | tests/unit/test_skill_architecture_allocation.py (planned) |
+
+**Requirement Text**  
+The Architecture Allocation Skill SHALL produce a requirement-to-component allocation completeness report and identify unallocated requirements before Gate 3 readiness evaluation.
+
+**Rationale**  
+Derived from SYS-0010 to ensure architectural allocation evidence is consistent and reusable.
+
+**Verification Method(s)**  
+Test
+
+**Verification Statement**  
+Tests SHALL verify that at least one unallocated requirement triggers a NOT_READY blocker with explicit requirement identifiers.
+
+---
+
+### AGT-0112 — Threat and Hazard Skill
+
+| Field | Value |
+|-------|-------|
+| **ID** | AGT-0112 |
+| **Short Name** | Threat and Hazard Skill |
+| **Level** | L3-Implementation |
+| **Status** | DRAFT |
+| **Priority** | P1-Critical |
+| **Source** | SYS-0010, SEC-0100, SAF-0100, REL-0100 |
+| **Trace: Parent** | SYS-0010 |
+| **Trace: Children** | NONE |
+| **Trace: Work Item** | Sprint 5 |
+| **Trace: Test** | tests/unit/test_skill_threat_hazard.py (planned) |
+
+**Requirement Text**  
+The Threat and Hazard Skill SHALL generate threat, hazard, and reliability artifacts with linked mitigations and severity assessments before Gate 3 readiness evaluation.
+
+**Rationale**  
+Derived from SYS-0010 to consolidate safety and security artifact generation under one reusable skill.
+
+**Verification Method(s)**  
+Test
+
+**Verification Statement**  
+Tests SHALL verify required artifact fields and mitigation links are produced and included in governance evidence.
+
+---
+
+### AGT-0113 — Traceability Synthesis Skill
+
+| Field | Value |
+|-------|-------|
+| **ID** | AGT-0113 |
+| **Short Name** | Traceability Synthesis Skill |
+| **Level** | L3-Implementation |
+| **Status** | DRAFT |
+| **Priority** | P1-Critical |
+| **Source** | SYS-0010, GOV-0002 |
+| **Trace: Parent** | SYS-0010 |
+| **Trace: Children** | NONE |
+| **Trace: Work Item** | Sprint 4 |
+| **Trace: Test** | tests/unit/test_skill_traceability_synthesis.py (planned) |
+
+**Requirement Text**  
+The Traceability Synthesis Skill SHALL generate forward and backward trace links across requirements, architecture elements, work items, and tests for gate evidence packaging.
+
+**Rationale**  
+Derived from SYS-0010 to make RTM and trace-rollup logic reusable across agents.
+
+**Verification Method(s)**  
+Test
+
+**Verification Statement**  
+Tests SHALL verify trace links are complete for configured scope and that missing links are reported as blockers.
+
+---
+
+### AGT-0114 — Test Design Skill
+
+| Field | Value |
+|-------|-------|
+| **ID** | AGT-0114 |
+| **Short Name** | Test Design Skill |
+| **Level** | L3-Implementation |
+| **Status** | DRAFT |
+| **Priority** | P2-High |
+| **Source** | SYS-0010, VNV-0300 |
+| **Trace: Parent** | SYS-0010 |
+| **Trace: Children** | NONE |
+| **Trace: Work Item** | Sprint 5 |
+| **Trace: Test** | tests/unit/test_skill_test_design.py (planned) |
+
+**Requirement Text**  
+The Test Design Skill SHALL generate requirement-linked test case proposals and verification-method coverage summaries before Gate 5 readiness evaluation.
+
+**Rationale**  
+Derived from SYS-0010 to standardize verification artifact quality.
+
+**Verification Method(s)**  
+Test
+
+**Verification Statement**  
+Tests SHALL confirm each active requirement receives at least one mapped test case or an explicit exemption rationale.
+
+---
+
+### AGT-0115 — Configuration Baseline Skill
+
+| Field | Value |
+|-------|-------|
+| **ID** | AGT-0115 |
+| **Short Name** | Configuration Baseline Skill |
+| **Level** | L3-Implementation |
+| **Status** | DRAFT |
+| **Priority** | P2-High |
+| **Source** | SYS-0010, CM-0200 |
+| **Trace: Parent** | SYS-0010 |
+| **Trace: Children** | NONE |
+| **Trace: Work Item** | Sprint 5 |
+| **Trace: Test** | tests/unit/test_skill_configuration_baseline.py (planned) |
+
+**Requirement Text**  
+The Configuration Baseline Skill SHALL generate baseline delta reports and change-control evidence for implementation and release gates.
+
+**Rationale**  
+Derived from SYS-0010 to standardize CM evidence across release cycles.
+
+**Verification Method(s)**  
+Test, Inspection
+
+**Verification Statement**  
+Tests SHALL verify baseline and change-log artifacts are produced with version identifiers and impacted component references.
+
+---
+
+### AGT-0116 — Release Readiness Skill
+
+| Field | Value |
+|-------|-------|
+| **ID** | AGT-0116 |
+| **Short Name** | Release Readiness Skill |
+| **Level** | L3-Implementation |
+| **Status** | DRAFT |
+| **Priority** | P2-High |
+| **Source** | SYS-0010, IRP-001 |
+| **Trace: Parent** | SYS-0010 |
+| **Trace: Children** | NONE |
+| **Trace: Work Item** | Sprint 6 |
+| **Trace: Test** | tests/integration/test_skill_release_readiness.py (planned) |
+
+**Requirement Text**  
+The Release Readiness Skill SHALL compile release checklist status, unresolved defect waivers, and approval records into a gate-ready release evidence package.
+
+**Rationale**  
+Derived from SYS-0010 to provide consistent, auditable release decisions.
+
+**Verification Method(s)**  
+Test
+
+**Verification Statement**  
+Integration tests SHALL verify that missing mandatory release evidence blocks readiness and lists unresolved checklist items.
+
+---
+
+### AGT-0117 — Data Governance Skill
+
+| Field | Value |
+|-------|-------|
+| **ID** | AGT-0117 |
+| **Short Name** | Data Governance Skill |
+| **Level** | L3-Implementation |
+| **Status** | DRAFT |
+| **Priority** | P3-Medium |
+| **Source** | SYS-0010, DATA plan corpus |
+| **Trace: Parent** | SYS-0010 |
+| **Trace: Children** | NONE |
+| **Trace: Work Item** | Sprint 8 |
+| **Trace: Test** | tests/unit/test_skill_data_governance.py (planned) |
+
+**Requirement Text**  
+The Data Governance Skill SHALL generate data inventory, data quality controls, and policy-control linkage evidence for gate packages where data constraints apply.
+
+**Rationale**  
+Derived from SYS-0010 to ensure data controls are explicit and auditable.
+
+**Verification Method(s)**  
+Test, Inspection
+
+**Verification Statement**  
+Tests SHALL verify generation of required inventory and control-link fields with references to governed datasets or interfaces.
+
+---
+
+### AGT-0118 — Operational Reliability Skill
+
+| Field | Value |
+|-------|-------|
+| **ID** | AGT-0118 |
+| **Short Name** | Operational Reliability Skill |
+| **Level** | L3-Implementation |
+| **Status** | DRAFT |
+| **Priority** | P3-Medium |
+| **Source** | SYS-0010, operations guidance |
+| **Trace: Parent** | SYS-0010 |
+| **Trace: Children** | NONE |
+| **Trace: Work Item** | Sprint 8 |
+| **Trace: Test** | tests/integration/test_skill_operational_reliability.py (planned) |
+
+**Requirement Text**  
+The Operational Reliability Skill SHALL evaluate SLO readiness, rollback capability, and deployment risk indicators before deployment gate declaration.
+
+**Rationale**  
+Derived from SYS-0010 to support dependable deployment and operations decisions.
+
+**Verification Method(s)**  
+Test
+
+**Verification Statement**  
+Integration tests SHALL verify deployment readiness is blocked when rollback procedures or reliability thresholds are not satisfied.
+
+---
+
+### AGT-0119 — Compliance Packaging Skill
+
+| Field | Value |
+|-------|-------|
+| **ID** | AGT-0119 |
+| **Short Name** | Compliance Packaging Skill |
+| **Level** | L3-Implementation |
+| **Status** | DRAFT |
+| **Priority** | P3-Medium |
+| **Source** | SYS-0010, AC8-0610 |
+| **Trace: Parent** | SYS-0010 |
+| **Trace: Children** | NONE |
+| **Trace: Work Item** | Sprint 8 |
+| **Trace: Test** | tests/integration/test_skill_compliance_packaging.py (planned) |
+
+**Requirement Text**  
+The Compliance Packaging Skill SHALL assemble waivers, risk acceptances, policy checks, and approver signatures into an auditable compliance bundle for release and deployment reviews.
+
+**Rationale**  
+Derived from SYS-0010 to make compliance evidence assembly repeatable and reviewable.
+
+**Verification Method(s)**  
+Test, Inspection
+
+**Verification Statement**  
+Tests SHALL verify required compliance bundle fields and signatures are present and that missing approvals produce explicit blockers.

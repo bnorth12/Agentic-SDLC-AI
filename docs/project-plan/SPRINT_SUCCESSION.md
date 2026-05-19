@@ -10,6 +10,13 @@
 
 The Agentic-SDLC-AI project spans **8 development sprints** grouped into **4 phases**, each culminating in a major capability release. Each sprint is 2 weeks and includes explicit Gate readiness checks.
 
+Default execution process (effective immediately):
+
+1. Every sprint SHALL include an execution details file and an async standup board.
+2. Async standup updates SHALL be maintained during implementation sessions (no synchronous meeting required).
+3. All sprint execution artifacts SHALL follow `docs/project-plan/SPRINT_EXECUTION_AND_ASYNC_STANDUP_TEMPLATE.md`.
+4. Default workflow guidance is defined in `docs/project-plan/ASYNC_STANDUP_WORKFLOW.md`.
+
 ## Replan Snapshot (May 9, 2026)
 
 The original sprint table below is retained as the baseline plan, but the repository has already moved ahead of the Phase 0 assumptions. Current delivered code includes the expanded agent set, gate nodes, checkpoint snapshot support, WorkPackage orchestration, KPI scaffolding, and end-to-end traceability tests.
@@ -19,6 +26,7 @@ Current immediate focus:
 - CI/CD hardening with lint and coverage enforcement
 - Production Docker polish and health checks
 - Observability dashboards for governance KPIs
+- Skills architecture layer kickoff (skill contract, registry, gate mapping)
 
 Remaining forward-looking roadmap items after that:
 
@@ -148,6 +156,11 @@ Add implementation and verification agents to complete a software development wo
 - Code generation stubs (simplified for testing)
 - Baseline register and change control tracking
 - Integration test: intake → Gate 4 (Implementation Ready)
+- Skills framework foundation:
+  - skill contract schema and versioning
+  - skill registry and agent-skill binding configuration
+  - gate-to-required-skill mapping for Gates 2-5
+  - P0 skills: Requirements Quality + Traceability Synthesis
 
 **Agents Delivered**: 8 (6 + Development + Configuration Management)  
 **Gate 4 Criteria**:
@@ -166,6 +179,10 @@ Add implementation and verification agents to complete a software development wo
 - Test plan generation and coverage tracking
 - Requirements-to-Test mapping
 - Integration test: intake → Gate 5 (Verification Complete)
+- Skills expansion:
+  - P0 skills: Architecture Allocation + Threat & Hazard
+  - P1 skills: Test Design + Configuration Baseline
+  - Gate validators consume skill evidence payloads
 
 **Agents Delivered**: 9 (8 + V&V)  
 **Gate 5 Criteria**:
@@ -195,6 +212,9 @@ Add robust checkpointing, recovery, long-horizon planning, and observability das
 - Metrics collection: agent execution time, gate transition times, error rates
 - Structured logging to observability backend (ELK or similar stub)
 - Health dashboard with historical metrics
+- Skill observability:
+  - skill execution time, confidence trend, and escalation metrics
+  - missing skill evidence counters per gate
 
 **Phase 3 Exit Criteria**:
 - ✅ Multi-hour workflows can pause/resume without data loss
@@ -215,6 +235,7 @@ Add multi-model routing, advanced compliance evidence, and scalable orchestratio
 - Multi-model inference layer (route by agent role and task type)
 - Role-based model policies (e.g., Requirements uses fast model, Architecture uses larger model)
 - Model performance tracking and adaptive selection
+- Skill-policy coupling (route selected skills to model profiles by complexity)
 
 ---
 
@@ -228,6 +249,10 @@ Add multi-model routing, advanced compliance evidence, and scalable orchestratio
 - Data Management Agent (new)
 - Advanced compliance evidence generation (waiver management, risk acceptance)
 - Multi-team orchestration patterns
+- Advanced skill set completion:
+  - Data Governance
+  - Operational Reliability
+  - Compliance Packaging
 
 **Agents Delivered**: 12 (9 + QA + Integration + Data Management)  
 **Phase 4 Exit Criteria**:
@@ -239,17 +264,17 @@ Add multi-model routing, advanced compliance evidence, and scalable orchestratio
 
 ## Cumulative Feature Timeline
 
-| Sprint | Agents | Major Capability | Phase |
-|--------|--------|-----------------|-------|
-| 0 | 4 | Multi-agent orchestration, state persistence, HITL framework, governance baseline | 0 |
-| 1 | 4 | Planning infrastructure, architecture decomposition, CI/CD | 1 |
-| 2 | 5 | Requirements agent with full hierarchy and noun-SHALL-verb | 1 |
-| 3 | 6 | Safety/Security agent, architecture review, integration test | 1 |
-| 4 | 8 | Development & CM agents, code generation stubs | 2 |
-| 5 | 9 | V&V agent, test planning and coverage tracking | 2 |
-| 6 | 9 | Persistent checkpointing, observability dashboard | 3 |
-| 7 | 9 | Multi-model routing, role-based policies | 4 |
-| 8 | 12 | QA, Integration, Data Management agents, advanced compliance | 4 |
+| Sprint | Agents | Major Capability | Skills Milestone | Phase |
+|--------|--------|-----------------|------------------|-------|
+| 0 | 4 | Multi-agent orchestration, state persistence, HITL framework, governance baseline | Skills concept not yet introduced | 0 |
+| 1 | 4 | Planning infrastructure, architecture decomposition, CI/CD | Skills backlog and architecture definition | 1 |
+| 2 | 5 | Requirements agent with full hierarchy and noun-SHALL-verb | Requirements quality behavior identified for extraction | 1 |
+| 3 | 6 | Safety/Security agent, architecture review, integration test | Threat/hazard behavior identified for extraction | 1 |
+| 4 | 8 | Development & CM agents, code generation stubs | Skills framework + first P0 skills implemented | 2 |
+| 5 | 9 | V&V agent, test planning and coverage tracking | P0 complete; P1 verification/CM skills online | 2 |
+| 6 | 9 | Persistent checkpointing, observability dashboard | Skill telemetry and gate-evidence metrics operational | 3 |
+| 7 | 9 | Multi-model routing, role-based policies | Skill-policy model routing enabled | 4 |
+| 8 | 12 | QA, Integration, Data Management agents, advanced compliance | Advanced P1/P2 skills complete | 4 |
 
 ---
 
