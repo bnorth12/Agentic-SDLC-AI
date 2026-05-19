@@ -11,8 +11,8 @@ Workflow Source: docs/project-plan/ASYNC_STANDUP_WORKFLOW.md
 | Story | Requirement Link(s) | Status | Owner | Last Update | Next Action |
 |-------|----------------------|--------|-------|-------------|-------------|
 | SKILL-4001 | AGT-0100 | DONE | Developer | 2026-05-18 16:15 | Keep stable while SKILL-4003 starts |
-| SKILL-4002 | AGT-0101 | IN REVIEW | Developer | 2026-05-18 16:15 | Prepare SKILL-4003 binding hook integration |
-| SKILL-4003 | INT-0100 | NOT STARTED | Developer | - | Prepare supervisor binding hooks |
+| SKILL-4002 | AGT-0101 | DONE | Developer | 2026-05-19 10:20 | Keep stable during integration hook rollout |
+| SKILL-4003 | INT-0100 | DONE | Developer | 2026-05-19 10:20 | Start SKILL-4004 requirements quality skill |
 | SKILL-4004 | AGT-0110 | NOT STARTED | Developer | - | Start once SKILL-4001 stable |
 | SKILL-4005 | AGT-0113 | NOT STARTED | Developer | - | Start after SKILL-4003 partial integration |
 | SKILL-4090 | TEST-0100 | NOT STARTED | Developer | - | Prepare smoke fixtures |
@@ -36,6 +36,13 @@ Workflow Source: docs/project-plan/ASYNC_STANDUP_WORKFLOW.md
 - Evidence: src/skills/registry.py, tests/unit/test_skill_registry.py, tests/unit/test_skill_contract_schema.py
 - Blockers: None
 - Next: Begin SKILL-4003 agent-skill binding hook in supervisor.
+
+- Timestamp: 2026-05-19 10:20
+- Stories: SKILL-4003
+- Update: Implemented skill binding hook in supervisor with role/gate policy config, mandatory-before-optional execution ordering, and execution log evidence capture.
+- Evidence: src/config/skills.py, src/graphs/supervisor.py, tests/integration/test_agent_skill_binding.py
+- Blockers: None
+- Next: Begin SKILL-4004 reusable requirements quality skill implementation.
 
 ### Day 2 - Jun 22
 
