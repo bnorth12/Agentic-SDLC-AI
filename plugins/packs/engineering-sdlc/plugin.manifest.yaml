@@ -1,0 +1,27 @@
+id: engineering-sdlc
+version: 0.1.0
+type: pack
+name: Engineering SDLC Pack
+description: Generalized SE skills from FarmRTK — REQ, traceability, EIRC, V&V, repo hygiene
+os: [windows, linux, macos]
+languages: [c, cpp, python, rust, java, javascript, php, fortran]
+frameworks: [platformio, arduino, node, cakephp, cargo, maven, cmake]
+entry:
+  skills_dir: imports
+  agents_dir: agents
+  scripts_dir: scripts
+dependencies:
+  packs: []
+  providers: [grok-build]
+gates:
+  - G1_traceability
+  - G3_verification_plan
+  - G4_independent_review
+  - G5_baseline
+toolchains:
+  - platformio
+  - python
+  - node
+  - rust
+  - java
+  - php

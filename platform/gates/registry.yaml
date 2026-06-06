@@ -1,0 +1,48 @@
+# Platform gate registry — modes: mandatory | optional | waived | maturity-gated
+version: "0.1.0"
+gates:
+  - id: G0_wave_charter
+    name: Wave / sprint charter
+    phase: planning
+    default_mode: mandatory
+    executor: { type: procedural, skill: orchestrate-sdlc }
+    viewer: viewer.markdown
+  - id: G1_traceability
+    name: Requirements traceability clean
+    phase: requirements
+    default_mode: maturity-gated
+    executor: { type: procedural, skill: traceability-audit-sdlc }
+    viewer: viewer.markdown
+    enforce_at: [merge_main]
+  - id: G2_icd_interfaces
+    name: Interface control document
+    phase: architecture
+    default_mode: optional
+    executor: { type: procedural, skill: icd-maintenance-sdlc }
+    viewer: viewer.icd-csv
+  - id: G3_verification_plan
+    name: V&V plan sync
+    phase: verification
+    default_mode: optional
+    executor: { type: procedural, skill: validation-plan-sdlc }
+    viewer: viewer.markdown
+  - id: G4_independent_review
+    name: EIRC commit/merge review
+    phase: implementation
+    default_mode: maturity-gated
+    executor: { type: procedural, skill: independent-review-sdlc }
+    viewer: viewer.markdown
+    enforce_at: [commit, merge_main]
+  - id: G5_baseline
+    name: Configuration baseline
+    phase: release
+    default_mode: optional
+    executor: { type: procedural, skill: configuration-baseline-sdlc }
+    viewer: viewer.markdown
+  - id: TM_pipeline_hitl
+    name: Threat model pipeline HITL
+    phase: security
+    default_mode: mandatory
+    executor: { type: langgraph, plugin: threat-modeling }
+    viewer: viewer.graph-canonical
+    source: matm

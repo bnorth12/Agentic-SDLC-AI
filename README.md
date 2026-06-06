@@ -1,4 +1,34 @@
-# Agentic SDLC AI Organization
+# Agentic SDLC AI — Platform (Reboot)
+
+> **Reboot in progress (2026-06-06):** Evolving into a **plugin-adaptable agentic IDE platform** for assured systems engineering.  
+> **Start here:** [docs/charter/REBOOT_CHARTER.md](docs/charter/REBOOT_CHARTER.md) · [REFACTOR_TODO.md](docs/charter/REFACTOR_TODO.md) · [FRAMEWORK_DECOMPOSITION.md](docs/charter/FRAMEWORK_DECOMPOSITION.md)
+
+**A portable, plugin-first agentic SDLC platform** — hybrid orchestration (procedural + LangGraph + Grok Build ACP), HITL gates, multi-language toolchains, GitHub-native workflows.
+
+Legacy LangGraph organization runtime remains in `src/` during migration. New severable layers: `platform/`, `plugins/`, `gui/`, `workspace/`, `src/platform/`.
+
+---
+
+## Quick links (reboot scaffold)
+
+| Artifact | Path |
+|----------|------|
+| Charter | [docs/charter/REBOOT_CHARTER.md](docs/charter/REBOOT_CHARTER.md) |
+| Refactor map | [docs/charter/REFACTOR_TODO.md](docs/charter/REFACTOR_TODO.md) |
+| Imports (FarmRTK + MATM) | [platform/imports/IMPORT_MANIFEST.md](platform/imports/IMPORT_MANIFEST.md) |
+| Plugin packs | [plugins/README.md](plugins/README.md) |
+| GUI / installer | [gui/README.md](gui/README.md) |
+| Workspace example | [workspace/templates/example-farmrtk.workspace.yaml](workspace/templates/example-farmrtk.workspace.yaml) |
+| Platform agents | [agents/platform/PLATFORM_AGENTS.md](agents/platform/PLATFORM_AGENTS.md) |
+
+```powershell
+powershell -File gui/installer/Install-AgenticPlatform.ps1 -Profile minimal
+pytest tests/unit/test_platform_scaffold.py -q
+```
+
+---
+
+## Legacy overview (pre-reboot)
 
 **A self-hosted, persistent multi-agent AI system that replicates a full engineering organization for Systems & Software Development Lifecycle (SDLC) execution.**
 

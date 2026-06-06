@@ -1,0 +1,33 @@
+id: farmrtk-program
+maturity: M1
+repos:
+  - path: ../FarmRTK
+    role: product
+    github: local/FarmRTK
+  - path: ../Multi Agent Threat Modeler
+    role: plugin
+    github: local/Multi Agent Threat Modeler
+  - path: .
+    role: platform
+packs:
+  - engineering-sdlc
+  - threat-modeling
+  - github-devops
+gates:
+  G0_wave_charter: mandatory
+  G1_traceability: maturity-gated
+  G4_independent_review: maturity-gated
+  TM_pipeline_hitl: optional
+runtime:
+  interactive: grok-build-acp
+  shell: powershell
+  providers:
+    primary: grok-build
+    fallback: [grok-api, openai, ollama]
+toolchains:
+  - platformio
+  - python
+github:
+  org: your-org
+  default_branch: main
+  actions_templates_pack: github-devops

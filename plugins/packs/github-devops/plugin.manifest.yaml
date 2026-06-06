@@ -1,0 +1,24 @@
+id: github-devops
+version: 0.1.0
+type: pack
+name: GitHub DevOps Pack
+description: Repo linkage, Actions templates, PR checks, gh CLI skills
+os: [windows, linux, macos]
+languages: []
+frameworks: []
+entry:
+  skills_dir: skills
+  scripts_dir: scripts
+  workflows_dir: workflows
+dependencies:
+  packs: []
+  providers: [github]
+gates:
+  - G4_independent_review
+toolchains:
+  - node
+  - python
+  - rust
+  - java
+  - php
+  - cpp

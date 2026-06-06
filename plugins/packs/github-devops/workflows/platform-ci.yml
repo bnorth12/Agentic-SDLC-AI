@@ -1,0 +1,14 @@
+# Template — copy to product repo .github/workflows/
+name: Agentic SDLC Platform CI
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+jobs:
+  gate-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Platform gate placeholder
+        run: echo "Wire to independent-review-sdlc / toolchain pack in R5"

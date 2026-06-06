@@ -1,0 +1,21 @@
+id: agentic-sdlc-ai-platform
+version: 0.2.0
+status: reboot-scaffold
+min_python: "3.11"
+supported_os:
+  - windows
+  - linux
+  - macos
+default_shell:
+  windows: powershell
+  linux: bash
+  macos: bash
+orchestration_modes:
+  - procedural
+  - langgraph
+  - acp
+primary_agent_runtime: grok-build-acp
+docs:
+  charter: docs/charter/REBOOT_CHARTER.md
+  refactor: docs/charter/REFACTOR_TODO.md
+  decomposition: docs/charter/FRAMEWORK_DECOMPOSITION.md
