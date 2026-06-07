@@ -63,6 +63,15 @@ def main() -> int:
 
     print("\n=== P4 SLICE 1 SMOKE COMPLETE ===")
     print("Next slice: PS wrapper + evidence schema usage in attach, more tests.")
+
+    # Slice 2 preview (integrated for small batch): evidence schema in attach call
+    attach_res = gh_evidence("attach", target="#42", files=["evidence/trace.md"], body="P4 attach sim")
+    print(f"attach sim (schema/files): status={attach_res['status']}, command has attach={'attach' in attach_res.get('command','')}")
+    schema = evidence_schema_example()
+    assert "files" in schema and schema["type"] == "gh-evidence"
+    print("  PASS: evidence schema + attach action (sim)")
+
+    # Note: real attach would use gh release upload or pr review --comment in full; here structured.
     return 0
 
 

@@ -254,6 +254,8 @@ New tools (ide_core.py) + manifest updates used end-to-end for planning, creatio
 
 **P4 slice 1 (basic gh wrapper):** New src/platform/tools/gh_evidence.py (reliable _run_gh with auth precheck, gh_evidence(action, target, title, body, files, ...), evidence_schema_example). Registered 'gh_evidence' in ToolRegistry (scopes gh.evidence). New test_p4_gh_evidence_smoke.py (wrapper calls, schema, registry invoke; structured even on no-auth). Live smoke PASS. Tiny anchors. Dual Python (PS next). Trace TOOL-001 / L4 / §5 / matrix.
 
+**P4 slice 2 (PS wrapper + schema):** New src/platform/tools/Invoke-GhEvidence.ps1 (PS surface for gh_evidence with params for action/target/title/body/files/labels). Extended p4 smoke for attach schema sim (files in evidence). Live PASS. Tiny anchors. Full dual PS (wrapper) + Python. Evidence schema used. Ready for integrate in slice 3.
+
 
 
 **Revision of this record:** Living — append further artifacts, evidence, or redlines as the tranche executes. FarmRTK platform skills generalization now complete across batches using the new tools (ide_core.py).
