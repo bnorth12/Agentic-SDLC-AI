@@ -366,7 +366,7 @@ class ShellHost:
         lb = tk.Listbox(pal)
         lb.pack(fill=tk.BOTH, expand=True, padx=4, pady=4)
         # populate with skills + some actions
-        actions = ["Open Folder", "GitHub Status", "Launch Grok Agent", "Run Skill: ide-hierarchy-taxonomy-steward"]
+        actions = ["Open Folder", "GitHub Status", "Launch Grok Agent", "Run Skill: ide-hierarchy-taxonomy-steward", "Show Transition Checklist"]
         try:
             loader = PluginLoader()
             for s in loader.discover_skills()[:5]:
@@ -396,6 +396,8 @@ class ShellHost:
                     self._run_github_action("status")
                 elif "Grok" in choice:
                     self._launch_grok_agent()
+                elif "Transition Checklist" in choice:
+                    self._show_transition_checklist()
         lb.bind("<<ListboxSelect>>", on_select)
         entry.focus()
         # simple filter on key
