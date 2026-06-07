@@ -122,6 +122,11 @@ class ShellHost:
         status_bar = ttk.Label(root, textvariable=status_var, relief=tk.SUNKEN, anchor=tk.W)
         status_bar.pack(side=tk.BOTTOM, fill=tk.X)
 
+        # Micro-batch: simple Transition Status stub (visible in GUI; shows baseline readiness per plan; calls preflight on hover/enter for demo)
+        trans_status = ttk.Label(root, text="Transition Status: Phase 1-3 baseline ready (checklist in Help; see PS_IDE_TRANSITION_PLAN.md) | Phase 4/5: dedicated smoke + gov reports needed for flip", foreground="green", relief=tk.RAISED)
+        trans_status.pack(side=tk.BOTTOM, fill=tk.X)
+        trans_status.bind("<Enter>", lambda e: self._run_governance_preflight(context="gui_trans_status", action_description="Transition Status hover (demo preflight)"))
+
         # Task 4: clarity - help label for hover/status updates on controls (tooltips simulation)
         help_label = ttk.Label(root, text="Hover or select items for hints. See Help > UI Legend for full explanations of all areas (Explorer=L4, etc.).", foreground="blue")
         help_label.pack(side=tk.BOTTOM, fill=tk.X)
@@ -374,6 +379,10 @@ class ShellHost:
             if sel:
                 choice = lb.get(sel[0])
                 pal.destroy()
+                # Micro-batch: gov preflight before palette dispatch (continuing Phase 2/3)
+                pre = self._run_governance_preflight(context="gui_palette", action_description=f"Palette action: {choice[:50]}")
+                if hasattr(self, 'viewer_text'):
+                    self.viewer_text.insert(tk.END, f"[GOV PREFLIGHT for palette] {pre.get('status')}\n")
                 if "Invoke:" in choice:
                     sid = choice.split(": ")[1]
                     try:

@@ -437,6 +437,14 @@ Matrix updated to reference the plan. This batch used skills/tools for grounding
 - Smoke re-PASS.
 - Phase 1 Batch 2 COMPLETE (checklist in plan and usable in the IDE). Advances readiness for Phase 2/3 (GUI dev enhancements) and Phase 5 (flip decision).
 
+**Next micro-batches (Phase 2/3 continuation, executed 2026-06, skills-first via temp_micro_batch_2_3.py):** 
+- Palette dispatch now wires gov preflight (small on_select change in _show_command_palette).
+- launch_ide.py docstring updated with Phase 5 flip notes (prepared for controlled execution).
+- Simple Transition Status label/stub added at bottom of GUI (visible readiness note + preflight on Enter for demo; advances "add Transition Status panel stub").
+- Smoke re-verified after changes (core paths + new governed actions PASS).
+- Plan and matrix updated with micro-batch notes + tiny anchors.
+- Phase 1-3 progressing; Phase 4/5 readiness (checklist + stubs + baseline prepare for flip when dedicated smoke + gov reports sufficient). All small, verified, dual-safe, skills/tools represented.
+
 **Phase 2/3 small batch (executed 2026-06):** 
 - shell_host.py: basic editor "Save (basic stub + preflight)" button added (calls _run_governance_preflight, "saves" via viewer note + message; explicitly documents as stub per plan/GUI_DESIGN baseline).
 - Plan and matrix updated with batch note + anchor.

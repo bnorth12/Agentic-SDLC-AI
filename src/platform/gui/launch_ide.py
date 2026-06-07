@@ -5,7 +5,7 @@ Usage (from repo root):
   or
   python src/platform/gui/launch_ide.py
 
-Launches the CUSTOM tkinter shell (L0) with full Phase 1-3 surfaces:
+Launches the CUSTOM tkinter shell (L0) with full Phase 1-3 surfaces (PS-to-IDE transition prepared per PS_IDE_TRANSITION_PLAN.md; Phase 5 flip when baseline + dedicated smoke + gov reports sufficient; see plan for criteria):
 - Explorer (L4 loader)
 - PS terminal (P2 robust)
 - Editor + Invoke (L2 executor)
