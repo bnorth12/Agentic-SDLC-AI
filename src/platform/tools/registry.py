@@ -93,6 +93,19 @@ class ToolRegistry:
         except Exception:
             pass  # non-fatal for bootstrap; smoke will still validate direct use
 
+        # P3 slice 2: populate skill-declared tools from manifests (L4 integration for visibility/enforcement)
+        try:
+            from ..plugins.loader import PluginLoader
+            loader = PluginLoader()
+            self._skill_declarations = {}
+            for s in loader.discover_skills():
+                pid = s.get("pack_id", "unknown")
+                if pid not in self._skill_declarations:
+                    self._skill_declarations[pid] = {}
+                self._skill_declarations[pid][s["id"]] = s.get("declared_tools", [])
+            registered += 1
+        except Exception:
+            self._skill_declarations = {}
         return registered
 
 

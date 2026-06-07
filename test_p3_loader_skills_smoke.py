@@ -52,6 +52,26 @@ def main() -> int:
 
     print("\n=== P3 SLICE 1 SMOKE COMPLETE ===")
     print("Next slice: integrate loader into executor + registry population from manifests.")
+
+    # P3 slice 2 integration check (live in this smoke for testability)
+    from src.platform.orchestration.executor import run_procedural_skill
+    from src.platform.tools.registry import get_registry
+    res = run_procedural_skill("ide-hierarchy-taxonomy-steward")
+    print(f"executor via loader: status={res.get('status')}, via_loader={res.get('discovered_via_loader')}, pack={res.get('pack_id')}")
+    assert res.get("discovered_via_loader") is True
+    assert res.get("pack_id") == "ide-platform"
+    # status may be error/partial (doc-example pwsh -File steps in the SKILL); loader resolution + declared_tools are the P3 win
+    outs = res.get("outputs", {})
+    print(f"  declared_tools in outputs: {outs.get('declared_tools')}")
+    assert "validate_hierarchy_metadata" in (outs.get("declared_tools") or [])
+    print("  PASS: run_procedural_skill now uses loader discovery (P3) + declared_tools present")
+
+    reg = get_registry()
+    decl = getattr(reg, "_skill_declarations", {})
+    print(f"registry skill_decls packs: {list(decl.keys())}")
+    assert "ide-platform" in decl
+    assert "ide-hierarchy-taxonomy-steward" in decl.get("ide-platform", {})
+    print("  PASS: registry populated with skill declarations from manifests (P3)")
     return 0
 
 

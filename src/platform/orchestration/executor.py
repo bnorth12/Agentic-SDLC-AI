@@ -23,6 +23,9 @@ from pydantic import BaseModel, Field
 # Priority 1: Tool registry + declaration parser (L2/L4)
 from ..tools.registry import get_registry, parse_declared_tools, parse_required_scopes  # type: ignore[attr-defined]
 
+# P3 slice 2: use L4 loader for skill discovery (replaces hardcoded paths)
+from ..plugins.loader import PluginLoader
+
 
 class SkillFrontmatter(BaseModel):
     name: str
@@ -315,24 +318,24 @@ class ProceduralSkillExecutor:
 
 # Convenience for router
 def run_procedural_skill(skill_id: str, payload: dict[str, Any] | None = None, workspace_root: str = ".") -> dict[str, Any]:
-    """Entry point used by router for PROCEDURAL mode."""
-    # Map skill_id to file path (simple convention for now)
-    # In real version this would use L4 pack loader + manifest
-    candidate_paths = [
-        f"plugins/packs/ide-platform/skills/{skill_id}/SKILL.md",
-        f"platform/skills/{skill_id}/SKILL.md",
-    ]
-
-    executor = ProceduralSkillExecutor(workspace_root=workspace_root)
-    for p in candidate_paths:
-        try:
-            result = executor.execute(p, payload)
-            return result.model_dump()
-        except FileNotFoundError:
-            continue
+    """Entry point used by router for PROCEDURAL mode.
+    P3: uses PluginLoader.discover_skills() (L4 manifest-driven) instead of hardcoded paths.
+    """
+    loader = PluginLoader()  # defaults to plugins/packs
+    for s in loader.discover_skills():
+        if s["id"] == skill_id:
+            executor = ProceduralSkillExecutor(workspace_root=workspace_root)
+            try:
+                result = executor.execute(s["path"], payload)
+                result_dict = result.model_dump()
+                result_dict["discovered_via_loader"] = True
+                result_dict["pack_id"] = s["pack_id"]
+                return result_dict
+            except FileNotFoundError:
+                continue
 
     return {
         "skill_id": skill_id,
         "status": "error",
-        "error": f"SKILL.md not found for {skill_id} in known locations",
+        "error": f"SKILL.md not found for {skill_id} via loader discovery",
     }
