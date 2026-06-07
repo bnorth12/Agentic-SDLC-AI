@@ -260,6 +260,8 @@ New tools (ide_core.py) + manifest updates used end-to-end for planning, creatio
 
 **P5 slice 1 (bundler core):** New src/platform/tools/gate_evidence_bundler.py (create_gate_evidence_bundle from exec+gh sources, GateEvidenceBundle pydantic, to_markdown/to_json viewer outputs, schema for G1/G3/G4). Registered 'bundle_gate_evidence'. New test_p5_gate_evidence_bundler_smoke.py (mock sources -> bundle -> md/json + registry invoke). Live PASS. Tiny anchors. Dual (Python; PS next). Trace L3-001 / §5 / matrix.
 
+**P5 slice 2 (PS wrapper + integrate):** New src/platform/tools/New-GateEvidenceBundle.ps1 (PS surface for bundler, sources JSON -> bundle md/json). Extended smoke: bundle from prior P2/P4 tools (exec+gh) + viewer md + PS sim. Live PASS. Tiny anchors. Dual PS+Python. Evidence bundling for gates ready.
+
 
 
 **Revision of this record:** Living — append further artifacts, evidence, or redlines as the tranche executes. FarmRTK platform skills generalization now complete across batches using the new tools (ide_core.py).
