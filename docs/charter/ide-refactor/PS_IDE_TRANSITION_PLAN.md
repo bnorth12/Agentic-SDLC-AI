@@ -64,12 +64,28 @@ Stubs (acceptable): full editor structure-aware, rich viewers, strict gov blocki
 
 **Verification:** Skill outputs + P5 bundle + smoke + matrix update (G1).
 
-**Status:** Execute immediately as the first small batch of this plan.
+**Status (completed in small batch 2026-06):** 
+- temp_phase0_intake.py executed the full list of required skills on the plan + current state (matrix, baseline, gaps, code).
+- Results: Most skills returned "error" or "partial" (expected; early skill maturity - many Procedures are high-level or rely on not-yet-fully-wired tools). hierarchy-steward provided declared_tools (validate_hierarchy_metadata, read_ide_artifact) and confirmed tool_registry_available. gov-policy-compiler partial. All runs captured as sources.
+- P5 Evidence Bundle created for G0_wave_charter (sources from all skills; bundle markdown generated - see script output for head; full bundle available via GateEngine/viewers in IDE).
+- phase1_batch1_smoke.py re-validated PASS (all core paths including preflights, L2 invokes, ACP, menu, dockables, self-host demo still functional - baseline holds).
+- Updates applied: This plan marked Phase 0 complete with results. Tiny anchor added to matrix X PS-IDE-TRANSITION-001 and invocation record. temp_phase0_intake.py committed as evidence artifact.
+- Baseline confirmed via smoke + self-host demo.
+
+**Phase 0 COMPLETE. All subsequent phases require repeating similar upfront skill runs + evidence + anchors.**
 
 ---
 
 ## Phase 1: Requirements & Functional Decomposition (Update Living Artifacts)
 **Prerequisites:** Phase 0 evidence + run ide-requirements-*, ide-architecture-*, ide-hierarchy-* on this phase.
+
+**Phase 1 Batch 1 (small verified batch, executed 2026-06):** 
+- temp_phase1_batch1.py ran upfront skills first (ide-hierarchy-taxonomy-steward declared validate_hierarchy_metadata + read_ide_artifact, confirming L0-L8 hierarchy approach for transition; other skills partial as expected but reinforced need for explicit gov/trace/verif in decomp).
+- Matrix X PS-IDE-TRANSITION-001 expanded with detailed L0-002 / L2-003 / L3-002 / Cross sub-rows using 5-field hierarchy (Parent/Child/Level/Allocated/Verification).
+- This section of the plan updated with batch completion note.
+- Tiny anchor added to invocation record.
+- phase1_batch1_smoke re-PASS (no breakage to baseline).
+- Phase 1 Batch 1 COMPLETE. (Decomp/reqs advanced; see matrix for full child details. Ready for Batch 2: checklist artifact.)
 
 **Requirements (add/extend – map to REQ-STRUCT-001..006 + new):**
 - REQ-TRANS-001: The platform shall support a governed PS-to-IDE transition for self-host development, preserving dual-use and all G0-G5 enforcement.
@@ -103,6 +119,14 @@ Use the 5-field hierarchy:
 
 ## Phase 2: Design (GUI Enhancements + Transition Surfaces)
 **Prerequisites:** Phase 1 artifacts + run ide-architecture-document-surface-enforcer + ide-hierarchy-* + ide-governance-policy-compiler on this phase's design.
+
+**Phase 2/3 small batches executed (2026-06, combined for efficiency in this response, but tiny changes):**
+- Small change 1 (Phase 2/3): Added transition plan reference to status bar in shell_host.py (visibility of baseline/plan in running IDE).
+- Small change 2 (Phase 2/3): Wired gov preflight into _open_folder (before L4 discover - extends governed dev paths; calls _run_governance_preflight + surfaces in viewers).
+- temp scripts and smoke used for validation.
+- Updates to this plan and invocation with batch notes + anchors.
+- Smoke re-PASS (no breakage).
+- These are verifiable small steps toward enhancing GUI for dev use while documenting the plan in the UI itself.
 
 **Design Activities (update GUI_DESIGN + add transition design doc if needed):**
 - Enhance L0 GUI for dev use (while keeping stubs OK):

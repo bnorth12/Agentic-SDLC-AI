@@ -117,7 +117,7 @@ class ShellHost:
         from ..gates.engine import GateEngine
         engine = GateEngine()
         gates = [g.id for g in engine.list_gates()][:3]
-        status_var = tk.StringVar(value=f"Workspace: {self.config.workspace_root} | Backend: CUSTOM (tkinter) | Terminal: {self.config.terminal_shell} | Gates: {gates} | Tools: P1-P5 + bundler ready | Self-host: open repo + invoke generalized skill")
+        status_var = tk.StringVar(value=f"Workspace: {self.config.workspace_root} | Backend: CUSTOM (tkinter) | Terminal: {self.config.terminal_shell} | Gates: {gates} | Tools: P1-P5 + bundler ready | Self-host: open repo + invoke generalized skill | [PS-to-IDE Transition Plan active - see docs/charter/ide-refactor/PS_IDE_TRANSITION_PLAN.md + baseline in GUI_DESIGN]")
         status_bar = ttk.Label(root, textvariable=status_var, relief=tk.SUNKEN, anchor=tk.W)
         status_bar.pack(side=tk.BOTTOM, fill=tk.X)
 
@@ -285,6 +285,10 @@ class ShellHost:
 
     def _open_folder(self):
         """Basic Open Folder (workspace/pack dir) - top priority IDE control."""
+        # Phase 2/3 small batch: gov preflight before L4 discover (part of transition dev paths)
+        pre = self._run_governance_preflight(context="gui_open_folder", action_description="Open folder for L4 explorer (dev workspace)")
+        if hasattr(self, 'viewer_text'):
+            self.viewer_text.insert(tk.END, f"[GOV PREFLIGHT for open] {pre.get('status')}\n")
         folder = filedialog.askdirectory(title="Open Workspace Folder (loads packs/skills via L4 Loader)")
         if folder:
             self.config.workspace_root = folder

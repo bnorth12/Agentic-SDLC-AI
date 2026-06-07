@@ -420,6 +420,30 @@ Matrix updated to reference the plan. This batch used skills/tools for grounding
 
 **Anchor:** PS_IDE_TRANSITION_PLAN-001 (new plan artifact with requirements + L0-L8 decomp + phased steps; matrix link; invocation anchor). Skills run to inform it. 2026-06. Directly answers "put together a plan on how to procede step by step through design and implemenation including the needed requirements and functional decomposition". Ready for Phase 0 execution in the same disciplined style.
 
+**Phase 0 Intake completed (small verified batch):** temp_phase0_intake.py ran the mandatory upfront skills for the transition plan (ide-requirements-implementation-auditor, ide-architecture-design-disposition, ide-hierarchy-taxonomy-steward, ide-governance-policy-compiler, ide-source-to-evidence-traceability, ide-verification-coverage, ide-check-work-commit). 
+
+**Phase 1 Batch 1 (small verified, skills-first):** temp_phase1_batch1.py ran upfront skills (hierarchy-steward confirmed L0-L8 tools for decomp; others reinforced gov/trace needs). 
+- Matrix X PS-IDE-TRANSITION-001 expanded with explicit L0-002/L2-003/L3-002/Cross sub decomp (5-field hierarchy).
+- PS_IDE_TRANSITION_PLAN.md Phase 1 section updated with batch note.
+- Tiny anchor here.
+- Smoke re-PASS.
+- Phase 1 Batch 1 COMPLETE (requirements/decomp advanced in artifacts). Next small batch: checklist or design enhancement.
+
+**Phase 2/3 small batches (executed as tiny verifiable changes toward design/impl):** 
+- shell_host.py: status bar now references the Transition Plan (UI visibility of baseline).
+- shell_host.py: gov preflight wired into _open_folder (before L4 discover; calls preflight + surfaces evidence).
+- PS_IDE_TRANSITION_PLAN.md updated with batch notes.
+- Invocation anchor here.
+- Smoke re-PASS.
+- These advance GUI for dev use + self-document the plan. Phase 2/3 partial progress; more in future small batches (e.g., editor save stub, checklist UI, executor hooks). Phase 4/5 notes in plan for when baseline sufficient (dedicated smoke + flip in docs/manifests). All skills-first, anchored, dual-safe.
+- Status: Mostly error/partial (current skill maturity - high-level Procedures, limited tool wiring for some), but hierarchy-steward succeeded in declaring tools and confirming registry; gov-policy-compiler partial; all sources captured for evidence.
+- P5 bundle created for G0_wave_charter (sources from skill runs; markdown head generated).
+- phase1_batch1_smoke.py re-PASS (baseline confirmed: menu, dockables, preflights, L2/P5, ACP, self-host paths).
+- Updates: PS_IDE_TRANSITION_PLAN.md marked Phase 0 complete with results. Matrix X PS-IDE-TRANSITION-001 status updated with Phase 0 note. Tiny anchor here.
+- Evidence: temp_phase0_intake.py output + P5 bundle + smoke.
+
+All per plan rules (skills first, evidence, anchors, small batch, live validation). Phase 0 COMPLETE. Now executing Phase 1+ in subsequent small batches below.
+
 **Phase 0 Intake executed (mandatory upfront per the plan):** temp_phase0_transition_intake.py ran the full required skills (ide-requirements-implementation-auditor, ide-architecture-design-disposition, ide-hierarchy-taxonomy-steward, ide-governance-policy-compiler, ide-source-to-evidence-traceability, ide-verification-coverage, ide-check-work-commit) on the new plan + current state (matrix baseline/gaps, GUI_DESIGN, code). 
 - Results: Partial runs still yielded declared tools/scopes + confirmed the L0-L8 + Cross frame, need for dedicated transition smoke, explicit chains for new REQ-TRANS-*, and phased approach.
 - P5 evidence bundle generated for G0/G1.
