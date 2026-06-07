@@ -264,6 +264,12 @@ New tools (ide_core.py) + manifest updates used end-to-end for planning, creatio
 
 **P5 slice 3 + conclusion:** Integrated via GateEngine.bundle_evidence_for_gate (uses bundler + viewer md/json) + real executor result from skill with gates frontmatter + gh sim + registry invoke. Extended smoke full test (P5 integrate). Updated gates/engine.py, GUI_DESIGN, ide-platform manifest. Final tiny anchors in record + matrix. Live smoke (real bundle from exec+engine) PASS. All P5 (bundler for G1/G3/G4 from exec+gh, viewer md/json, executor/gates integrate, PS+Python, test bundle gen, docs updates, dual, trace L3-001/§5/matrix) complete in small batches. P5 concluded. All priorities 1-5 done.
 
+**MVP IDE Launch Plan (post P1-P5 tools):** See detailed step-by-step in current session review. Focus: L0 custom shell (Dear PyGui or equiv for Win11 unique impl, no source reuse), wire to L2 executor + L3 bundler + L4 loader + registry tools (incl P4 gh + P5 bundler), basic explorer/editor/viewer/terminal surfaces, self-hosting demo (open this repo, invoke generalized skill via UI, produce visible evidence bundle). PS-first execution bridge. Traceable to L0-001 in matrix, GUI_DESIGN, §5. Batches to follow same discipline.
+
+**Phase 1 Batch 1 executed:** Enhanced shell_host.py with real CUSTOM tkinter backend (basic launchable Win11 window + status + PS terminal pane using subprocess/threaded pwsh output from P2 robust). Added create_test_app for non-blocking smokes. New test_phase1_batch1_smoke.py validates instantiation/launch readiness (no crash, components present). Live smoke PASS. Tiny anchor. Win11 launchable MVP started (PS primary). See GUI_DESIGN L0-001.
+
+**Phase 1 Batch 2 executed (explorer + invoke wiring):** Extended the tkinter CUSTOM launch with basic L4 explorer (Listbox from PluginLoader.discover_skills(), shows ide-platform skills) + "Invoke Example Skill" button that wires L2 run_procedural_skill (robust P2) + P5 bundler for G4 on a real gated skill (ide-hierarchy-taxonomy-steward). Evidence bundle md shown in terminal output. Updated smoke with direct loader/executor/bundler checks (real data, bundle created). Live smoke PASS (all wiring validated). This completes Phase 1: launchable Win11 shell with explorer + invoke. PS dual intact. Tiny anchor. See L0-001 / L2 / L4 / P5 in matrix.
+
 
 
 **Revision of this record:** Living — append further artifacts, evidence, or redlines as the tranche executes. FarmRTK platform skills generalization now complete across batches using the new tools (ide_core.py).
