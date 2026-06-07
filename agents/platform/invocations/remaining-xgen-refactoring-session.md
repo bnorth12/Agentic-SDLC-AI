@@ -362,3 +362,39 @@ This batch directly addresses "was all of this HMI GUI implementation added to t
 This directly implements the user's requirement: the full rigor is wired into the interfaces so it is never skipped. Future "start coding" (new skills, edits via IDE) or "user try" (PS cmd, GUI button, ACP response) must go through preflights + evidence first.
 
 **Anchor:** GOV-WIRING-001 (new gates + preflight in ShellHost + PS wrapper + matrix row + self-audit via skills). Smoke PASS. 2026-06.
+
+**PS-to-IDE Transition Readiness batch (overall IDE application gaps + basic functionality baseline):** User direction: ensure all skills/tools represented in the work; document gaps against the overall application in the IDE; prepare for eventual move from PS-primary to using the IDE itself to continue developing the IDE. Transition must be well-documented and tested. Stubs/TODOs acceptable if basic functionality exists.
+
+- Actively used skills/tools for evaluation (temp_transition_gap_eval.py ran ide-verification-coverage, ide-source-to-evidence-traceability, ide-governance-policy-compiler, ide-hierarchy-taxonomy-steward via L2 + P1 registry reads on GUI/design artifacts). This batch itself followed the gov preflight pattern.
+- Ground truth basic functionality catalog (acceptable for transition, explicitly documented so devs know what they can rely on):
+  - Launch (Win11, zero extra deps): `.\.venv\Scripts\python.exe -m src.platform.gui.launch_ide`
+  - Menu primary controls: File (Open/Close Folder + L4 reload), GitHub (P4 evidence + clone), Grok/Build (ACP launch with gov preflight, L2 handoff, Open PS with IDE context), Help (full UI Legend explaining every stub/control/wiring).
+  - Dockable framework: ttk.PanedWindow (L4 explorer | center editor + viewers + PS terminal as first-class dockable tool).
+  - L4 Explorer + self-host demo: real packs/skills tree from PluginLoader; select loads real SKILL.md; Invoke/palette runs real generalized skill via L2 (robust P2) + P5 bundle visible in viewers/terminal.
+  - Command surfaces: Ctrl+P palette (skills + actions, real dispatches); ACP panel (JSON protocol with opened-workspace system context + user messages; gov preflight before send/handoff; real L2 handoff button; graceful stub fallback).
+  - Governance (wired dual): _run_governance_preflight in GUI + preflight in Invoke-IdeTool.ps1 (calls gov skills + check-work/hierarchy before any user action/exposure; always produces P5 evidence surfaced in viewers/status; "evidence + visibility today, strict block in future").
+  - PS dual: full P1-P5 wrappers available; co-running PS from menu; robust terminal pane.
+  - Status: gates (L3), P1-P5 ready, self-host note.
+- Stubs/TODOs (called out in UI Legend, code, GUI_DESIGN 2.6 — acceptable for basic functionality):
+  - Editor: real SKILL load + invoke; full structure-aware edit/save is stub (future).
+  - Viewers: P5 bundles + markdown display work; rich (mermaid/graph/audit) are partial/stub (R2+).
+  - ACP: full protocol + preflight + handoff work; "stub vs procedural" toggle and no-CLI fallback are explicit stubs.
+  - Governance: preflights always run and evidence is produced/surfaced (meets "never before engineering/testing"); hard blocking on mandatory gates + auto-executor integration are future.
+  - Other: Tauri/Dear PyGui evolution, full multi-agent, rich editors (R2+ per GUI_DESIGN).
+- Gaps documented (overall IDE application + transition):
+  - No dedicated PS-to-IDE Migration Plan or "when basic functionality is sufficient" checklist yet (current is parallel PS-primary + GUI MVP).
+  - Matrix ground truth drift (improved by X GOV-WIRING-001 + L0 expansion + new X PS-IDE-TRANSITION-001, but verification columns and some child rows still narrative-heavy).
+  - Governance enforcement: evidence today, not yet hard block on all paths (see preflight comments "future strict enforcement").
+  - L2 executor: no auto-run of declared gov gates from frontmatter yet (manual preflights in interfaces only).
+  - Testing: phase1 smoke covers core; no dedicated "IDE self-host regression" or "transition smoke" exercising the full dev path.
+  - Explicit "for all future IDE dev work, run these skills first" note not yet wired into manifests/launch_ide/transition checklist (though preflights + this eval batch do it in practice).
+- Actions taken:
+  - Added X PS-IDE-TRANSITION-001 row to matrix (full decomposition, basic functionality baseline, explicit "stubs OK if documented", PS remains supported, transition criteria).
+  - Updated invocation record with this anchor + gap list + basic functionality catalog (pulled from skill-driven eval).
+  - (Follow-on in batch: GUI_DESIGN.md will get explicit "Basic Functionality Baseline for Self-Host Transition" subsection.)
+- Skills/tools represented: GOV skills actively called in preflights and in this eval script; P1 registry + L2 + P5 used throughout; matrix now requires future work to go through the same (self-referential).
+- Validation: temp script + prior phase1 smoke (core paths including preflight-invoked actions still PASS). Self-host demo (open repo, L4, L2 invoke, P5, gov preflight on ACP/handoff) remains the proof that basic functionality exists today.
+
+When the team decides the time is right, the documented baseline + known stubs + gov wiring + traceability in matrix will allow a controlled, tested move of development work into the IDE while keeping PS as a fully supported dual surface. No "raw command before testing" or "code before engineering" will be possible on the governed paths.
+
+**Anchor:** PS-IDE-TRANSITION-001 (new matrix row + invocation section + skill-driven gap eval + basic functionality catalog). Skills/tools used for the evaluation itself. Smoke paths validated. 2026-06. Matches user: "start putting the gaps against the overall application in the ide in place" + "well documented and tested when we make that transition" + "basic functionality" with stubs/TODOs OK.
