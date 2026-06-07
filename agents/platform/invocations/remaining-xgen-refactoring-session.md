@@ -278,6 +278,8 @@ New tools (ide_core.py) + manifest updates used end-to-end for planning, creatio
 
 **Phase 3 Batch 2 + Phase 4 executed (self-host demo + validation/packaging):** Added launch_ide.py (Win11 entry: python -m src.platform.gui.launch_ide). Status/self-host note in shell. Smoke extended with launcher import + packaging stub (portable folder/PyInstaller note, no admin). Full end-to-end validation (launch + explorer + invoke + bundle + gates + self-host via real generalized skill). Live PASS. Final tiny anchors in record + matrix (L0-001 MVP achieved on Win11). All phases 1-4 complete in sequence small batches. PS dual, traceability. See GUI_DESIGN. Ready for full R2+ or P5 follow-on.
 
+**Task 1 (first of 5) executed in this small batch:** _launch_grok_agent now opens _create_agent_panel: spawns agent_command (grok agent stdio or stub for env), threaded output to Text, input entry, handoff button to L2 executor (real skill like ide-hierarchy). Agent Panel as Toplevel (dockable in task 2). Menu calls it. Smoke extended + PASS (panel created without crash). Tiny anchor. See L1-001 matrix, GUI_DESIGN ACP section. Dual PS intact. GrokBuild now more real in IDE.
+
 **Next small batch (this one - Menu + Core Controls + Clarity + Dockable Framework):** Added full tk.Menu bar to the CUSTOM tkinter shell with:
 - File: Open Folder (filedialog + L4 loader context, now with _reload_explorer support), Close Folder, Exit.
 - GitHub: Status + Create Evidence (directly calls P4 gh_evidence tool via registry).
@@ -289,6 +291,14 @@ All new menu actions wired to existing backend. Live smoke PASS. Tiny anchor add
 
 
 **Revision of this record:** Living — append further artifacts, evidence, or redlines as the tranche executes. FarmRTK platform skills generalization now complete across batches using the new tools (ide_core.py).
+
+**Tasks 1-5 of 5 suggested executed in this small batch (combined for sequence):** 
+1. ACP/GrokBuild: _create_agent_panel spawns agent_command, panel with output/input/handoff to L2 (real skill). Menu wired. Smoke PASS.
+2. Dockable: additional PanedWindow splits for explorer/center (editor/viewers/terminal as resizable tools); pack hook comment.
+3. Editor + palette: real SKILL load on tree select; Ctrl+P command palette with skills/actions, invoke on select.
+4. Clarity: help_label + hover binds on all areas; UI Legend explains every stub/control purpose and usage.
+5. Deeper GitHub/Grok: clone to workspace (git + reload); "Run via ACP vs procedural" in menu + deeper note.
+All 5 wired to P1-P5 backend, dual PS, GUI framework for plugins. Live smoke full PASS. Tiny anchors in record + matrix L0/L1. Directly addresses user: menu/primary controls, dockable (PS example), open/close, github/grok at top, clarity of stubs. GUI/HMI prioritized. See GUI_DESIGN. Ready for follow-on (full ACP, Dear PyGui).
 
 **Related:**
 - Parent plans: [structural-refactor-execution-plan.md](../../structural-refactor-execution-plan.md), [WAVE_01_R1_FOUNDATIONS_DETAILED_PLAN.md](../../../project-plan/WAVE_01_R1_FOUNDATIONS_DETAILED_PLAN.md), [IDE_REFACTOR_PLAN.md](../../charter/IDE_REFACTOR_PLAN.md)

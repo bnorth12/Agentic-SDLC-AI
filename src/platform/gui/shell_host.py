@@ -12,10 +12,11 @@ from pydantic import BaseModel, Field
 
 # tkinter for CUSTOM backend (Win11 native feel, stdlib)
 import tkinter as tk
-from tkinter import ttk, scrolledtext, filedialog, messagebox
+from tkinter import ttk, scrolledtext, filedialog, messagebox, simpledialog
 import subprocess
 import threading
 import queue
+import os  # for path exists in editor load (task 3/4)
 
 # Platform backend (P3 loader, P2 executor, P5 bundler, etc.) for wiring in batches
 from ..plugins.loader import PluginLoader
@@ -89,12 +90,14 @@ class ShellHost:
         github_menu = tk.Menu(menubar, tearoff=0)
         github_menu.add_command(label="Git Status", command=lambda: self._run_github_action("status"))
         github_menu.add_command(label="Create Evidence Issue/PR", command=lambda: self._run_github_action("create_evidence"))
+        github_menu.add_command(label="Clone Repo into Workspace", command=lambda: self._run_github_action("clone"))
         menubar.add_cascade(label="GitHub", menu=github_menu)
 
         # Grok Build menu - agent/runtime functions (ACP/GrokBuild + PS tie-in)
         grok_menu = tk.Menu(menubar, tearoff=0)
         grok_menu.add_command(label="Launch Grok Agent (ACP)", command=self._launch_grok_agent)
-        grok_menu.add_command(label="Run Skill via GrokBuild", command=self._run_skill_via_grok)
+        grok_menu.add_command(label="Run Skill via GrokBuild (L2 handoff)", command=self._run_skill_via_grok)
+        grok_menu.add_command(label="Run current via ACP (stub vs procedural)", command=lambda: messagebox.showinfo("GrokBuild", "ACP vs procedural toggle stub. In full: spawn ACP session for live agent, or force L2 procedural like current invoke. See config agent_command and manifest."))
         grok_menu.add_separator()
         grok_menu.add_command(label="Open PowerShell with IDE Context", command=self._open_ps_with_ide)
         menubar.add_cascade(label="Grok / Build", menu=grok_menu)
@@ -115,9 +118,16 @@ class ShellHost:
         status_bar = ttk.Label(root, textvariable=status_var, relief=tk.SUNKEN, anchor=tk.W)
         status_bar.pack(side=tk.BOTTOM, fill=tk.X)
 
+        # Task 4: clarity - help label for hover/status updates on controls (tooltips simulation)
+        help_label = ttk.Label(root, text="Hover or select items for hints. See Help > UI Legend for full explanations of all areas (Explorer=L4, etc.).", foreground="blue")
+        help_label.pack(side=tk.BOTTOM, fill=tk.X)
+        self.help_label = help_label
+        self.status_var = status_var  # for updates in other methods (task 4)
+
         # Terminal pane (integrated PS)
         term_frame = ttk.LabelFrame(root, text="Integrated PowerShell Terminal (L2 Execution Surface)")
         term_frame.pack(fill=tk.BOTH, expand=True, padx=8, pady=8)
+        term_frame.bind("<Enter>", lambda e: self.help_label.config(text="L2 PS Terminal (dockable tool): robust P2 pwsh execution. Type or test button. All P1-P5 tools available via PS wrappers too."))
 
         output = scrolledtext.ScrolledText(term_frame, height=18, state="disabled", wrap=tk.WORD, font=("Consolas", 10))
         output.pack(fill=tk.BOTH, expand=True, padx=4, pady=4)
@@ -193,6 +203,8 @@ class ShellHost:
         tree = ttk.Treeview(explorer_frame, height=14, show="tree")
         tree.pack(fill=tk.BOTH, expand=True, padx=4, pady=4)
         self._explorer_tree = tree  # for _reload_explorer on Open/Close Folder (dockable explorer support)
+        self.tree = tree
+        self.item_to_path = {}  # for editor load on select (task 3)
 
         # Populate tree (tiny: limit for MVP, real packs + their skills)
         pack_map = {}
@@ -200,7 +212,11 @@ class ShellHost:
             pid = tree.insert("", "end", text=f"📦 {p.id}", open=True)
             pack_map[p.id] = pid
             for s in [s for s in skills if s["pack_id"] == p.id][:3]:
-                tree.insert(pid, "end", text=f"  📄 {s['id']}")
+                iid = tree.insert(pid, "end", text=f"  📄 {s['id']}")
+                self.item_to_path[iid] = s['path']
+        tree.bind("<<TreeviewSelect>>", self._on_tree_select)  # task 3: load real SKILL into editor on click
+        tree.bind("<Enter>", lambda e: self.help_label.config(text="L4 Explorer: Tree of packs/skills from PluginLoader. Select to load editor (task 3), invoke runs L2 + P5 bundle."))
+        explorer_frame.bind("<Enter>", lambda e: self.help_label.config(text="L4 Explorer pane (dockable): shows discovered skills/agents. Open Folder in menu reloads from workspace."))
 
         def invoke_from_tree() -> None:
             # Wire to L2 + P5 (example from selected or default known gated skill)
@@ -229,9 +245,11 @@ class ShellHost:
 
         editor_frame = ttk.LabelFrame(center, text="Editor - SKILL.md (L0 structure-aware stub; frontmatter + procedure)")
         editor_frame.pack(fill=tk.BOTH, expand=True, pady=4)
+        editor_frame.bind("<Enter>", lambda e: self.help_label.config(text="L0 Editor: load real SKILL on tree select (task 3), edit stub, invoke runs L2. Future: full structure aware."))
         editor = scrolledtext.ScrolledText(editor_frame, height=10, font=("Consolas", 9))
         editor.insert("1.0", "# Example from ide-hierarchy-taxonomy-steward\n## Procedure\n1. Run inventory...\n```pwsh\n# robust pwsh here\n```")
         editor.pack(fill=tk.BOTH, expand=True, padx=4, pady=4)
+        self.editor = editor  # for task 3 load real content
         ttk.Button(editor_frame, text="Invoke from Editor (L2)", command=invoke_from_tree).pack(pady=2)
 
         viewers = ttk.LabelFrame(center, text="Viewers Dock (L0 - markdown + P5 evidence bundle viewer)")
@@ -239,6 +257,7 @@ class ShellHost:
         viewer_text = scrolledtext.ScrolledText(viewers, height=8, font=("Consolas", 9))
         viewer_text.insert("1.0", "[Viewer] Bundle or markdown will appear here after invoke (P5 to_md output).")
         viewer_text.pack(fill=tk.BOTH, expand=True, padx=4, pady=4)
+        self.viewer_text = viewer_text  # for task 3/4 updates
 
         root.after(100, process_queue)
         root.mainloop()
@@ -288,24 +307,104 @@ class ShellHost:
         except Exception as e:
             print(f"[GUI] Reload explorer error: {e}")
 
+    def _on_tree_select(self, event):
+        """Task 3: load real selected SKILL.md into editor on tree click (makes editor useful)."""
+        selection = self.tree.selection()
+        if not selection: return
+        iid = selection[0]
+        path = self.item_to_path.get(iid)
+        if path and os.path.exists(path):
+            try:
+                with open(path, 'r', encoding='utf-8') as f:
+                    content = f.read()[:2000]  # limit for MVP
+                self.editor.delete("1.0", tk.END)
+                self.editor.insert("1.0", content)
+                self.viewer_text.delete("1.0", tk.END)
+                self.viewer_text.insert("1.0", f"[Editor loaded: {path}]\nClick Invoke to run via L2.")
+            except Exception as e:
+                self.editor.delete("1.0", tk.END)
+                self.editor.insert("1.0", f"Error loading: {e}")
+        # update status for clarity (task 4)
+        self.status_var.set(self.status_var.get() + f" | Selected: {iid}")  # assumes status_var accessible or set in launch
+
+    # Note: need 'import os' at top for exists, added in next if needed. For now, assume.
+
+    def _show_command_palette(self, event=None):
+        """Task 3: basic Command Palette (Ctrl+P) listing invocable skills + actions (GitHub, Grok)."""
+        pal = tk.Toplevel()
+        pal.title("Command Palette (Ctrl+P)")
+        pal.geometry("400x300")
+        entry = ttk.Entry(pal)
+        entry.pack(fill=tk.X, padx=4, pady=4)
+        lb = tk.Listbox(pal)
+        lb.pack(fill=tk.BOTH, expand=True, padx=4, pady=4)
+        # populate with skills + some actions
+        actions = ["Open Folder", "GitHub Status", "Launch Grok Agent", "Run Skill: ide-hierarchy-taxonomy-steward"]
+        try:
+            loader = PluginLoader()
+            for s in loader.discover_skills()[:5]:
+                actions.append(f"Invoke: {s['id']}")
+        except: pass
+        for a in actions:
+            lb.insert(tk.END, a)
+        def on_select(evt):
+            sel = lb.curselection()
+            if sel:
+                choice = lb.get(sel[0])
+                pal.destroy()
+                if "Invoke:" in choice:
+                    sid = choice.split(": ")[1]
+                    try:
+                        res = run_procedural_skill(sid, workspace_root=self.config.workspace_root)
+                        # append to terminal if available
+                        print(f"[palette] Invoked {sid}: {res.get('status')}")
+                    except Exception as ee: print(ee)
+                elif "Open Folder" in choice:
+                    self._open_folder()
+                elif "GitHub" in choice:
+                    self._run_github_action("status")
+                elif "Grok" in choice:
+                    self._launch_grok_agent()
+        lb.bind("<<ListboxSelect>>", on_select)
+        entry.focus()
+        # simple filter on key
+        def filter_list(*a):
+            q = entry.get().lower()
+            lb.delete(0, tk.END)
+            for a in actions:
+                if q in a.lower():
+                    lb.insert(tk.END, a)
+        entry.bind("<KeyRelease>", filter_list)
+
     def _run_github_action(self, action: str):
-        """GitHub repo functions using P4 gh_evidence tool (callable from registry)."""
+        """GitHub repo functions using P4 gh_evidence tool (callable from registry). Deeper in this batch: clone, status tied to workspace."""
         try:
             reg = __import__('src.platform.tools.registry', fromlist=['get_registry']).get_registry()
             if action == "status":
-                res = reg.invoke("gh_evidence", action="create-issue", title="GUI Git Status Request", body="User requested status from IDE menu")
-                messagebox.showinfo("GitHub", f"Status action invoked via P4 tool.\nResult: {res.get('status', 'ok')}")
+                res = reg.invoke("gh_evidence", action="create-issue", title="GUI Git Status Request", body=f"Workspace: {self.config.workspace_root}\nUser requested status from IDE menu")
+                messagebox.showinfo("GitHub", f"Status action invoked via P4 tool.\nResult: {res.get('status', 'ok')}\n(Real gh status in PS wrapper or terminal.)")
             elif action == "create_evidence":
                 res = reg.invoke("gh_evidence", action="attach", target="#42", files=["evidence/gui_action.md"], body="Evidence created from IDE GitHub menu")
                 messagebox.showinfo("GitHub", f"Evidence attach invoked via P4 tool.\nSee P4 smoke for real usage.")
+            elif action == "clone":
+                url = simpledialog.askstring("Clone Repo", "GitHub repo URL or owner/repo (uses gh or git):")
+                if url:
+                    if not url.startswith("http"): url = f"https://github.com/{url}.git"
+                    try:
+                        subprocess.check_call(["git", "clone", url], cwd=self.config.workspace_root)
+                        messagebox.showinfo("GitHub", f"Cloned {url} to workspace. Reload folder to see in explorer (L4).")
+                        self._reload_explorer()
+                    except Exception as ee:
+                        messagebox.showerror("Clone Error", str(ee))
         except Exception as e:
             messagebox.showerror("GitHub Error", f"P4 gh_evidence not fully wired in this early shell: {e}\n(Use PS Invoke-GhEvidence.ps1 for now)")
 
     def _launch_grok_agent(self):
-        """Grok Build / ACP functions - launches the configured agent_command (L1 ACP / GrokBuild)."""
-        cmd = self.config.agent_command
-        messagebox.showinfo("Grok / Build", f"Launching GrokBuild ACP agent (stub in this batch).\nCommand: {' '.join(cmd)}\n\nIn full implementation this would spawn the stdio ACP session and open the Agent Interaction Panel (L1).\nCurrently wired only in ShellConfig and referenced in platform/manifest.yaml as primary_agent_runtime.")
-        # Future: use subprocess to start the grok stdio process and connect ACP protocol.
+        """Grok Build / ACP functions - launches the configured agent_command (L1 ACP / GrokBuild).
+        Now actually spawns the process and opens a basic dockable Agent Panel (text chat + handoff to L2).
+        This is the first small batch for ACP integration per the plan.
+        """
+        self._create_agent_panel()
 
     def _run_skill_via_grok(self):
         """Run skill using GrokBuild context (ties IDE menu to the running PS/ACP)."""
@@ -348,3 +447,93 @@ All areas are wired to the real platform backend (loader, executor, registry, bu
 See GUI_DESIGN.md for the full vision (dockable tools, agent panels, command palette, etc.). Current is early MVP shell - more dockable behavior and clarity coming in follow-on small batches.
 """
         messagebox.showinfo("UI Legend", legend)
+
+    def _create_agent_panel(self):
+        """Task 1: Basic Agent Panel for GrokBuild/ACP (dockable as Toplevel for MVP, will be Paned in task 2).
+        Spawns the agent_command (grok agent stdio from ShellConfig, as per platform/manifest primary_agent_runtime).
+        Shows output in Text, input sends to process, button to handoff command to L2 executor.
+        """
+        try:
+            panel = tk.Toplevel(self.root if hasattr(self, 'root') else None)
+            panel.title("Agent Panel - GrokBuild ACP (L1)")
+            panel.geometry("600x400")
+
+            output = scrolledtext.ScrolledText(panel, height=15, state="disabled", wrap=tk.WORD, font=("Consolas", 9))
+            output.pack(fill=tk.BOTH, expand=True, padx=4, pady=4)
+
+            input_var = tk.StringVar()
+            input_entry = ttk.Entry(panel, textvariable=input_var, font=("Consolas", 9))
+            input_entry.pack(fill=tk.X, padx=4, pady=2)
+
+            out_queue = queue.Queue()
+
+            def append(text):
+                output.configure(state="normal")
+                output.insert(tk.END, text)
+                output.see(tk.END)
+                output.configure(state="disabled")
+
+            def process_q():
+                try:
+                    while True:
+                        t = out_queue.get_nowait()
+                        panel.after(0, lambda tt=t: append(tt))
+                except queue.Empty:
+                    pass
+                panel.after(100, process_q)
+
+            proc = None
+            cmd = self.config.agent_command
+            try:
+                proc = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, bufsize=1, cwd=self.config.workspace_root)
+            except Exception as e:
+                append(f"[error spawning {cmd}: {e} - using echo stub for demo]\n")
+                # stub for test env without 'grok' CLI
+                proc = None
+
+            def read_output():
+                if proc and proc.stdout:
+                    for line in iter(proc.stdout.readline, ""):
+                        out_queue.put(line)
+                    proc.stdout.close()
+                else:
+                    out_queue.put("Stub mode: type commands, use 'handoff' button.\n")
+
+            threading.Thread(target=read_output, daemon=True).start()
+            panel.after(100, process_q)
+
+            def send_cmd(event=None):
+                cmd_text = input_var.get().strip()
+                if not cmd_text: return
+                input_var.set("")
+                append(f"> {cmd_text}\n")
+                if proc and proc.stdin:
+                    try:
+                        proc.stdin.write(cmd_text + "\n")
+                        proc.stdin.flush()
+                    except:
+                        append("[stdin closed]\n")
+                else:
+                    if cmd_text.lower().startswith("handoff "):
+                        skill = cmd_text.split(" ",1)[1] if " " in cmd_text else "ide-hierarchy-taxonomy-steward"
+                        append(f"[handoff to L2 executor: {skill}]\n")
+                        try:
+                            res = run_procedural_skill(skill, workspace_root=self.config.workspace_root)
+                            append(f"L2 result: {res.get('status')}\n")
+                        except Exception as ee:
+                            append(f"L2 error: {ee}\n")
+                    else:
+                        append(f"[stub] {cmd_text}\n")
+
+            input_entry.bind("<Return>", send_cmd)
+
+            handoff_btn = ttk.Button(panel, text="Handoff current to L2 (ide-hierarchy-taxonomy-steward)", 
+                                     command=lambda: [append("[handoff to L2]\n"), 
+                                                      append(str(run_procedural_skill("ide-hierarchy-taxonomy-steward", workspace_root=self.config.workspace_root).get("status")) + "\n") ])
+            handoff_btn.pack(pady=2)
+
+            append("Agent Panel started. ACP stdio connected (or stub). Type commands or use handoff.\n")
+            # Note: for real ACP protocol, would parse messages; here simple line-based for demo.
+
+        except Exception as e:
+            messagebox.showerror("ACP Error", str(e))
