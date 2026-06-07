@@ -47,3 +47,4 @@ Gate registry: `platform/gates/registry.yaml`
 | Version | Date | Change |
 |---------|------|--------|
 | 0.2.0 | 2026-06-06 | Platform reboot scaffold; imports from FarmRTK + MATM |
+| 0.3.0 | 2026-06 | Added **Planning Agent** and **Refactoring Agent** (in `agents/platform/`) with associated skills (`platform/skills/ide-portfolio-planning` and `ide-structural-refactoring`). These agents were used to produce the full [IDE_REFACTOR_PLAN.md](docs/charter/IDE_REFACTOR_PLAN.md) for turning the repo into the complete agentic AI IDE (editors, viewers, interaction agents, skills, PowerShell+GitHub, hybrid orchestration, packs). All copied MATM/FarmRTK agents are now explicitly in scope for generalization under the new agents. Starter `plugins/packs/ide-platform/` manifest added. |

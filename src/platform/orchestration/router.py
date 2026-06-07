@@ -1,4 +1,7 @@
-"""Route work packages to procedural, LangGraph, or ACP executors."""
+"""Route work packages to procedural, LangGraph, or ACP executors.
+
+Now wired for PROCEDURAL mode using the new L2 ProceduralSkillExecutor (E1.1).
+"""
 
 from __future__ import annotations
 
@@ -6,6 +9,8 @@ from enum import Enum
 from typing import Any
 
 from pydantic import BaseModel, Field
+
+from .executor import run_procedural_skill
 
 
 class ExecutionMode(str, Enum):
@@ -24,7 +29,11 @@ class WorkPackage(BaseModel):
 
 
 class OrchestrationRouter:
-    """Select executor from gate registry or explicit work package mode."""
+    """Select executor from gate registry or explicit work package mode.
+
+    For PROCEDURAL: delegates to run_procedural_skill (parses SKILL.md,
+    executes supported steps, returns evidence).
+    """
 
     def resolve_mode(self, package: WorkPackage) -> ExecutionMode:
         if package.mode != ExecutionMode.PROCEDURAL:
@@ -37,10 +46,28 @@ class OrchestrationRouter:
 
     def execute(self, package: WorkPackage) -> dict[str, Any]:
         mode = self.resolve_mode(package)
-        # Scaffold: wire to executors in R1
+
+        if mode == ExecutionMode.PROCEDURAL:
+            if not package.skill_id:
+                return {
+                    "status": "error",
+                    "mode": mode.value,
+                    "package_id": package.id,
+                    "error": "skill_id required for PROCEDURAL mode",
+                }
+            # Delegate to the new procedural executor
+            result = run_procedural_skill(
+                skill_id=package.skill_id,
+                payload=package.payload,
+            )
+            result["package_id"] = package.id
+            result["mode"] = mode.value
+            return result
+
+        # Still scaffold for other modes (LangGraph / ACP) — future work
         return {
             "status": "scaffold",
             "mode": mode.value,
             "package_id": package.id,
-            "message": "Executor not wired — see docs/charter/REFACTOR_TODO.md R1",
+            "message": f"{mode.value} executor not yet wired (see L2 roadmap)",
         }

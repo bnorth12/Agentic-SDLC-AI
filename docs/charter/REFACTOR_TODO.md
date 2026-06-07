@@ -68,7 +68,10 @@
 |-------|---------------|--------|
 | `independent-review-orchestrator` (via agent) | EIRC / governance pack | IMPORTED |
 | `remediation-readiness` | Sprint gate skill | IMPORTED |
-| `kpi-drift-analyst` | Program metrics alignment | IMPORTED |
+| `kpi-drift-analyst` | Program metrics alignment | GENERALIZED (Tranche 2) — ide-kpi-drift-analyst (full agent artifact created) | ide-platform pack; self-hosting XGEN + structural health metrics |
+| hierarchy-taxonomy-steward (MATM) | Hierarchy taxonomy / decomp | GENERALIZED (Tranche 2) — ide-hierarchy-taxonomy-steward | ide-platform; L0-L8 + WP taxonomy for remaining XGEN/structural |
+| requirements-implementation-auditor (MATM) | Req-to-impl coverage | GENERALIZED (Tranche 2) — ide-requirements-implementation-auditor | ide-platform; closes impl/verification legs for generalized artifacts |
+| (independent-review-history-rollup-orchestrator + repo-governance-autoflow-orchestrator) | Review rollup + governance autoflow | GENERALIZED (Tranche 2) — ide-independent-review-history-rollup-orchestrator, ide-repo-governance-autoflow-orchestrator | ide-platform; G4 evidence hygiene + autoflow for XGEN tranches |
 | `requirements-baseline-steward` | REQ gate skill | IMPORTED |
 | `traceability-blocker-planner` | Traceability skill merge | IMPORTED |
 | `sprint-closeout-certifier` | Wave end gate | IMPORTED |
@@ -93,12 +96,22 @@ All 24 `.agent.md` files → merge into platform governance agent registry; dedu
 
 | Legacy module | Action |
 |---------------|--------|
-| `src/graphs/supervisor.py` | BRIDGE → `src/platform/orchestration/langgraph_adapter.py` |
-| `src/gates/*` | MERGE → `src/platform/gates/registry.py` + YAML |
-| `src/agents/*` (12) | KEEP core SE agents; domain logic → packs |
-| `src/skills/registry.py` | MERGE → `src/platform/plugins/skill_registry.py` |
-| Streamlit dashboard | MOVE → `gui/viewers/legacy-streamlit/` |
-| Docker Compose | OPTIONAL profile in installer |
+| `src/graphs/supervisor.py` | BRIDGE → `src/platform/orchestration/langgraph_adapter.py` or archive after generalized agents provide equivalent governance |
+| `src/gates/*` | MERGE → `src/platform/gates/registry.py` + YAML (mostly done in scaffold) |
+| `src/agents/*` (12) | Domain/SE logic → packs or generalized imported agents; old implementations moved to `legacy/` during R1–R2 |
+| `src/skills/registry.py` | MERGE → platform skill discovery (platform/skills + packs) + contracts |
+| Streamlit dashboard | MOVE → `gui/viewers/legacy-streamlit/` (optional) |
+| Docker Compose | OPTIONAL / legacy profile in installer |
+
+**New (R1+; XGEN complete for platform skills):** Planning Agent + Refactoring Agent created in `agents/platform/`, with primary skills `ide-portfolio-planning` and `ide-structural-refactoring` (plus ide_core tools) in `plugins/packs/ide-platform/`. Full manifests updated (ide-platform, IMPORT_MANIFEST, platform/manifest, engineering-sdlc, github-devops, threat-modeling) for coordination (see plugin.manifest.yaml for full FarmRTK/MATM list + L4/L7 notes; cross with PLATFORM_AGENTS.md pack-only section, matrix, invocation record, LAYER index). 
+
+See the full layered [IDE_REFACTOR_PLAN.md](./IDE_REFACTOR_PLAN.md) (L0–L8 + cross-cutting; §5 for traceability/capabilities/decomp) and the governing [AGENTIC_IDE_PROJECT_PLAN.md](../../project-plan/AGENTIC_IDE_PROJECT_PLAN.md) (high-level waves/epics with limited details, layer-mapped; WAVE-02 for post-XGEN + GUI/PowerShell-MVP).
+
+**Reusability evaluation (core input to plans, produced by Refactoring Agent via ide-structural-refactoring skill Phases 0-2):** [docs/charter/ide-refactor/REUSABILITY_EVALUATION_REPORT.md](../../charter/ide-refactor/REUSABILITY_EVALUATION_REPORT.md) — full inventory + per-layer reusability verdicts (very high for most MATM 24 agents + 26 skills + FarmRTK 17 platform skills into L2/L3/L4/L5/Cross/XGEN; selective legacy src/ ports; archive for historical docs bulk). All now in ide-platform (coordinated via manifests + tools).
+
+Supporting: `docs/charter/ide-refactor/LAYER_WORK_PACKAGE_INDEX.md` (WP catalog + dep matrix; XGEN complete) and detailed Wave 01/02 plans at `docs/project-plan/WAVE_01_R1_FOUNDATIONS_DETAILED_PLAN.md` + `NEXT_WAVE_02_CHARTER.md`. All imported assets have explicit generalization path + layer fit + manifest registration.
+
+All 24 MATM agents + 17 FarmRTK platform skills processed through `ide-structural-refactoring` + ide_core tools (generalize per layer, add IDE surfaces, PowerShell+GitHub, manifest-driven, evidence, hierarchy per matrix). Legacy `src/` decision, doc hygiene, and self-hosting treated as explicit cross-layer (see structural-refactor-execution-plan.md). Full coordination: manifests (ide-platform primary), PLATFORM_AGENTS (pack-only), matrix (traceability), executor/tools (L2/L4), PowerShell-MVP + custom GUI (no source reuse), gates, invocation record.
 
 ---
 
@@ -139,3 +152,4 @@ Agentic-SDLC-AI/  → platform + installer + packs
 | Rev | Date | Change |
 |-----|------|--------|
 | 0.1 | 2026-06-06 | Initial refactor map after import scaffold |
+| 0.2 | 2026-06 | Added Planning Agent + Refactoring Agent (personas + primary skills) + comprehensive IDE_REFACTOR_PLAN.md produced by them. All imported agents now have a clear generalization path via the new agents/skills. Legacy handling and doc hygiene explicitly scoped. |

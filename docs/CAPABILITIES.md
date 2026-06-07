@@ -1,4 +1,30 @@
-# Agentic-SDLC-AI Capabilities
+# Agentic-SDLC-AI Capabilities (Legacy / Pre-Reboot View)
+
+**Status (2026-06 Reboot)**: This document describes the pre-reboot "12-Agent Orchestra" SDLC governance capabilities. It is **largely superseded** by the new agentic IDE platform layered model.
+
+**Authoritative Replacement Sources:**
+- [docs/charter/FRAMEWORK_DECOMPOSITION.md](charter/FRAMEWORK_DECOMPOSITION.md) — L0–L8 + Cross layers with explicit **Capabilities by Layer**.
+- [docs/charter/IDE_REFACTOR_PLAN.md](charter/IDE_REFACTOR_PLAN.md) (especially new §5 + expanded layer table) — Traceability, capabilities, and functional decomposition for the IDE platform reboot.
+- [docs/charter/ide-refactor/IDE_ARCHITECTURE_TRACEABILITY_MATRIX.md](charter/ide-refactor/IDE_ARCHITECTURE_TRACEABILITY_MATRIX.md) — Standalone Requirements → Capabilities → Functional Decomposition → Artifacts → Verification matrix.
+- [plugins/packs/ide-platform/](plugins/packs/ide-platform/) — The new home for generalized platform process capabilities (Planning Agent + ide-portfolio-planning, Refactoring Agent + ide-structural-refactoring, and Tranche 1/2 items: ide-hierarchy-taxonomy-steward, ide-kpi-drift-analyst, ide-repo-governance-autoflow-orchestrator, ide-requirements-implementation-auditor, ide-independent-review-history-rollup-orchestrator, ide-technical-writer, ide-validation-plan, etc.).
+- Recent self-hosted artifacts: ide-structure-requirements-baseline.md, structural-refactor-execution-plan.md (Tranche 2), and agents/platform/invocations/remaining-xgen-refactoring-session.md.
+
+**Deprecation Guidance**:
+- The old 12-agent system (Program Manager, Requirements Dev, Architecture Agent, etc.) and its phase/gate model are now treated as **domain examples** that can live in packs (e.g., engineering-sdlc pack) rather than core platform.
+- Core platform process/governance capabilities have been elevated into the new `ide-platform` pack and the L0-L8 model (see FRAMEWORK_DECOMPOSITION.md "Capabilities by Layer").
+- Old SDLC-specific hierarchy (L0 stakeholder needs → L3 implementation) informed the reboot but is replaced by the severable L0-L8 + Cross functional decomposition with consistent hierarchy metadata (Parent/Child/Level/Allocated/Verification).
+- Governance evidence, HITL, and traceability principles are preserved and generalized (now expressed via ide-* skills, the gate engine in L3, and the traceability matrix).
+
+The remainder of this document is retained for historical reference. Do not extend the 12-agent table or old phase capabilities for new platform work. New capabilities are defined in the charter documents and matrix above.
+
+**Quick Mapping of Old to New**:
+- Old "Integration & Orchestration" (supervisor) → L2 hybrid router + executor + ide-portfolio-planning / ide-structural-refactoring (meta agents).
+- Old governance/evidence patterns → Generalized into ide-platform (governance-policy-compiler, source-to-evidence-traceability-auditor, independent-review family, etc.) + L3 gate engine.
+- Old domain agents (Requirements, Architecture, V&V, etc.) → Examples in packs or generalized into ide-platform for the IDE's own development (self-hosting).
+
+---
+
+# Legacy Content (Pre-Reboot — For Reference Only)
 
 **Document Purpose**: Define the functionality, agent roles, and orchestration patterns that make Agentic-SDLC-AI a distributed SDLC governance platform.
 

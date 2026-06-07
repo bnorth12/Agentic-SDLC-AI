@@ -18,6 +18,22 @@
 | **L7** | `packs` | Domain capabilities | `plugins/packs/` |
 | **L8** | `product-repo` | Application source (external) | FarmRTK, customer apps |
 
+### Capabilities by Layer (Target)
+
+Each layer provides a distinct set of capabilities that are severable and composable. These are the "what" the layer enables for the IDE and for self-hosting development of the platform itself.
+
+- **L0 (GUI Shell)**: Agent/skill/manifest/evidence editors; rich viewers (markdown, mermaid, graph, audit trails); agent interaction panels; PowerShell terminal integration; layout & settings persistence.
+- **L1 (Agent Runtime)**: ACP stdio host for interactive multi-agent sessions; tool permission & scoping model scoped to IDE surfaces; session lifecycle and state handoff to L2.
+- **L2 (Orchestration)**: Hybrid routing (procedural SKILL.md execution, LangGraph stateful graphs, ACP interactive); invocation of generalized skills/agents; evidence return to L3; basic hybrid dispatch between execution modes.
+- **L3 (Gate Engine + HITL + Evidence)**: Registry-driven gate enforcement (G0–G5); maturity-aware policy profiles (strict/advisory); evidence bundle production & validation; HITL interrupt points; viewer hooks for evidence.
+- **L4 (Plugin Host)**: Discovery & loading of `SKILL.md` + `.agent.md` from platform/skills/ and packs; viewer & toolchain registration; pack manifest resolution; tool registry loading & permission enforcement.
+- **L5 (Workspace)**: Workspace manifest-driven configuration (repos, packs, gates, shell, providers); maturity level affecting gate modes; context provider for all other layers.
+- **L6 (Providers)**: LLM provider abstraction (Grok Build ACP primary, others pluggable); GitHub provider (repos, Actions, gh CLI, PR evidence); secrets & auth.
+- **L7 (Packs)**: Delivery of domain + platform-process capabilities (ide-platform for Planning/Refactoring/governance; engineering-sdlc, threat-modeling, github-devops, etc.); first-class agent/skill content living inside packs.
+- **L8 + Cross**: External product consumption of the IDE; legacy migration strategy (bridge/archive/port); overall doc hygiene & living documentation; continuous generalization (XGEN) of imported assets; self-hosting/dogfooding of the entire platform.
+
+Cross-cutting capabilities (apply to all layers): Traceability (G1), Hierarchy/functional decomposition, PowerShell + GitHub native evidence, self-hosting, editor/viewer surface contracts.
+
 ---
 
 ## Severable object catalog
@@ -88,32 +104,53 @@ flowchart TB
         SHELL[Portable IDE host]
         TERM[OS terminal - PowerShell/bash]
         PANEL[Agent panel ACP]
+        EDIT[Agent/Skill/Manifest/ Evidence editors]
     end
     subgraph L4 [L4 Plugin Host]
-        PLUG[Plugin loader]
-        P1[engineering-sdlc]
-        P2[threat-modeling]
+        PLUG[Plugin + Skill/Agent loader]
+        P1[ide-platform (planning, refactoring, governance)]
+        P2[engineering-sdlc]
         P3[github-devops]
+        TOOLREG[Tool registry & permissions]
     end
     subgraph L2 [L2 Orchestration]
-        RTR[Router]
-        PROC[Procedural]
-        LG[LangGraph]
-        ACP[ACP]
+        RTR[Router (procedural / LangGraph / ACP)]
+        PROC[Procedural Skill Executor]
+        LG[LangGraph adapter]
+        ACP[ACP sessions]
     end
-    subgraph L3 [L3 Gates]
+    subgraph L3 [L3 Gates + Evidence]
         GREG[Gate registry]
-        HITL[HITL policy]
+        HITL[HITL policy + evidence bundles]
     end
     SHELL --> PANEL
     PANEL --> ACP
     SHELL --> PLUG
     PLUG --> P1 & P2 & P3
+    PLUG --> TOOLREG
     RTR --> PROC & LG & ACP
     PROC & LG & ACP --> GREG
     GREG --> HITL
+    EDIT -.-> PLUG
 ```
 
+**Example Functional Decomposition (Hierarchy Metadata applied)**
+
+For a representative component (Procedural Skill Executor at L2, and a generalized agent at L4/L7):
+
+- **Parent Capability**: L2 Orchestration – Hybrid execution of first-class skills and agents
+- **Child Function**: Procedural execution of SKILL.md procedures with evidence return
+- **Decomposition Level**: 3
+- **Allocated Component/Module**: src/platform/orchestration/executor.py + tools/executor/run-skill.ps1
+- **Verification Method**: Smoke test of ide-structural-refactoring procedure; G1 traceability from this plan; G2 executor interface contract
+
+- **Parent Capability**: L4 Plugin Host + L7 Packs – Elevation of agents/skills as editable artifacts
+- **Child Function**: Discovery, loading, and registration of ide-* agents/skills from ide-platform pack
+- **Decomposition Level**: 2
+- **Allocated Component/Module**: plugins/packs/ide-platform/agents/ide-*.agent.md + skills/*/SKILL.md + plugin.manifest.yaml
+- **Verification Method**: Pack loader test; hierarchy validation by ide-hierarchy-taxonomy-steward; source-to-evidence audit; G4 review of XGEN tranche
+
+All significant architecture elements (new executor, tools, generalized agents/skills from Tranche 1/2, IDE surfaces) must carry equivalent hierarchy metadata. See ide-structure-requirements-baseline.md and structural-refactor-execution-plan.md for applied examples on repo structure.
 ---
 
 ## Language / framework adaptability

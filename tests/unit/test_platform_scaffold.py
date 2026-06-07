@@ -2,8 +2,6 @@
 
 from pathlib import Path
 
-import pytest
-
 from src.platform.gates import GateEngine
 from src.platform.plugins import PluginLoader
 from src.platform.orchestration import OrchestrationRouter, ExecutionMode, WorkPackage
