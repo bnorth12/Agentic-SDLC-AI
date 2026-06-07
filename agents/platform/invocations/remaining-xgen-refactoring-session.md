@@ -278,6 +278,14 @@ New tools (ide_core.py) + manifest updates used end-to-end for planning, creatio
 
 **Phase 3 Batch 2 + Phase 4 executed (self-host demo + validation/packaging):** Added launch_ide.py (Win11 entry: python -m src.platform.gui.launch_ide). Status/self-host note in shell. Smoke extended with launcher import + packaging stub (portable folder/PyInstaller note, no admin). Full end-to-end validation (launch + explorer + invoke + bundle + gates + self-host via real generalized skill). Live PASS. Final tiny anchors in record + matrix (L0-001 MVP achieved on Win11). All phases 1-4 complete in sequence small batches. PS dual, traceability. See GUI_DESIGN. Ready for full R2+ or P5 follow-on.
 
+**Next small batch (this one - Menu + Core Controls + Clarity + Dockable Framework):** Added full tk.Menu bar to the CUSTOM tkinter shell with:
+- File: Open Folder (filedialog + L4 loader context, now with _reload_explorer support), Close Folder, Exit.
+- GitHub: Status + Create Evidence (directly calls P4 gh_evidence tool via registry).
+- Grok / Build: Launch Grok Agent (ACP stub using ShellConfig.agent_command and platform/manifest primary_agent_runtime), Run Skill via GrokBuild context (ties to L2 + PS dual).
+- Help: UI Legend (clear explanation of every stubbed area: Explorer=L4, Terminal=L2/P2, Editor=L0, Viewers=P5, Status=L3, etc.).
+Added basic PanedWindow for resizable dockable-feel panes (explorer vs main area) - foundation for plugins/packs to register additional dockable tools (including more PS terminals).
+All new menu actions wired to existing backend. Live smoke PASS. Tiny anchor added. This batch directly addresses the user's feedback: primary controls (menu) now in place, dockable tools framework started (PS terminal as example), open/close folder + GitHub + GrokBuild at top of this batch, and stubs are now explained via Help > UI Legend so the purpose of every area is clear. GUI/HMI prioritized as requested so remaining functionality (plugins, specialized packs) can layer on top.
+
 
 
 **Revision of this record:** Living — append further artifacts, evidence, or redlines as the tranche executes. FarmRTK platform skills generalization now complete across batches using the new tools (ide_core.py).
