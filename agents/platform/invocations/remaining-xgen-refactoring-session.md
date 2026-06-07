@@ -246,6 +246,8 @@ New tools (ide_core.py) + manifest updates used end-to-end for planning, creatio
 
 **P2 slice 3 (to conclusion):** Switched parser in ProceduralSkillExecutor to run_robust_powershell (all real SKILL pwsh steps now get full robust: trunc/timeout/env/cwd/sandbox). Added real skill step test (temp SKILL.md + executor.execute, asserts pwsh evidence). Created dedicated PS wrapper src/platform/tools/Run-RobustPwsh.ps1. Updated smoke. Live validation (real-skill PASS). Tiny anchors. All original P2 items (harden, sandbox notes, PS wrappers x2, registry, real skill test, dual, trace to §5/matrix) concluded.
 
+**P3 slice 1 (loader + skills discovery):** Extended src/platform/plugins/loader.py: discover_skills() (scans entry.skills_dir, reuses P1 read_ide_artifact + parse_declared_tools). New test_p3_loader_skills_smoke.py validates ide-platform + P1 declared_tools (e.g. ide-hierarchy). Live smoke PASS (42 skills). Tiny anchors. L4-001/§5 trace. Dual (Python first; PS helper next).
+
 
 
 **Revision of this record:** Living — append further artifacts, evidence, or redlines as the tranche executes. FarmRTK platform skills generalization now complete across batches using the new tools (ide_core.py).
