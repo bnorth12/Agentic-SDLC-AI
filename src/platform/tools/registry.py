@@ -79,6 +79,20 @@ class ToolRegistry:
                 scopes = ["ide.fs.read", "ide.generalize"]
             self.register(ToolSpec(name=name, description=doc, scopes=scopes, func=fn))
             registered += 1
+
+        # P2 smallest slice: expose robust pwsh execution as a first-class tool (dual Python + PS/GUI)
+        try:
+            from ..orchestration.executor import run_robust_powershell
+            self.register(ToolSpec(
+                name="run_robust_powershell",
+                description="Robust pwsh (P2 slice 1: truncation, explicit timeout; env/cwd ready). Dual for executor, agents, PS-MVP terminal, future custom GUI.",
+                scopes=["exec.ps"],
+                func=run_robust_powershell,
+            ))
+            registered += 1
+        except Exception:
+            pass  # non-fatal for bootstrap; smoke will still validate direct use
+
         return registered
 
 

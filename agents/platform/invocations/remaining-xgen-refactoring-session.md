@@ -238,6 +238,10 @@ New tools (ide_core.py) + manifest updates used end-to-end for planning, creatio
 
 **Baseline commit & push:** Committed + pushed as b2f614c (final amended for lint-clean) on feature/sprint-4-skills-foundation. 105 files, full P1 + XGEN + L2 + docs + manifests as the new executable baseline before P2 batch. (See git log for full message with traceability refs.)
 
+**Follow-up (scaffold tests):** Tiny commit b80a1a0 updated the two failing test_platform_scaffold.py cases (added ide-platform assert to loader test; updated router test expectation + comment for real L2 "error" behavior). Both now pass (live pytest). Makes pre-push test portion clean for future batches. Hook still has coverage gate on new modules.
+
+**P2 smallest slice (pwsh robust):** Started with test_p2_pwsh_smoke.py + hardened _execute_powershell / run_robust_powershell (truncation + explicit timeout status + params with defaults; exposed in ToolRegistry as "run_robust_powershell"). Smoke validated success/trunc/timeout + registry invoke. Dual Python (executor/agents) + PS/GUI terminal path. Tiny anchors + matrix note. See L2-001 / §5. Next micro: env scoping etc. Live smoke passed.
+
 
 
 **Revision of this record:** Living — append further artifacts, evidence, or redlines as the tranche executes. FarmRTK platform skills generalization now complete across batches using the new tools (ide_core.py).

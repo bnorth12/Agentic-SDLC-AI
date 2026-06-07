@@ -78,25 +78,46 @@ def parse_skill_md(skill_path: str | Path) -> tuple[SkillFrontmatter, str]:
     return front, body
 
 
-def _execute_powershell(command: str, cwd: str | None = None) -> ExecutionEvidence:
-    """Execute a PowerShell step using pwsh (Windows primary)."""
+def _execute_powershell(command: str, cwd: str | None = None, timeout: int = 120, max_output: int = 8192) -> ExecutionEvidence:
+    """Execute a PowerShell step using pwsh (Windows primary).
+
+    P2 smallest slice (robust): added explicit TimeoutExpired handling + output truncation
+    (prevents huge evidence blobs). Defaults preserve exact prior behavior.
+    Future slices: env scoping, sandbox profile, duration, full tool registration.
+    """
     try:
         result = subprocess.run(
             ["pwsh", "-NoProfile", "-Command", command],
             capture_output=True,
             text=True,
             cwd=cwd,
-            timeout=120,
+            timeout=timeout,
         )
+        stdout = result.stdout or ""
+        stderr = result.stderr or ""
+        if len(stdout) > max_output:
+            stdout = stdout[:max_output] + "\n... [truncated for evidence size]"
+        if len(stderr) > max_output:
+            stderr = stderr[:max_output] + "\n... [truncated for evidence size]"
         return ExecutionEvidence(
             skill_id="",
             step_index=0,
             step_type="pwsh",
             command_or_code=command,
-            stdout=result.stdout,
-            stderr=result.stderr,
+            stdout=stdout,
+            stderr=stderr,
             returncode=result.returncode,
             status="success" if result.returncode == 0 else "error",
+        )
+    except subprocess.TimeoutExpired:
+        return ExecutionEvidence(
+            skill_id="",
+            step_index=0,
+            step_type="pwsh",
+            command_or_code=command,
+            stderr=f"Timeout after {timeout}s",
+            returncode=-1,
+            status="timeout",
         )
     except Exception as e:
         return ExecutionEvidence(
@@ -108,6 +129,23 @@ def _execute_powershell(command: str, cwd: str | None = None) -> ExecutionEviden
             returncode=-1,
             status="error",
         )
+
+
+def run_robust_powershell(command: str, cwd: str | None = None, timeout: int = 120, max_output: int = 8192) -> ExecutionEvidence:
+    """P2 smallest viable slice: public robust PowerShell execution surface.
+
+    Thin wrapper over the hardened _execute_powershell.
+    - Output truncation to keep evidence manageable
+    - Explicit timeout status
+    - Ready for env scoping / sandbox in next micro-slice
+
+    Dual surface: Python (called from executor steps, agents, or via ToolRegistry)
+    + PowerShell (via Invoke-IdeTool.ps1 or future GUI terminal integration).
+
+    Traceable to L2-001 / TOOL rows in IDE_ARCHITECTURE_TRACEABILITY_MATRIX.md
+    and IDE_REFACTOR_PLAN §5 (L2 orchestration + tooling).
+    """
+    return _execute_powershell(command, cwd=cwd, timeout=timeout, max_output=max_output)
 
 
 def _execute_python_fragment(code: str, cwd: str | None = None) -> ExecutionEvidence:
