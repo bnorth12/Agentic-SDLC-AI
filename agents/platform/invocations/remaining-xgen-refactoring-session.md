@@ -242,6 +242,8 @@ New tools (ide_core.py) + manifest updates used end-to-end for planning, creatio
 
 **P2 smallest slice (pwsh robust):** Started with test_p2_pwsh_smoke.py + hardened _execute_powershell / run_robust_powershell (truncation + explicit timeout status + params with defaults; exposed in ToolRegistry as "run_robust_powershell"). Smoke validated success/trunc/timeout + registry invoke. Dual Python (executor/agents) + PS/GUI terminal path. Tiny anchors + matrix note. See L2-001 / §5. Next micro: env scoping etc. Live smoke passed.
 
+**P2 slice 2 (env + sandbox + PS):** Added env= support (safe merge) + sandbox notes (-NoProfile, reviewed cmds, caller env) to robust pwsh funcs. Updated Invoke-IdeTool.ps1 example. Extended smoke (env test passes). Tiny anchors in record + matrix. Dual ready. Trace L2/§5. Live smoke passed. Next: full sandbox profile, parser integration.
+
 
 
 **Revision of this record:** Living — append further artifacts, evidence, or redlines as the tranche executes. FarmRTK platform skills generalization now complete across batches using the new tools (ide_core.py).

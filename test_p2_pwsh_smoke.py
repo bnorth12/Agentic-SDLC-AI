@@ -10,7 +10,8 @@ Focus (tiny slice):
 - Live validation of success, truncation, timeout paths.
 - Traceability: L2-001 / TOOL-001 in IDE_ARCHITECTURE_TRACEABILITY_MATRIX.md + IDE_REFACTOR_PLAN §5.
 
-Next micro-slices will add env scoping, full sandbox profile, duration, better PS wrapper integration.
+Slice 2 (this run): env scoping + basic sandbox notes + PS wrapper example + smoke extension.
+Next: full sandbox profile, procedure parser integration for env, richer docs, etc.
 """
 from __future__ import annotations
 
@@ -51,7 +52,14 @@ def main() -> int:
     assert "Timeout" in ev_to.stderr
     print("  PASS: explicit timeout status")
 
-    # 4. Registry exposure (P2 tool)
+    # 4. Env scoping (P2 slice 2) + basic sandbox note (env is caller-controlled)
+    ev_env = run_robust_powershell('Write-Output "ENV:$env:P2_SMOKE_ENV"', env={"P2_SMOKE_ENV": "from-smoke"})
+    print(f"env: status={ev_env.status}, contains from-smoke={'from-smoke' in ev_env.stdout}")
+    assert ev_env.status == "success"
+    assert "from-smoke" in ev_env.stdout
+    print("  PASS: env support (safe merge)")
+
+    # 5. Registry exposure (P2 tool)
     reg = get_registry()
     tools = reg.list_tools()
     print(f"registry tools contain run_robust_powershell: {'run_robust_powershell' in tools}")
@@ -62,11 +70,11 @@ def main() -> int:
     assert "via-registry" in ev_via_reg.stdout
     print("  PASS: registered as tool and invocable")
 
-    # 5. PS / dual note (the surface is the Python func; PS wrapper can call it via the existing Invoke or future thin .ps1)
-    print("  (Dual PS surface: existing Invoke-IdeTool.ps1 + future direct robust wrapper; GUI terminal will call the same Python entry.)")
+    # 6. PS / dual note (the surface is the Python func; PS wrapper can call it via the existing Invoke or future thin .ps1)
+    print("  (Dual PS surface: existing Invoke-IdeTool.ps1 + future direct robust wrapper; GUI terminal will call the same Python entry. Env support ready for sandboxed procedures.)")
 
-    print("\n=== P2 SMOKE COMPLETE (smallest slice passed) ===")
-    print("Next: more P2 (env, sandbox notes, richer PS integration, docs), tiny anchors, matrix update.")
+    print("\n=== P2 SMOKE COMPLETE (slice 2 passed) ===")
+    print("Next: more P2 (full sandbox profile, richer PS integration, docs, integration in procedure parser), tiny anchors, matrix update.")
     return 0
 
 

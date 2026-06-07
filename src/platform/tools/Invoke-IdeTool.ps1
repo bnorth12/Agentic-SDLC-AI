@@ -20,6 +20,9 @@
 
   # Or from a skill procedure step (future robust runner will surface this)
   & "$PSScriptRoot/Invoke-IdeTool.ps1" -Name list_tools
+
+  # P2 slice 2: robust pwsh with env (dual for PS-MVP + future GUI terminal)
+  # & "$PSScriptRoot/Invoke-IdeTool.ps1" -Name run_robust_powershell -PayloadJson '{"command":"Write-Output $env:MYVAR","env":{"MYVAR":"from-ps"}}'
 #>
 [CmdletBinding()]
 param(

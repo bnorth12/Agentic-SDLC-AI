@@ -12,6 +12,7 @@ Supports basic evidence capture for G1/G3/G4.
 
 from __future__ import annotations
 
+import os
 import subprocess
 from pathlib import Path
 from typing import Any
@@ -78,20 +79,27 @@ def parse_skill_md(skill_path: str | Path) -> tuple[SkillFrontmatter, str]:
     return front, body
 
 
-def _execute_powershell(command: str, cwd: str | None = None, timeout: int = 120, max_output: int = 8192) -> ExecutionEvidence:
+def _execute_powershell(command: str, cwd: str | None = None, timeout: int = 120, max_output: int = 8192, env: dict | None = None) -> ExecutionEvidence:
     """Execute a PowerShell step using pwsh (Windows primary).
 
-    P2 smallest slice (robust): added explicit TimeoutExpired handling + output truncation
-    (prevents huge evidence blobs). Defaults preserve exact prior behavior.
-    Future slices: env scoping, sandbox profile, duration, full tool registration.
+    P2 slice 2 (env + sandbox notes): added env= support (safe merge over os.environ).
+    Basic sandboxing notes: -NoProfile (enforced), caller-controlled env (no blanket
+    full override), recommend only reviewed commands. Full sandbox (restricted
+    env/policy, duration, etc.) in later slices.
+    Truncation + explicit timeout from slice 1 preserved. Defaults keep prior behavior.
     """
     try:
+        run_env = None
+        if env:
+            run_env = os.environ.copy()
+            run_env.update({str(k): str(v) for k, v in env.items()})
         result = subprocess.run(
             ["pwsh", "-NoProfile", "-Command", command],
             capture_output=True,
             text=True,
             cwd=cwd,
             timeout=timeout,
+            env=run_env,
         )
         stdout = result.stdout or ""
         stderr = result.stderr or ""
@@ -131,21 +139,21 @@ def _execute_powershell(command: str, cwd: str | None = None, timeout: int = 120
         )
 
 
-def run_robust_powershell(command: str, cwd: str | None = None, timeout: int = 120, max_output: int = 8192) -> ExecutionEvidence:
-    """P2 smallest viable slice: public robust PowerShell execution surface.
+def run_robust_powershell(command: str, cwd: str | None = None, timeout: int = 120, max_output: int = 8192, env: dict | None = None) -> ExecutionEvidence:
+    """P2 slice 2: public robust PowerShell execution surface (env + sandbox notes).
 
     Thin wrapper over the hardened _execute_powershell.
-    - Output truncation to keep evidence manageable
-    - Explicit timeout status
-    - Ready for env scoping / sandbox in next micro-slice
+    - env: optional dict merged safely over os.environ (caller controls; basic sandbox)
+    - Output truncation + explicit timeout (slice 1)
+    - Sandbox notes: -NoProfile enforced, reviewed commands only. Full profile later.
 
-    Dual surface: Python (called from executor steps, agents, or via ToolRegistry)
-    + PowerShell (via Invoke-IdeTool.ps1 or future GUI terminal integration).
+    Dual surface: Python (executor steps, agents, ToolRegistry) + PowerShell (Invoke-IdeTool.ps1
+    or future GUI terminal with PS integration).
 
     Traceable to L2-001 / TOOL rows in IDE_ARCHITECTURE_TRACEABILITY_MATRIX.md
     and IDE_REFACTOR_PLAN §5 (L2 orchestration + tooling).
     """
-    return _execute_powershell(command, cwd=cwd, timeout=timeout, max_output=max_output)
+    return _execute_powershell(command, cwd=cwd, timeout=timeout, max_output=max_output, env=env)
 
 
 def _execute_python_fragment(code: str, cwd: str | None = None) -> ExecutionEvidence:
