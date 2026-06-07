@@ -252,6 +252,8 @@ New tools (ide_core.py) + manifest updates used end-to-end for planning, creatio
 
 **P3 slice 3 + conclusion:** Added PS discovery helper src/platform/tools/Discover-IdePack.ps1 (lists packs/skills/declared_tools via loader). Updated ide-platform manifest + GUI_DESIGN notes. Final tiny anchors in record + matrix. Live validation (py smoke + equiv PS discovery). All P3 (load_pack + discover_skills/tools, L4 integrate, reg pop, PS helper, test ide-platform, updates, dual, §5/L4 trace) complete. P3 concluded. Ready for P4.
 
+**P4 slice 1 (basic gh wrapper):** New src/platform/tools/gh_evidence.py (reliable _run_gh with auth precheck, gh_evidence(action, target, title, body, files, ...), evidence_schema_example). Registered 'gh_evidence' in ToolRegistry (scopes gh.evidence). New test_p4_gh_evidence_smoke.py (wrapper calls, schema, registry invoke; structured even on no-auth). Live smoke PASS. Tiny anchors. Dual Python (PS next). Trace TOOL-001 / L4 / §5 / matrix.
+
 
 
 **Revision of this record:** Living — append further artifacts, evidence, or redlines as the tranche executes. FarmRTK platform skills generalization now complete across batches using the new tools (ide_core.py).

@@ -106,6 +106,19 @@ class ToolRegistry:
             registered += 1
         except Exception:
             self._skill_declarations = {}
+
+        # P4 slice 1: gh CLI / GitHub Evidence Tool (reliable wrapper, auth check, attach evidence)
+        try:
+            from .gh_evidence import GH_EVIDENCE_TOOL
+            self.register(ToolSpec(
+                name="gh_evidence",
+                description="Reliable gh wrapper for evidence (auth check, create issue/PR comment, attach files). Evidence schema support. Dual Python+PS. See gh_evidence.py, P4 smoke.",
+                scopes=["gh.evidence", "exec.ps"],
+                func=GH_EVIDENCE_TOOL,
+            ))
+            registered += 1
+        except Exception:
+            pass
         return registered
 
 
