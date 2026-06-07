@@ -250,6 +250,8 @@ New tools (ide_core.py) + manifest updates used end-to-end for planning, creatio
 
 **P3 slice 2 (integrate exec + reg):** Updated run_procedural_skill to resolve via loader.discover_skills() (no more hardcoded only-ide-platform). Registry bootstrap now populates _skill_declarations from manifests. Extended p3 smoke for live integration (resolution succeeds, declared_tools in outputs, reg has decls). Live PASS. Tiny anchors. Full L4 loader + executor + registry integration.
 
+**P3 slice 3 + conclusion:** Added PS discovery helper src/platform/tools/Discover-IdePack.ps1 (lists packs/skills/declared_tools via loader). Updated ide-platform manifest + GUI_DESIGN notes. Final tiny anchors in record + matrix. Live validation (py smoke + equiv PS discovery). All P3 (load_pack + discover_skills/tools, L4 integrate, reg pop, PS helper, test ide-platform, updates, dual, §5/L4 trace) complete. P3 concluded. Ready for P4.
+
 
 
 **Revision of this record:** Living — append further artifacts, evidence, or redlines as the tranche executes. FarmRTK platform skills generalization now complete across batches using the new tools (ide_core.py).
