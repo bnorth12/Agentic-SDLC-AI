@@ -429,6 +429,22 @@ Matrix updated to reference the plan. This batch used skills/tools for grounding
 - Smoke re-PASS.
 - Phase 1 Batch 1 COMPLETE (requirements/decomp advanced in artifacts). Next small batch: checklist or design enhancement.
 
+**Phase 1 Batch 2 (small verified, skills-first):** temp_phase1_batch2_checklist.py ran upfront skills (gov, hierarchy, verification, traceability, check-work).
+- Lightweight checklist (baseline + stubs + gov/trace rules + flip criteria) added to PS_IDE_TRANSITION_PLAN.md.
+- Wired to GUI: Help > "Transition Checklist (PS-to-IDE)" (calls preflight, shows in messagebox + viewers; surfaces gov evidence).
+- Matrix X PS-IDE-TRANSITION-001 updated with Batch 2 note.
+- Tiny anchor here.
+- Smoke re-PASS.
+- Phase 1 Batch 2 COMPLETE (checklist in plan and usable in the IDE). Advances readiness for Phase 2/3 (GUI dev enhancements) and Phase 5 (flip decision).
+
+**Phase 2/3 small batch (executed 2026-06):** 
+- shell_host.py: basic editor "Save (basic stub + preflight)" button added (calls _run_governance_preflight, "saves" via viewer note + message; explicitly documents as stub per plan/GUI_DESIGN baseline).
+- Plan and matrix updated with batch note + anchor.
+- Smoke re-PASS (editor path now governed and tested).
+- Advances GUI for basic dev use (edit paths now have preflight). Phase 4/5: checklist + save stub + existing baseline/smokes/gov preflights prepare for transition (see Phase 5 criteria; flip notes can be added to manifests/launch_ide when baseline sufficient). All small, skills-first, anchored, dual-safe.
+
+**Phase 4/5 readiness (documented in this batch):** With Phase 1 checklist wired + Phase 2/3 editor save stub + prior gov preflights + baseline (smoke PASS, gov skills run), the transition is prepared per plan (use dedicated smoke + gov reports + matrix for flip decision). launch_ide.py and plan have notes for when to flip primary (GUI visual primary; PS dual). Phase 4 (full transition smoke) and Phase 5 (flip + move real work) in next small batches when baseline sufficient. Skills/tools used throughout.
+
 **Phase 2/3 small batches (executed as tiny verifiable changes toward design/impl):** 
 - shell_host.py: status bar now references the Transition Plan (UI visibility of baseline).
 - shell_host.py: gov preflight wired into _open_folder (before L4 discover; calls preflight + surfaces evidence).

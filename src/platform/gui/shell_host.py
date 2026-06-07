@@ -108,6 +108,7 @@ class ShellHost:
         # Help menu - makes stubbed areas understandable
         help_menu = tk.Menu(menubar, tearoff=0)
         help_menu.add_command(label="UI Legend / How to Use", command=self._show_ui_legend)
+        help_menu.add_command(label="Transition Checklist (PS-to-IDE)", command=self._show_transition_checklist)
         help_menu.add_command(label="About Agentic IDE", command=lambda: messagebox.showinfo("About", "Custom unique agentic IDE (tkinter MVP). PS + L2 executor primary. P1-P5 tools integrated. See GUI_DESIGN.md."))
         menubar.add_cascade(label="Help", menu=help_menu)
 
@@ -260,6 +261,14 @@ class ShellHost:
         editor.pack(fill=tk.BOTH, expand=True, padx=4, pady=4)
         self.editor = editor  # for task 3 load real content
         ttk.Button(editor_frame, text="Invoke from Editor (L2)", command=invoke_from_tree).pack(pady=2)
+
+        # Phase 2/3 small: basic save stub (calls preflight, "saves" by updating viewer with note; full structure-aware save is stub/R2)
+        def basic_save_stub():
+            pre = self._run_governance_preflight(context="gui_editor_save", action_description="Basic editor save stub (transition dev path)")
+            if hasattr(self, 'viewer_text'):
+                self.viewer_text.insert(tk.END, f"[GOV PREFLIGHT for editor save] {pre.get('status')}\n[Editor save stub] Content 'saved' (stub - real save future). Transition checklist recommends gov before edit work.\n")
+            messagebox.showinfo("Editor Save (stub)", "Preflight run. Basic save stub executed (see viewers). Full edit/save is documented stub per plan/GUI_DESIGN.")
+        ttk.Button(editor_frame, text="Save (basic stub + preflight)", command=basic_save_stub).pack(pady=2)
 
         viewers = ttk.LabelFrame(center, text="Viewers Dock (L0 - markdown + P5 evidence bundle viewer)")
         viewers.pack(fill=tk.BOTH, expand=True, pady=4)
@@ -460,6 +469,46 @@ All areas are wired to the real platform backend (loader, executor, registry, bu
 See GUI_DESIGN.md for the full vision (dockable tools, agent panels, command palette, etc.). Current is early MVP shell - more dockable behavior and clarity coming in follow-on small batches.
 """
         messagebox.showinfo("UI Legend", legend)
+
+    def _show_transition_checklist(self):
+        """Phase 1 Batch 2 / Phase 2 small: Wire the lightweight Transition Checklist (from plan) to GUI.
+        Calls gov preflight first (as per rules), then shows summary. This makes the checklist visible/usable in the IDE for transition readiness.
+        """
+        pre = self._run_governance_preflight(context="gui_help_transition_checklist", action_description="Show PS-to-IDE Transition Checklist")
+        if hasattr(self, 'viewer_text'):
+            self.viewer_text.insert(tk.END, f"[GOV PREFLIGHT for checklist] {pre.get('status')}\n")
+
+        checklist = """PS-to-IDE Transition Checklist (see full in PS_IDE_TRANSITION_PLAN.md)
+
+Baseline (must work):
+- [ ] Launch, File menu (open/close + L4), GitHub (P4), Grok/Build (ACP + L2 handoff + PS context), Help (Legend)
+- [ ] Dockables (Paned explorer | editor/viewers + PS terminal)
+- [ ] L4 Explorer (tree, load SKILL, L2 invoke + P5 bundle)
+- [ ] Palette (Ctrl+P, real dispatches)
+- [ ] ACP (JSON protocol + context + preflight + L2 handoff)
+- [ ] Gov preflights (always on paths, P5 evidence, viewers/status)
+- [ ] PS dual (wrappers, co-running, robust terminal)
+- [ ] Status (gates, P1-P5, self-host, plan ref)
+- [ ] Self-host demo (open repo, L4, L2, P5, gov evidence)
+
+Stubs (OK if documented):
+- [ ] Editor full structure-aware (stub; real load+invoke works)
+- [ ] Rich viewers (P5 bundles work; rich R2+)
+- [ ] ACP "stub vs procedural" and no-CLI fallback (explicit)
+- [ ] Gov strict block (evidence today; future)
+
+Transition gov/trace:
+- [ ] Route dev work (edit skills, audits, ACP) through preflights.
+- [ ] Run gov skills (gov-compiler, hierarchy-steward, verification-coverage, traceability, check-work) + P5 before major.
+- [ ] Tiny anchors in matrix/plan/invocation after batches.
+- [ ] Dual test PS+GUI.
+- [ ] Flip when baseline + dedicated smoke + gov reports + matrix complete.
+
+Verification: phase1 smoke + gov runs + self-host demo. Attach evidence when using for real tasks.
+
+Full checklist and Phase 5 flip criteria in docs/charter/ide-refactor/PS_IDE_TRANSITION_PLAN.md
+"""
+        messagebox.showinfo("Transition Checklist (PS-to-IDE)", checklist)
 
     def _run_governance_preflight(self, context: str = "user_action", action_description: str = "") -> dict:
         """GOVERNANCE WIRING (Cross L2/L3 + HMI): Mandatory pre-flight using full engineering rigor (agents/skills/tools) before any user-facing action or 'try this' exposure.

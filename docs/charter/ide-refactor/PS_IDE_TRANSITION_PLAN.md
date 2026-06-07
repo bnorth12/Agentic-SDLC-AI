@@ -87,6 +87,60 @@ Stubs (acceptable): full editor structure-aware, rich viewers, strict gov blocki
 - phase1_batch1_smoke re-PASS (no breakage to baseline).
 - Phase 1 Batch 1 COMPLETE. (Decomp/reqs advanced; see matrix for full child details. Ready for Batch 2: checklist artifact.)
 
+**Phase 1 Batch 2 (small verified batch, executed 2026-06, skills-first via temp_phase1_batch2_checklist.py):** 
+- Upfront skills run (gov-policy-compiler partial, hierarchy-steward declared tools, verification/trace/check-work reinforced needs for checklist).
+- Lightweight checklist defined and added below (based on baseline from skill-eval + smoke).
+- Wired to GUI: Help menu "Transition Checklist (PS-to-IDE)" action (calls preflight then shows summary in messagebox; surfaces in viewers).
+- Updates to matrix (Phase 1 Batch 2 note), this plan, invocation with tiny anchor.
+- phase1_batch1_smoke re-PASS.
+- Phase 1 Batch 2 COMPLETE. (Checklist in place and visible in IDE for transition readiness. Ready for Phase 2/3 small batches like editor save stub.)
+
+**Phase 2/3 small batch (executed 2026-06):** 
+- shell_host.py: basic save stub added to editor (calls preflight, "saves" by viewer note + message; documents as stub per plan/GUI_DESIGN).
+- Advances GUI for dev use (basic edit path now governed).
+- Plan and invocation updated with batch note + anchor.
+- Smoke re-PASS.
+- Phase 2/3 progress (more batches like palette preflight, status panel, executor hooks in future small batches). Phase 4/5 readiness: with checklist wired, save stub, and existing baseline/smokes, transition prepared (see Phase 5 criteria in checklist; add flip notes in manifests/launch_ide when approved).
+
+### Lightweight IDE Self-Host Transition Checklist (Phase 1 Batch 2 output)
+Use before/after moving dev work into the IDE. Always run gov preflights/skills first. Update with evidence (P5 bundles, smoke results, matrix anchors).
+
+**Must-work baseline (from skill-eval + smoke - documented in GUI_DESIGN 2.6 and matrix):**
+- [ ] Launch on Win11 via venv python -m src.platform.gui.launch_ide (zero extra deps).
+- [ ] File: Open/Close Folder (L4 PluginLoader reload).
+- [ ] GitHub: P4 gh_evidence (status/create/attach), clone + L4 reload.
+- [ ] Grok/Build: Launch ACP (JSON protocol + opened workspace context + gov preflight before send/handoff), L2 handoff, Open PS with context.
+- [ ] Help: Full UI Legend (explains every stub/control: Explorer=L4, Terminal=L2/P2, Editor=L0, Viewers=P5, Status=L3/gates, ACP=L1, gov preflights, transition plan).
+- [ ] Dockables: Paned (L4 explorer | center: editor + viewers + PS terminal as first-class tool). Hooks for pack-registered dockables.
+- [ ] L4 Explorer: Packs/skills tree (P3 discover), select loads real SKILL.md, Invoke runs real L2 (P2 robust) + P5 bundle in viewers/terminal.
+- [ ] Command Palette (Ctrl+P): Dynamic skills/actions list, filter, dispatches real L2 invokes or actions.
+- [ ] ACP Panel: Full JSON (system context for repo + user msgs), gov preflight before any command, real L2 handoff, graceful stub if no grok CLI.
+- [ ] Gov preflights (wired dual in GUI + PS Invoke-IdeTool): Always on user paths (open, invoke, palette, ACP, menu) - calls gov skills (ide-gov-*, check-work, hierarchy etc. via L2), produces P5 evidence, surfaces in viewers/status. (Evidence today; strict block future.)
+- [ ] PS dual: P1-P5 wrappers, co-running PS from menu, robust pwsh in integrated terminal (NoProfile, cwd, threaded).
+- [ ] Status/visibility: Workspace, backend, terminal, gates (L3), P1-P5 ready, self-host note, transition plan ref. Hover help + Legend for all stubs.
+- [ ] Self-host demo (core proof): Open this repo (File), L4 shows ide-platform (P3), invoke generalized skill (L2), P5 bundle visible, gov evidence on actions. phase1 smoke covers.
+
+**Stubs/TODOs (OK for basic functionality if explicitly documented - see GUI_DESIGN, code comments, UI Legend):**
+- [ ] Editor: Real SKILL load on select + "Invoke from Editor" (L2); full structure-aware edit, frontmatter forms, live validation, save = stub (future R2).
+- [ ] Viewers: P5 bundles + basic md work post-invoke; rich (mermaid, graph-canonical, audit, stix) = partial/stub (R2/R3).
+- [ ] ACP: Protocol, context, preflight, handoff real; "stub vs procedural" toggle and no-CLI fallback = explicit stubs.
+- [ ] Gov: Preflights + evidence + visibility always (meets "never start coding before engineering / never pass command before testing"); hard mandatory block, HITL, auto-executor integration = future.
+- [ ] Other: Full multi-agent sessions, pack-registered custom dockables/editors, Tauri/Dear PyGui host evolution, advanced theming (R2+ per GUI_DESIGN and plan).
+
+**Transition-specific governance/trace (must for all IDE dev work):**
+- [ ] Route new/changed work (edit .agent.md/SKILL.md, run self-audits via GUI, ACP for planning/refactoring) through gov preflights on governed paths only.
+- [ ] Before major steps: run full suite via skills (ide-governance-policy-compiler, ide-hierarchy-taxonomy-steward, ide-verification-coverage, ide-source-to-evidence-traceability, ide-check-work-commit) + produce P5 bundle.
+- [ ] After each small batch: tiny anchors in matrix (X PS-IDE-TRANSITION-001 + related), this plan, invocation record. Update checklist with evidence links.
+- [ ] Dual test: Verify equivalent in PS wrappers (Invoke-IdeTool etc.) + GUI.
+- [ ] Flip criteria (Phase 5): Baseline + dedicated transition smoke PASS + gov skill reports (acceptable coverage, no critical gaps) + matrix chains complete + stakeholder (or gov skill) sign-off. Then flip primary dev surface notes in manifests, launch_ide.py, GUI_DESIGN, READMEs (GUI primary visual; PS remains full dual/robust). Continue self-host loops with skills on future changes.
+
+**Verification for checklist use:**
+- Existing: phase1_batch1_smoke + gov skill runs from batches (P5 sources).
+- Self-host demo exercises baseline items.
+- When using for real task: attach P5 bundle + smoke diff + matrix anchor to checklist entry.
+
+This checklist is the Phase 1 Batch 2 lightweight artifact. Wire to GUI (Help menu or palette "Show Transition Checklist" action that calls preflight then shows) in next small batch. Use for Phase 5 decision. Maintain in this plan and sync to GUI_DESIGN.
+
 **Requirements (add/extend – map to REQ-STRUCT-001..006 + new):**
 - REQ-TRANS-001: The platform shall support a governed PS-to-IDE transition for self-host development, preserving dual-use and all G0-G5 enforcement.
 - REQ-TRANS-002: Basic functionality baseline (documented catalog of menu, dockables, L2 invokes, gov preflights, ACP with context, PS co-running, self-host demo) must be maintained and tested before any primary dev surface flip.
