@@ -72,3 +72,23 @@ class GateEngine:
 
     def requires_hitl(self, gate_id: str, **kwargs: Any) -> bool:
         return self.effective_mode(gate_id, **kwargs) == GateMode.MANDATORY
+
+    # P5 slice 3: integrate bundler for evidence (G1/G3/G4). Uses the L2/L4 bundler tool.
+    def bundle_evidence_for_gate(
+        self,
+        gate_id: str,
+        sources: list[dict],
+        metadata: dict | None = None,
+    ) -> dict:
+        """Create viewer-friendly evidence bundle for this gate (calls bundler tool).
+        sources: list of {"type": "...", "id": "...", "result": {...}} (exec, gh, etc.)
+        Returns bundle dict (with .md / .json ready strings in metadata if desired).
+        """
+        from ..tools.gate_evidence_bundler import create_gate_evidence_bundle, bundle_to_markdown, bundle_to_json
+        bundle = create_gate_evidence_bundle(gate_id, sources, metadata=metadata or {})
+        return {
+            "bundle": bundle.model_dump(),
+            "markdown": bundle_to_markdown(bundle),
+            "json": bundle_to_json(bundle),
+            "gate": self._gates.get(gate_id).model_dump() if gate_id in self._gates else None,
+        }

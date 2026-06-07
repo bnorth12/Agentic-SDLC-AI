@@ -171,6 +171,7 @@ The long-term GUI is **not** a fork, embedding, or reuse of Zed, VS Code, or Ecl
 - **Tool permissions UI**: Will be custom, integrated with the L4 tool registry and L1 permission model. (P1: registry.py + scopes + frontmatter declarations + PS Invoke-IdeTool.ps1 implemented and live-tested; dual for current PowerShell-MVP and future GUI terminal PS integration.)
   P2 complete: run_robust_powershell (truncation, timeout, env scoping, basic sandbox) now default for SKILL.md pwsh steps via executor; dedicated Run-RobustPwsh.ps1 + registry exposure; real skill tests; dual PS/GUI. See matrix L2-001 / invocation record.
   P4: gh_evidence tool (auth, create/attach evidence to issues/PRs, schema) + Invoke-GhEvidence.ps1; registry + real SKILL integration via python/tool calls. Dual. See matrix TOOL-001, test_p4_gh_evidence_smoke.py.
+  P5: gate_evidence_bundler + New-GateEvidenceBundle.ps1 (bundle exec+gh for G1/G3/G4 into md/json viewer bundles); GateEngine integration; real SKILL + engine tests. Dual. See matrix L3-001, test_p5_gate_evidence_bundler_smoke.py.
 
 ### 2.7 Open Decisions & Risks (to be resolved in detailed SW design)
 - Exact layout/docking engine for the custom portable shell (we will own this, not reuse an existing editor's).

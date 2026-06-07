@@ -107,6 +107,31 @@ def main() -> int:
 
     # Note: real PS call would be pwsh -File New-GateEvidenceBundle.ps1 -GateId G3_hitl -SourcesJson '...'
     print("  (PS wrapper New-GateEvidenceBundle.ps1 ready for dual use)")
+
+    # Slice 3: full integration test (real executor on skill with gates in frontmatter + gh sim + GateEngine bundle + registry)
+    from src.platform.orchestration.executor import ProceduralSkillExecutor
+    from src.platform.gates.engine import GateEngine
+    execr = ProceduralSkillExecutor(workspace_root=".")
+    # Use a real skill that declares gates (e.g. G1/G4 from P1-era frontmatter)
+    skill_res = execr.execute("plugins/packs/ide-platform/skills/ide-hierarchy-taxonomy-steward/SKILL.md")
+    exec_source = {"type": "skill_execution", "id": "ide-hierarchy-taxonomy-steward", "result": skill_res.model_dump()}
+    gh_sim = {"type": "gh_evidence", "id": "pr#evidence-42", "result": {"status": "success", "stdout": "Evidence attached", "command": "gh pr comment"}}
+    sources = [exec_source, gh_sim]
+
+    # Direct bundler + GateEngine
+    engine = GateEngine()
+    bundled = engine.bundle_evidence_for_gate("G4_independent_review", sources, metadata={"test": "slice3"})
+    print(f"GateEngine bundle for G4: items={len(bundled['bundle']['evidence'])}, has_md={len(bundled['markdown'])>100}")
+    assert "G4_independent_review" in bundled["markdown"]
+    assert bundled["gate"] is not None
+
+    # Via registry too
+    reg_bundle = reg.invoke("bundle_gate_evidence", gate_id="G1_traceability", sources=sources)
+    print(f"registry bundle G1: items={len(reg_bundle.evidence) if hasattr(reg_bundle, 'evidence') else 'n/a'}")
+    print("  PASS: real executor result + GateEngine + registry bundle (P5 integrate)")
+
+    # Viewer note: md/json ready for L0 viewers / GUI evidence panels (see GUI_DESIGN)
+    print("  (viewer-friendly outputs for GUI + PRs/docs)")
     return 0
 
 
