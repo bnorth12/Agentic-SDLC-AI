@@ -398,3 +398,32 @@ This directly implements the user's requirement: the full rigor is wired into th
 When the team decides the time is right, the documented baseline + known stubs + gov wiring + traceability in matrix will allow a controlled, tested move of development work into the IDE while keeping PS as a fully supported dual surface. No "raw command before testing" or "code before engineering" will be possible on the governed paths.
 
 **Anchor:** PS-IDE-TRANSITION-001 (new matrix row + invocation section + skill-driven gap eval + basic functionality catalog). Skills/tools used for the evaluation itself. Smoke paths validated. 2026-06. Matches user: "start putting the gaps against the overall application in the ide in place" + "well documented and tested when we make that transition" + "basic functionality" with stubs/TODOs OK.
+
+**Full PS-to-IDE Transition Plan created (governed design + implementation roadmap):** Per user request after gap documentation: "put together a plan on how to procede step by step through design and implemenation including the needed requirements and functional decomposition".
+
+- New artifact: [docs/charter/ide-refactor/PS_IDE_TRANSITION_PLAN.md](../../../docs/charter/ide-refactor/PS_IDE_TRANSITION_PLAN.md)
+- Grounded in existing: IDE_REFACTOR_PLAN §5, FRAMEWORK_DECOMPOSITION (L0-L8), matrix (now links the plan in X PS-IDE-TRANSITION-001), GUI_DESIGN baseline, invocation gaps, temp_transition_gap_eval.py (skill output).
+- Structure (self-referential, uses the project's own mechanisms):
+  - **Phase 0 (mandatory upfront for everything):** Run ide-requirements-*, ide-architecture-*, ide-hierarchy-*, ide-gov-*, ide-traceability-*, ide-verification-*, ide-check-work-* first on the plan/state. Update artifacts + produce P5. Confirm baseline.
+  - **Phase 1:** Requirements (new REQ-TRANS-00x extending REQ-STRUCT-*) + functional decomp (5-field hierarchy under X PS-IDE-TRANSITION-001: L0-002 GUI Dev Surface, L2-003 Executor Hooks, L3-002 Mature Enforcement, Cross Dual Workflow). Update matrix/this plan/LAYER index/GUI_DESIGN + checklist.
+  - **Phase 2:** Design (enhance GUI for dev use while keeping stubs; gov in all new paths; "How to develop the IDE inside the IDE" guide; dual PS parity). Run arch/document skills on designs.
+  - **Phase 3:** Implementation in small governed batches (1-7 listed: more preflights, editor/viewers basics, checklist actions, executor hooks, gate maturity, manifests, polish). Each batch: skills first, P5, anchors, smoke, keep PS working.
+  - **Phase 4:** Verification (new transition smoke exercising full dev path + gov; full skill suite self-audit; harden docs; G1/G4 packet).
+  - **Phase 5:** Controlled execution (flip primary notes in manifests/docs when baseline+tests sufficient; move real work into IDE; ongoing self-host loops with gov skills).
+- Requirements: REQ-TRANS-001..004 (governed transition, maintain baseline, gov on all IDE dev paths, mandatory traceability/audits). Stubs/TODOs OK if documented + baseline works.
+- Functional Decomposition (L0-L8 + Cross, 5-field): Detailed in the plan (Parent: Cross XSELF self-hosting; Child: X PS-IDE-TRANSITION-001 Level 3 with L0/L2/L3 subs + verification methods).
+- Governance: Every phase/batch starts with the listed skills (upfront engineering + testing). Dual PS+GUI. Evidence always. Self-host the plan (edit it in the IDE once baseline allows; run skills on it).
+- Transition criteria: Documented baseline (from TRANS eval) + dedicated tests + gov skill reports + matrix chains complete. PS remains supported.
+- Next immediate: Execute Phase 0 on this plan (run skills, update matrix/invocation with results, produce bundle).
+
+Matrix updated to reference the plan. This batch used skills/tools for grounding + documentation.
+
+**Anchor:** PS_IDE_TRANSITION_PLAN-001 (new plan artifact with requirements + L0-L8 decomp + phased steps; matrix link; invocation anchor). Skills run to inform it. 2026-06. Directly answers "put together a plan on how to procede step by step through design and implemenation including the needed requirements and functional decomposition". Ready for Phase 0 execution in the same disciplined style.
+
+**Phase 0 Intake executed (mandatory upfront per the plan):** temp_phase0_transition_intake.py ran the full required skills (ide-requirements-implementation-auditor, ide-architecture-design-disposition, ide-hierarchy-taxonomy-steward, ide-governance-policy-compiler, ide-source-to-evidence-traceability, ide-verification-coverage, ide-check-work-commit) on the new plan + current state (matrix baseline/gaps, GUI_DESIGN, code). 
+- Results: Partial runs still yielded declared tools/scopes + confirmed the L0-L8 + Cross frame, need for dedicated transition smoke, explicit chains for new REQ-TRANS-*, and phased approach.
+- P5 evidence bundle generated for G0/G1.
+- Baseline confirmed (phase1 smoke re-PASS on core paths).
+- Immediate actions: Matrix link to plan (done); this anchor + Phase 0 summary; proceed to Phase 1 (requirements/decomp updates) only after evidence.
+
+All per the plan's own rules and project discipline (skills-first, evidence, anchors, small batch). Smoke validated. Ready for next micro (Phase 1 artifact updates + more skill runs on the decomp).
