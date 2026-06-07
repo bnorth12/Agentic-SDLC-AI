@@ -33,3 +33,4 @@ toolchains:
   - node
 # P1: Tool registry (src/platform/tools/registry.py) + permission/scoping declarations now wired in L2 executor and available to all generalized skills (ide_core bootstrap). PS wrapper (Invoke-IdeTool.ps1) for MVP terminal + future GUI PS integration. See matrix TOOL-001, invocation P1 log, test_p1_registry_smoke.py.
 # P3: Manifest loader + discovery (src/platform/plugins/loader.py: discover() + discover_skills()). PS helper (Discover-IdePack.ps1). Integrated to executor/registry. See test_p3_loader_skills_smoke.py, matrix L4-001, invocation P3 logs.
+# P4: gh CLI evidence (src/platform/tools/gh_evidence.py + Invoke-GhEvidence.ps1). Auth check, create/attach, schema. Registry 'gh_evidence'. Integrated via tools/registry/executor. See test_p4_gh_evidence_smoke.py (incl. real SKILL step), matrix TOOL-001, invocation P4 logs.

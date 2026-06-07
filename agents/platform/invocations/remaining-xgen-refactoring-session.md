@@ -256,6 +256,8 @@ New tools (ide_core.py) + manifest updates used end-to-end for planning, creatio
 
 **P4 slice 2 (PS wrapper + schema):** New src/platform/tools/Invoke-GhEvidence.ps1 (PS surface for gh_evidence with params for action/target/title/body/files/labels). Extended p4 smoke for attach schema sim (files in evidence). Live PASS. Tiny anchors. Full dual PS (wrapper) + Python. Evidence schema used. Ready for integrate in slice 3.
 
+**P4 slice 3 + conclusion:** Real SKILL step test in smoke (temp SKILL python block calls gh_evidence via registry; executor captures in evidence). Updated ide-platform manifest + GUI_DESIGN. Final tiny anchors in record + matrix. Live smoke (real gh tool in SKILL) PASS. All P4 (reliable gh wrapper/auth/attach/create, schema, py+pwsh, registry, real tests, updates, dual, trace §5/matrix/TOOL-001) complete in small batches. P4 concluded. Ready for P5.
+
 
 
 **Revision of this record:** Living — append further artifacts, evidence, or redlines as the tranche executes. FarmRTK platform skills generalization now complete across batches using the new tools (ide_core.py).

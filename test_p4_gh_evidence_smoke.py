@@ -72,6 +72,35 @@ def main() -> int:
     print("  PASS: evidence schema + attach action (sim)")
 
     # Note: real attach would use gh release upload or pr review --comment in full; here structured.
+
+    # Slice 3: real skill step integration test (temp SKILL with python block calling gh_evidence tool via registry)
+    import tempfile
+    temp_skill = None
+    try:
+        with tempfile.NamedTemporaryFile(mode='w', suffix='.md', delete=False, dir='.', encoding='utf-8') as f:
+            f.write("""---
+name: p4-gh-skill-test
+---
+## Procedure
+```python
+from src.platform.tools.registry import get_registry
+reg = get_registry()
+res = reg.invoke("gh_evidence", action="create-issue", title="P4 real skill evidence", body="Dry-run via tool in SKILL step.")
+print("GH-TOOL-IN-SKILL:", res.get("status"))
+```
+""")
+            temp_skill = f.name
+        from src.platform.orchestration.executor import ProceduralSkillExecutor
+        execr = ProceduralSkillExecutor(workspace_root=".")
+        res = execr.execute(temp_skill)
+        py_evs = [e for e in res.evidence if e.step_type == "python"]
+        has_gh = any("GH-TOOL-IN-SKILL" in (e.stdout or "") for e in py_evs)
+        print(f"real-skill gh via tool: #py-evs={len(py_evs)}, has-gh-tool={has_gh}, status={res.status}")
+        assert len(py_evs) >= 1 and has_gh
+        print("  PASS: real SKILL step using gh_evidence via registry/tool call (P4 integrate)")
+    finally:
+        if temp_skill and Path(temp_skill).exists():
+            Path(temp_skill).unlink()
     return 0
 
 
