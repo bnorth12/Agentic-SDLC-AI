@@ -119,11 +119,13 @@ All 24 MATM agents + 17 FarmRTK platform skills processed through `ide-structura
 
 | Item | Target | Phase |
 |------|--------|-------|
-| Zed ACP host config | `gui/shell/zed/` | R4 |
-| Portable shell abstraction | `src/platform/gui/shell_host.py` | R4 |
-| Work-product viewers | `gui/viewers/{markdown,mermaid,stix,icd,graph}/` | R2–R4 |
+| Zed ACP host config | `gui/shell/zed/` | R4 (bootstrap reference) |
+| Portable shell abstraction (CUSTOM tkinter MVP) | `src/platform/gui/shell_host.py` + `launch_ide.py` | **MVP delivered** (phases 1-4 + 5-tasks batch + ACP micro + GAP-CLOSURE-L0-HMI-001): menu primary controls (File open/close folder + L4 reload; GitHub via P4; Grok/Build ACP launch + L2 handoff + PS context; Help full legend); dockable Paned framework (PS terminal as example); real editor load + Ctrl+P palette; clarity (hovers + UI Legend so every stub/control is understandable); ACP with JSON system/user messages + workspace context (fixed the user's exact parse error). Wired to real P1-P5 + L2 + L4. Self-host demo inside the shell. See matrix L0-001 (hierarchy expanded), GUI_DESIGN 2.6 (synced in closure), invocation record. |
+| Work-product viewers | `gui/viewers/{markdown,mermaid,stix,icd,graph}/` | R2–R4 (P5 bundles + viewer dock functional in current MVP) |
 | Installer | `gui/installer/Install-AgenticPlatform.ps1` | R6 |
 | Settings schema | `workspace/templates/platform-settings.schema.json` | R1 |
+
+**Closure note (this batch, using the skills/tools):** Evaluated via ide-hierarchy-taxonomy-steward + ide-architecture-document-surface-enforcer + ide-source-to-evidence-traceability + ide-verification-coverage (L2 executor + P1 read_ide_artifact/validate + audit script). Gaps closed in artifacts; P5 evidence bundled. Smoke re-PASS. Matches user request to use skills/tools for suggested tasks + evaluate + close gaps.
 
 ---
 

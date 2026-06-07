@@ -329,3 +329,20 @@ Fix (src/platform/gui/shell_host.py):
 Live validation + traceability discipline preserved. Ready for user re-test on desktop + next micro (deeper ACP client class, embedded dock instead of loose Toplevel, multi-turn state, or Dear PyGui evolution per GUI_DESIGN).
 
 **Anchor:** ACP-JSON-FRAME-001 (L1-001 advance, 5-tasks follow-on). Smoke re-PASS. 2026-06. (Matches user demo + error paste exactly.)
+
+**Gap closure + overall project evaluation batch (self-hosted via skills + P1-P5 tools):** Per user request after the ACP error and HMI questions: executed the suggested remediation using the generalized skills and tools. 
+- Discovered relevant skills via PluginLoader (ide-hierarchy-taxonomy-steward, ide-architecture-document-surface-enforcer, ide-source-to-evidence-traceability, ide-verification-coverage, ide-governance-policy-compiler, etc.).
+- Ran them via L2 run_procedural_skill (frontmatter/declared_tools/evidence captured even on partial "error" status; Procedures used as spec for "work required by the agent/skills").
+- Used P1 registry tools (read_ide_artifact on all key GUI/docs/matrix/plan files, validate_hierarchy_metadata) + audit script (temp_gap_closure_audit.py) to inventory, verify surfaces, evaluate verifications.
+- Produced evaluation report (gaps synthesized directly from skill Procedures): L0-001 still "Pending" in matrix despite delivery; GUI_DESIGN 2.6 stale vs actual CUSTOM ShellHost + 5 controls; no granular hierarchy rows for menu/dockables/palette/clarity/ACP; layer index/plan/TODO lag on MVP status; verification thin (smokes + narrative, no L0 gates); formal G1 chains for HMI surfaces incomplete vs invocation logs.
+- Closed gaps (executing the exact remediation the skills prescribe):
+  - Matrix: L0-001 row expanded with full hierarchy/Parent-Child-Level-Allocated-Verification for the delivered controls (primary menu + workspace, dockable Paned + PS terminal, command palette, HMI clarity/UI Legend, ACP JSON + context injection, ShellHost wiring to P1-P5/L2). Links to shell_host.py, launch_ide.py, test_phase1_batch1_smoke.py, invocation anchors, self-host demo. L0 surfaces now explicitly traceable.
+  - GUI_DESIGN.md: 2.6 "Current Implementation State" rewritten to accurately describe the launchable CUSTOM tkinter MVP (menu with File/GitHub/Grok/Help per user, Paned dockables, real editor/palette, hover+full legend clarity, ACP panel with the JSON fix that resolved the user's parse error + initial workspace context, P1-P5 wiring, dual PS+GUI, launch command, self-host demo inside it). Roadmap note added.
+  - Supporting: LAYER_WORK_PACKAGE_INDEX + IDE_REFACTOR_PLAN §5 + REFACTOR_TODO GUI section updated with MVP status + links (this batch).
+  - Invocation record: this anchor + evaluation summary.
+  - P5 evidence: bundle created from audit sources + changes (via bundle_gate_evidence + GateEngine).
+- Validation: re-ran phase1 smoke (PASS); re-invoked skills/tools for closure; self-host paths (open folder, invoke, ACP, handoff, palette) still functional.
+- Discipline: small batch, live validation (audit script + smokes + registry calls), tiny anchors in record + matrix, used the skills/tools the platform provides for its own governance (self-hosting), dual surfaces noted, unique custom preserved.
+This batch directly addresses "was all of this HMI GUI implementation added to the capabilities/system architecture/system design/functional decomposition/requirements/implementation/verification artifacts?" and "are we sticking to the overall rules... well documented well engineered verified product". Now substantially yes for the MVP slice; remaining R2+ surfaces + full L0 gates/G1 on the HMI code itself noted as follow-on.
+
+**Anchor:** GAP-CLOSURE-L0-HMI-001 (matrix L0-001 detailed + hierarchy, GUI_DESIGN synced, supporting docs + invocation updated, skills+tools evaluation + P5 bundle, smoke re-PASS). 2026-06. Matches user "use the skills and tools to execute the suggested tasks then evaluate... then close the gaps".

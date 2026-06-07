@@ -37,11 +37,12 @@ A first concrete self-hosted procedure exercise has been performed: a Requiremen
 ## Work Package Catalog (by Layer)
 
 ### L0 + L1 — GUI Shell, Editors, Viewers, Interaction, Runtime
-- WP-L0-001: Basic agent + skill editors (markdown + outline + invoke action)
-- WP-L0-002: Viewer registry + first viewers (markdown, mermaid, graph-canonical)
-- WP-L0-003: Agent panel + multi-agent ACP sessions (L1)
-- WP-L1-001: ACP stdio host + IDE-scoped tool permissions
-- WP-L0-010: Interaction agent patterns (HITL panel, command router) — generalize from MATM independent-review-orchestrator + sprint-intake-gatekeeper
+- WP-L0-001: Basic agent + skill editors (markdown + outline + invoke action) — **MVP partial delivered in CUSTOM tkinter ShellHost** (real tree load of SKILL.md on select, editor stub + invoke button wired to L2; full structure-aware R2+). See shell_host.py, GUI_DESIGN 2.6 (updated in GAP-CLOSURE-L0-HMI-001), matrix L0-001.
+- WP-L0-002: Viewer registry + first viewers (markdown, mermaid, graph-canonical) — stubs + P5 bundle viewer functional in delivered shell (viewers dock shows bundles from invoke); full R2.
+- WP-L0-003: Agent panel + multi-agent ACP sessions (L1) — **delivered** (Toplevel MVP with JSON protocol framing + initial workspace context; handoff to real L2; menu "Launch Grok Agent (ACP)"). Fixed user parse error. See _create_agent_panel, matrix L1-001, ACP-JSON-FRAME-001 + GAP-CLOSURE anchor.
+- WP-L1-001: ACP stdio host + IDE-scoped tool permissions — **partial delivered** (stdio spawn + JSON user/system messages in panel; P1 registry permissions; full multi-turn client R2). Dual with PS.
+- WP-L0-010: Interaction agent patterns (HITL panel, command router) — **partial** (Ctrl+P command palette dispatches real skills/actions; UI Legend + hovers for clarity; full HITL in R2+). Primary menu + dockables (File open/close + GH/Grok + PS context, Paned framework) delivered as foundation for these (user-prioritized 5-tasks batch).
+**MVP HMI status (this closure batch, evaluated via ide-hierarchy-taxonomy-steward + ide-architecture-document-surface-enforcer + ide-verification-coverage + ide-source-to-evidence-traceability using P1 read/validate + L2 executor):** Primary controls + dockables + clarity + ACP bridge complete and wired; see invocation GAP-CLOSURE-L0-HMI-001, matrix L0-001 (now with hierarchy for the controls), GUI_DESIGN 2.6 (synced).
 
 **Primary imported patterns:** MATM independent-review-* family, sprint-intake-gatekeeper  
 **Key gates:** G2, G4  
