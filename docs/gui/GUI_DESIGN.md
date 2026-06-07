@@ -169,6 +169,7 @@ The long-term GUI is **not** a fork, embedding, or reuse of Zed, VS Code, or Ecl
 - **Editors / Panels**: Will be custom components in the new shell (structure-aware editors for agent/skill artifacts, agent interaction panels, etc.). The current "Zed config" work is purely bootstrap scaffolding.
 - **Agent panel & multi-agent**: Will be custom surfaces in the portable shell, backed by L1 ACP + L2 router.
 - **Tool permissions UI**: Will be custom, integrated with the L4 tool registry and L1 permission model. (P1: registry.py + scopes + frontmatter declarations + PS Invoke-IdeTool.ps1 implemented and live-tested; dual for current PowerShell-MVP and future GUI terminal PS integration.)
+  P2 complete: run_robust_powershell (truncation, timeout, env scoping, basic sandbox) now default for SKILL.md pwsh steps via executor; dedicated Run-RobustPwsh.ps1 + registry exposure; real skill tests; dual PS/GUI. See matrix L2-001 / invocation record.
 
 ### 2.7 Open Decisions & Risks (to be resolved in detailed SW design)
 - Exact layout/docking engine for the custom portable shell (we will own this, not reuse an existing editor's).

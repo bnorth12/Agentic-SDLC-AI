@@ -244,6 +244,8 @@ New tools (ide_core.py) + manifest updates used end-to-end for planning, creatio
 
 **P2 slice 2 (env + sandbox + PS):** Added env= support (safe merge) + sandbox notes (-NoProfile, reviewed cmds, caller env) to robust pwsh funcs. Updated Invoke-IdeTool.ps1 example. Extended smoke (env test passes). Tiny anchors in record + matrix. Dual ready. Trace L2/§5. Live smoke passed. Next: full sandbox profile, parser integration.
 
+**P2 slice 3 (to conclusion):** Switched parser in ProceduralSkillExecutor to run_robust_powershell (all real SKILL pwsh steps now get full robust: trunc/timeout/env/cwd/sandbox). Added real skill step test (temp SKILL.md + executor.execute, asserts pwsh evidence). Created dedicated PS wrapper src/platform/tools/Run-RobustPwsh.ps1. Updated smoke. Live validation (real-skill PASS). Tiny anchors. All original P2 items (harden, sandbox notes, PS wrappers x2, registry, real skill test, dual, trace to §5/matrix) concluded.
+
 
 
 **Revision of this record:** Living — append further artifacts, evidence, or redlines as the tranche executes. FarmRTK platform skills generalization now complete across batches using the new tools (ide_core.py).

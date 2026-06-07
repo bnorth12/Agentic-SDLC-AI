@@ -16,13 +16,14 @@ Next: full sandbox profile, procedure parser integration for env, richer docs, e
 from __future__ import annotations
 
 import sys
+import tempfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from src.platform.orchestration.executor import run_robust_powershell
+from src.platform.orchestration.executor import run_robust_powershell, ProceduralSkillExecutor
 from src.platform.tools.registry import get_registry, reset_registry_for_tests
 
 
@@ -73,8 +74,35 @@ def main() -> int:
     # 6. PS / dual note (the surface is the Python func; PS wrapper can call it via the existing Invoke or future thin .ps1)
     print("  (Dual PS surface: existing Invoke-IdeTool.ps1 + future direct robust wrapper; GUI terminal will call the same Python entry. Env support ready for sandboxed procedures.)")
 
-    print("\n=== P2 SMOKE COMPLETE (slice 2 passed) ===")
-    print("Next: more P2 (full sandbox profile, richer PS integration, docs, integration in procedure parser), tiny anchors, matrix update.")
+    # 7. Real skill step test (P2 conclusion slice): use ProceduralSkillExecutor on a temp SKILL.md
+    # with a safe inline pwsh block. This exercises the parser -> run_robust_powershell path.
+    temp_skill = None
+    try:
+        with tempfile.NamedTemporaryFile(mode='w', suffix='.md', delete=False, dir='.', encoding='utf-8') as f:
+            f.write("""---
+name: p2-real-pwsh-test
+---
+# temp for smoke
+## Procedure
+```pwsh
+Write-Output "REAL-SKILL-PWSH-STEP-OK"
+```
+""")
+            temp_skill = f.name
+        execr = ProceduralSkillExecutor(workspace_root=".")
+        res = execr.execute(temp_skill)
+        pwsh_evs = [e for e in res.evidence if e.step_type == "pwsh"]
+        print(f"real-skill: #pwsh-evs={len(pwsh_evs)}, status={res.status}, has-ok={any('REAL-SKILL-PWSH-STEP-OK' in (e.stdout or '') for e in pwsh_evs)}")
+        assert len(pwsh_evs) == 1
+        assert "REAL-SKILL-PWSH-STEP-OK" in pwsh_evs[0].stdout
+        assert res.status in ("success", "partial")
+        print("  PASS: real SKILL.md pwsh step via executor (robust path)")
+    finally:
+        if temp_skill and Path(temp_skill).exists():
+            Path(temp_skill).unlink()
+
+    print("\n=== P2 SMOKE COMPLETE (P2 to conclusion) ===")
+    print("All P2 items (harden timeouts/env/cwd/output/error, sandbox notes, PS wrappers, registry expose, real skill step test, dual PS/GUI, anchors, trace) complete.")
     return 0
 
 

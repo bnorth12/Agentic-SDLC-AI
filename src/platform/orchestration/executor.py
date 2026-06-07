@@ -234,7 +234,9 @@ class ProceduralSkillExecutor:
                 continue
 
             if lang.lower() in ("pwsh", "powershell"):
-                ev = _execute_powershell(code, cwd=str(self.workspace_root))
+                # P2 conclusion: use public robust API for all real SKILL.md pwsh steps
+                # (gets truncation, timeout status, env, cwd scoping, sandbox notes)
+                ev = run_robust_powershell(code, cwd=str(self.workspace_root))
             elif lang.lower() == "python":
                 ev = _execute_python_fragment(code, cwd=str(self.workspace_root))
             else:
