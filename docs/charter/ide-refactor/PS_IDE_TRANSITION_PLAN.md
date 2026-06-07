@@ -258,6 +258,16 @@ Each batch must:
 
 **Deliverables:** Flipped primary notes; example self-hosted dev work with evidence; updated plans.
 
+**Recent micro-batches continuation (Phase 2/3, executed 2026-06, skills-first):** 
+- Skills upfront run (gov, hierarchy, verif, trace, check-work).
+- Palette dispatch for "Show Transition Checklist" (on_select calls method with preflight).
+- Transition Status label enhanced to be clickable (Button-1 calls _show_transition_checklist for demo).
+- Smoke re-verified (PASS on all paths).
+- Plan updated with micro notes + tiny anchors in matrix/invocation.
+- Continues small batches; Phase 4/5 prep (checklist + baseline + gov preflights + clickable status ready for when dedicated smoke + gov reports sufficient for Phase 5 flip). Dual PS+GUI. All per plan.
+
+**Micro-batches continuation (Phase 2/3, executed 2026-06):** Skills upfront (gov etc.). Palette now dispatches "Show Transition Checklist" (on_select calls _show... with preflight). Smoke verified (PASS). Plan/matrix/invocation updated with tiny anchors + notes. Continues small batches for governed IDE dev surfaces; Phase 4/5 prep (checklist + baseline + gov preflights ready for when dedicated smoke + gov reports sufficient for flip). Dual PS+GUI. All per plan rules.
+
 **Verification:** Self-host demo now includes "developing the IDE in the IDE"; gov preflights catch issues; matrix/traceability complete.
 
 ---

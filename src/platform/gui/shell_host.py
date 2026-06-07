@@ -126,6 +126,7 @@ class ShellHost:
         trans_status = ttk.Label(root, text="Transition Status: Phase 1-3 baseline ready (checklist in Help; see PS_IDE_TRANSITION_PLAN.md) | Phase 4/5: dedicated smoke + gov reports needed for flip", foreground="green", relief=tk.RAISED)
         trans_status.pack(side=tk.BOTTOM, fill=tk.X)
         trans_status.bind("<Enter>", lambda e: self._run_governance_preflight(context="gui_trans_status", action_description="Transition Status hover (demo preflight)"))
+        trans_status.bind("<Button-1>", lambda e: self._show_transition_checklist())  # clickable to show checklist (Phase 2/3 micro)
 
         # Task 4: clarity - help label for hover/status updates on controls (tooltips simulation)
         help_label = ttk.Label(root, text="Hover or select items for hints. See Help > UI Legend for full explanations of all areas (Explorer=L4, etc.).", foreground="blue")

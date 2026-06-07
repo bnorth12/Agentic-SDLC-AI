@@ -438,6 +438,14 @@ Matrix updated to reference the plan. This batch used skills/tools for grounding
 - Phase 1 Batch 2 COMPLETE (checklist in plan and usable in the IDE). Advances readiness for Phase 2/3 (GUI dev enhancements) and Phase 5 (flip decision).
 
 **Next micro (Phase 2/3 continuation, executed 2026-06, skills-first):** 
+- Skills upfront (gov etc. via temp script).
+- Palette dispatches "Show Transition Checklist" (on_select calls _show... with preflight).
+- Transition Status label enhanced to clickable (Button-1 calls checklist).
+- Smoke verified (PASS).
+- Plan/matrix/invocation updated with micro note + tiny anchors.
+- Continues small batches; Phase 4/5 prep (checklist + baseline + gov preflights + clickable status ready for when dedicated smoke + gov reports sufficient for flip). Dual PS+GUI. All per plan rules.
+
+**Next micro (Phase 2/3 continuation, executed 2026-06, skills-first):** 
 - Palette now includes and dispatches "Show Transition Checklist" (on_select calls _show... with preflight).
 - Smoke verified (PASS, including new action path).
 - Plan/matrix/invocation updated with micro note + tiny anchors.
