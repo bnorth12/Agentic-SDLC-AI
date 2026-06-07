@@ -272,6 +272,12 @@ New tools (ide_core.py) + manifest updates used end-to-end for planning, creatio
 
 **Phase 2 Batch 1 executed (full explorer tree):** Upgraded explorer to ttk.Treeview (full tree: packs as parents from loader.discover(), skills as children from discover_skills(); limited for MVP but real data). Updated smoke to validate tree data + invoke wiring. Live PASS. Tiny anchor. Advances L0 explorer + L4. See matrix.
 
+**Phase 2 Batch 2/3 executed (editor + viewers dock):** Added center editor stub (ScrolledText prefilled with SKILL example + "Invoke from Editor" button) and viewers dock (ScrolledText for markdown + P5 bundle viewer). Wiring uses real loader/executor/bundler. Smoke updated and PASS (tree + invoke + bundle md for viewers). Tiny anchor. L0 surfaces + L2/L4/P5. Full Phase 2 MVP surfaces in shell. See GUI_DESIGN.
+
+**Phase 3 Batch 1 executed (status/governance + self-host):** Enhanced status bar with gates from GateEngine (L3), maturity, self-host demo note ("open repo + invoke generalized skill"). Smoke validates. Tiny anchor. Governance + demo ready in MVP shell. See L0 / L3.
+
+**Phase 3 Batch 2 + Phase 4 executed (self-host demo + validation/packaging):** Added launch_ide.py (Win11 entry: python -m src.platform.gui.launch_ide). Status/self-host note in shell. Smoke extended with launcher import + packaging stub (portable folder/PyInstaller note, no admin). Full end-to-end validation (launch + explorer + invoke + bundle + gates + self-host via real generalized skill). Live PASS. Final tiny anchors in record + matrix (L0-001 MVP achieved on Win11). All phases 1-4 complete in sequence small batches. PS dual, traceability. See GUI_DESIGN. Ready for full R2+ or P5 follow-on.
+
 
 
 **Revision of this record:** Living — append further artifacts, evidence, or redlines as the tranche executes. FarmRTK platform skills generalization now complete across batches using the new tools (ide_core.py).

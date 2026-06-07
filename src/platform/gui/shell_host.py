@@ -74,8 +74,11 @@ class ShellHost:
         root.title("Agentic IDE MVP - Win11 (PS-First Custom Shell)")
         root.geometry("900x600")
 
-        # Status bar (L5 / governance)
-        status_var = tk.StringVar(value=f"Workspace: {self.config.workspace_root} | Backend: CUSTOM (tkinter) | Terminal: {self.config.terminal_shell} | Tools: P1-P5 ready")
+        # Status bar (L5 / governance) - Phase 3: gates from engine, maturity, scopes
+        from ..gates.engine import GateEngine
+        engine = GateEngine()
+        gates = [g.id for g in engine.list_gates()][:3]
+        status_var = tk.StringVar(value=f"Workspace: {self.config.workspace_root} | Backend: CUSTOM (tkinter) | Terminal: {self.config.terminal_shell} | Gates: {gates} | Tools: P1-P5 + bundler ready | Self-host: open repo + invoke generalized skill")
         status_bar = ttk.Label(root, textvariable=status_var, relief=tk.SUNKEN, anchor=tk.W)
         status_bar.pack(side=tk.BOTTOM, fill=tk.X)
 
@@ -180,6 +183,23 @@ class ShellHost:
 
         note = ttk.Label(explorer_frame, text="Phase 2 MVP: Tree from real loader (packs/skills). Button runs real generalized skill + bundle. Full click-to-editor + more viewers in next batches. Self-hosting via these skills.", foreground="gray")
         note.pack(pady=4)
+
+        # Phase 2 Batch 2/3: Center editor stub (structure-aware for SKILL.md) + Viewers dock (markdown + P5 bundle viewer)
+        center = ttk.Frame(root)
+        center.pack(side=tk.LEFT, fill=tk.BOTH, expand=True, padx=4)
+
+        editor_frame = ttk.LabelFrame(center, text="Editor - SKILL.md (L0 structure-aware stub; frontmatter + procedure)")
+        editor_frame.pack(fill=tk.BOTH, expand=True, pady=4)
+        editor = scrolledtext.ScrolledText(editor_frame, height=10, font=("Consolas", 9))
+        editor.insert("1.0", "# Example from ide-hierarchy-taxonomy-steward\n## Procedure\n1. Run inventory...\n```pwsh\n# robust pwsh here\n```")
+        editor.pack(fill=tk.BOTH, expand=True, padx=4, pady=4)
+        ttk.Button(editor_frame, text="Invoke from Editor (L2)", command=invoke_from_tree).pack(pady=2)
+
+        viewers = ttk.LabelFrame(center, text="Viewers Dock (L0 - markdown + P5 evidence bundle viewer)")
+        viewers.pack(fill=tk.BOTH, expand=True, pady=4)
+        viewer_text = scrolledtext.ScrolledText(viewers, height=8, font=("Consolas", 9))
+        viewer_text.insert("1.0", "[Viewer] Bundle or markdown will appear here after invoke (P5 to_md output).")
+        viewer_text.pack(fill=tk.BOTH, expand=True, padx=4, pady=4)
 
         root.after(100, process_queue)
         root.mainloop()
