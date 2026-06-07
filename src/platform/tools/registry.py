@@ -119,6 +119,19 @@ class ToolRegistry:
             registered += 1
         except Exception:
             pass
+
+        # P5 slice 1: Gate Evidence Bundler (collect exec + gh evidence into G1/G3/G4 bundles, md/json viewer output)
+        try:
+            from .gate_evidence_bundler import GATE_EVIDENCE_BUNDLER
+            self.register(ToolSpec(
+                name="bundle_gate_evidence",
+                description="Bundle evidence for gates (from SkillExecutionResult + gh_evidence). Outputs dict/md/json. Schema for G1/G3/G4. Dual Python+PS. See gate_evidence_bundler.py, P5 smoke.",
+                scopes=["gate.evidence", "exec.ps"],
+                func=GATE_EVIDENCE_BUNDLER,
+            ))
+            registered += 1
+        except Exception:
+            pass
         return registered
 
 
