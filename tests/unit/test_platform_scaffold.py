@@ -25,6 +25,7 @@ def test_plugin_loader_discovers_packs():
     assert "engineering-sdlc" in ids
     assert "threat-modeling" in ids
     assert "github-devops" in ids
+    assert "ide-platform" in ids  # primary pack after P1 baseline + XGEN (hook clean)
 
 
 def test_workspace_template_loads():
@@ -38,5 +39,7 @@ def test_orchestration_router_scaffold():
     router = OrchestrationRouter()
     pkg = WorkPackage(id="wp-1", skill_id="traceability-audit-sdlc")
     result = router.execute(pkg)
-    assert result["status"] == "scaffold"
+    # Pre-L2-executor returned "scaffold" for unknown skills; now real run_procedural_skill
+    # returns structured "error" (skill not found in ide-platform layout). Still PROCEDURAL mode.
+    assert result["status"] == "error"
     assert router.resolve_mode(pkg) == ExecutionMode.PROCEDURAL
