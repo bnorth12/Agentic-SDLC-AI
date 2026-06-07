@@ -260,6 +260,15 @@ Each batch must:
 
 **Recent micro-batches continuation (Phase 2/3, executed 2026-06, skills-first):** 
 - Skills upfront run (gov, hierarchy, verif, trace, check-work).
+- Palette now dispatches "Show Transition Checklist" (on_select calls method with preflight).
+- Transition Status label enhanced to be clickable (Button-1 calls _show_transition_checklist for demo).
+- Smoke verified (PASS).
+- Plan updated with micro notes.
+- Tiny anchors in matrix/invocation for this batch.
+- Continues small batches; Phase 4/5 prep (checklist + baseline + gov preflights + clickable status ready for when dedicated smoke + gov reports sufficient for flip). Dual PS+GUI. All per plan rules.
+
+**Next micro (Phase 2/3 + Phase 4 prep, executed 2026-06):** Skills upfront. Transition Status now clickable. Smoke verified. Plan/matrix/invocation updated with anchors. This set of updates committed and pushed to main (merge from feature after updates). Phase 1-3 advancing; Phase 4/5 prep complete for this set. 
+- Skills upfront run (gov, hierarchy, verif, trace, check-work).
 - Palette dispatch for "Show Transition Checklist" (on_select calls method with preflight).
 - Transition Status label enhanced to be clickable (Button-1 calls _show_transition_checklist for demo).
 - Smoke re-verified (PASS on all paths).

@@ -445,6 +445,8 @@ Matrix updated to reference the plan. This batch used skills/tools for grounding
 - Plan/matrix/invocation updated with micro note + tiny anchors.
 - Continues small batches; Phase 4/5 prep (checklist + baseline + gov preflights + clickable status ready for when dedicated smoke + gov reports sufficient for flip). Dual PS+GUI. All per plan rules.
 
+**This set of updates committed and pushed to main (merge from feature after the micro updates). Phase 1-3 advancing; Phase 4/5 prep complete for this set. Smoke and skills verified. Ready for next micro or Phase 5 execution when baseline sufficient.**
+
 **Next micro (Phase 2/3 continuation, executed 2026-06, skills-first):** 
 - Palette now includes and dispatches "Show Transition Checklist" (on_select calls _show... with preflight).
 - Smoke verified (PASS, including new action path).
