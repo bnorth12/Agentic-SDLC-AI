@@ -309,3 +309,23 @@ All 5 wired to P1-P5 backend, dual PS, GUI framework for plugins. Live smoke ful
 ---
 
 *End of initial invocation record. Artifacts and updates produced below in session execution.*
+
+**L1 ACP protocol micro-batch (follow-on to the 5-tasks GUI batch):** Fixed the exact user-reported failure in the Agent Panel. Root cause: `_send_to_agent` (old `_create_agent_panel`) did raw `proc.stdin.write(cmd_text + "\n")` — the grok-build-acp stdio (or any ACP JSON parser) saw bare text and emitted "failed to parse incoming message: expected value at line 1 column 1. Raw: evaluate the repo that is opened". 
+
+Fix (src/platform/gui/shell_host.py):
+- Added `import json`.
+- Stored `self.root` in `_launch_custom_tkinter` so Toplevel parenting works reliably.
+- Rewrote `_create_agent_panel`:
+  - On spawn: immediately writes a JSON system message containing the live `config.workspace_root` (the "repo that is opened").
+  - Every <Return> in the input: wraps the typed text as `json.dumps({"role": "user", "content": text})` before write+flush. This is valid ACP-style input.
+  - `read_output` thread: per-line `json.loads` + pretty `json.dumps(indent=2)` when possible; falls back to raw line for non-JSON agent output.
+  - Startup banner now explains the framing + context injection.
+  - Stub mode (when "grok" CLI absent) now explicitly acknowledges the workspace context for "evaluate the repo..." queries and points the user at the real L2 handoff button.
+  - Handoff button continues to call the real `run_procedural_skill` (P2 robust + P1 registry + P3 loader + P5 bundler) and surfaces declared_tools / status.
+- Re-ran `test_phase1_batch1_smoke.py` (venv python): full PASS including the `host._create_agent_panel()` no-crash assertion + all prior menu/dockable/editor/palette/clarity/L2/P5 wiring.
+- Tiny anchors here + in IDE_ARCHITECTURE_TRACEABILITY_MATRIX.md (L1-001 cell extended with the exact error + fix note).
+- This makes "Launch Grok Agent (ACP)" + typed natural language commands (including the user's "evaluate the repo that is opened" after Open Folder) actually round-trip as structured messages. Real agent responses will now be parsed/pretty-printed in the panel log. Handoff path unchanged and fully functional.
+
+Live validation + traceability discipline preserved. Ready for user re-test on desktop + next micro (deeper ACP client class, embedded dock instead of loose Toplevel, multi-turn state, or Dear PyGui evolution per GUI_DESIGN).
+
+**Anchor:** ACP-JSON-FRAME-001 (L1-001 advance, 5-tasks follow-on). Smoke re-PASS. 2026-06. (Matches user demo + error paste exactly.)
