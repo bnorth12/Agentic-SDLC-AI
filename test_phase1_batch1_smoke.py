@@ -48,22 +48,23 @@ def main() -> int:
     assert hasattr(host, "_launch_custom_tkinter")
     print("  PASS: Launch methods and test app instantiation (no crash)")
 
-    # Phase 1 Batch 2 wiring validation (explorer from P3 loader + invoke via P2/P5)
+    # Phase 2 Batch 1 wiring validation (full tree explorer from P3 loader + invoke via P2/P5)
     # Direct test of the wiring logic (loader + executor + bundler) used in the GUI
     from src.platform.plugins.loader import PluginLoader
     from src.platform.orchestration.executor import run_procedural_skill
     from src.platform.tools.gate_evidence_bundler import create_gate_evidence_bundle
     ldr = PluginLoader()
+    packs = ldr.discover()
     sks = ldr.discover_skills()
-    assert len(sks) > 0 and any("ide-hierarchy" in s["id"] for s in sks)
-    print("  PASS: L4 loader explorer data available (ide-platform skills)")
+    assert len(packs) > 0 and len(sks) > 0 and any("ide-hierarchy" in s["id"] for s in sks)
+    print("  PASS: L4 full explorer tree data (packs + skills from loader)")
 
-    # Simulate the invoke_example button logic
+    # Simulate the invoke_from_tree button logic (Phase 2 explorer wiring)
     res = run_procedural_skill("ide-hierarchy-taxonomy-steward", workspace_root=".")
     assert "declared_tools" in res.get("outputs", {})
     bundle = create_gate_evidence_bundle("G4_independent_review", [{"type": "skill", "id": "test", "result": res}])
     assert bundle.gate_id == "G4_independent_review"
-    print("  PASS: L2 executor + P5 bundler wired for 'Invoke' (real skill + evidence bundle)")
+    print("  PASS: L2 executor + P5 bundler wired for explorer 'Invoke' (real skill + evidence bundle)")
 
     # 3. Simulate "launch" concepts (PS terminal readiness)
     # The real terminal uses pwsh -NoProfile -Command (from P2 robust)

@@ -270,6 +270,8 @@ New tools (ide_core.py) + manifest updates used end-to-end for planning, creatio
 
 **Phase 1 Batch 2 executed (explorer + invoke wiring):** Extended the tkinter CUSTOM launch with basic L4 explorer (Listbox from PluginLoader.discover_skills(), shows ide-platform skills) + "Invoke Example Skill" button that wires L2 run_procedural_skill (robust P2) + P5 bundler for G4 on a real gated skill (ide-hierarchy-taxonomy-steward). Evidence bundle md shown in terminal output. Updated smoke with direct loader/executor/bundler checks (real data, bundle created). Live smoke PASS (all wiring validated). This completes Phase 1: launchable Win11 shell with explorer + invoke. PS dual intact. Tiny anchor. See L0-001 / L2 / L4 / P5 in matrix.
 
+**Phase 2 Batch 1 executed (full explorer tree):** Upgraded explorer to ttk.Treeview (full tree: packs as parents from loader.discover(), skills as children from discover_skills(); limited for MVP but real data). Updated smoke to validate tree data + invoke wiring. Live PASS. Tiny anchor. Advances L0 explorer + L4. See matrix.
+
 
 
 **Revision of this record:** Living — append further artifacts, evidence, or redlines as the tranche executes. FarmRTK platform skills generalization now complete across batches using the new tools (ide_core.py).
