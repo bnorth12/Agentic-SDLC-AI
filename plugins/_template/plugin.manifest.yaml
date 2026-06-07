@@ -1,0 +1,16 @@
+id: my-pack
+version: 0.1.0
+type: pack
+name: My Plugin Pack
+description: Template — copy to plugins/packs/<id>/
+os: [windows, linux, macos]
+languages: []
+frameworks: []
+entry:
+  skills_dir: skills
+  agents_dir: agents
+dependencies:
+  packs: []
+  providers: [grok-build]
+gates: []
+toolchains: []

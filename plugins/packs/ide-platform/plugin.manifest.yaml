@@ -1,0 +1,37 @@
+id: ide-platform
+version: 0.1.0
+type: pack
+name: Agentic IDE Platform Core
+description: Core platform process skills and agents for the full-featured agentic AI IDE (portfolio planning, structural refactoring, editor/viewer/skill/agent surface governance). Skills and agents here are generalized from imports and are intended to become first-class IDE citizens (editable, viewable, invocable via hybrid orchestration and Grok Build ACP).
+os: [windows, linux, macos]
+languages: [python, powershell]
+frameworks: []
+entry:
+  skills_dir: skills
+  agents_dir: agents
+  # Future: editors, viewers, interaction models specific to IDE authoring
+  # Note: Generalized Requirements, Arch/Design, Compliance, Verification, Traceability, and Independent Review agents/skills (plus Planning/Refactoring backbone) now live here as first-class pack content. This is the home for platform process capabilities so the future IDE can edit them naturally as artifacts. We are burning through prioritization (Requirements → Architecture/Design → Compliance/Verification) and using them to govern self-hosted work including repo structure refactors (see structural-refactor-execution-plan.md). Open to refactoring loops as designs clarify.
+
+# Full FarmRTK platform skills generalization (all 17, via ide_core tools + Refactoring Agent batches; see agents/platform/invocations/remaining-xgen-refactoring-session.md and IDE_ARCHITECTURE_TRACEABILITY_MATRIX.md):
+# Batch 1: ide-repo-audit, ide-process-audit, ide-program-metrics, ide-check-work-commit.
+# Batch 2 (in order): ide-decision-record, ide-icd-maintenance, ide-risk-register, ide-configuration-baseline, ide-data-storage.
+# Batch 3: ide-test-authoring, ide-independent-review, ide-bom-procurement.
+# Earlier/priority: ide-technical-writer, ide-validation-plan, ide-kpi-drift-analyst, ide-requirements-baseline, ide-traceability-audit, ide-source-to-evidence-traceability, etc.
+# Plus supporting: ide-hierarchy-taxonomy-steward, ide-hierarchy-conformance, ide-requirements-implementation-auditor, ide-governance-policy-compiler, ide-process-audit, ide-repo-audit, ide-independent-review-orchestrator, ide-multi-sprint-portfolio-planner, ide-sprint-*, ide-traceability-*, ide-verification-*, ide-remediation-*, ide-artifact-lineage, ide-architecture-*, etc. (full list in skills/ and agents/).
+# All with full IDE surface awareness (agents/skills as editable first-class artifacts in the pack), L0-L8 + Cross hierarchy (per FRAMEWORK_DECOMPOSITION and matrix), PowerShell + gh native, explicit traceability to IDE_REFACTOR_PLAN §5 / matrix / self-hosting. Coordinated with L2 executor + ide_core tools (for procedural execution, hierarchy validation, generalization stubs, artifact I/O). ide-platform now primary for platform process (L4/L7); engineering-sdlc retains domain FarmRTK imports. Cross-coordination: see LAYER_WORK_PACKAGE_INDEX.md (XGEN progress), REFACTOR_TODO.md, PLATFORM_AGENTS.md (pack-only section), invocation record. Open to refactoring loops as GUI/PowerShell-MVP and custom shell evolve.
+dependencies:
+  packs: [engineering-sdlc, github-devops]
+  providers: [grok-build, github]
+gates:
+  - G0_wave_charter
+  - G1_traceability
+  - G4_independent_review
+  - G5_baseline
+toolchains:
+  - python
+  - powershell
+  - node
+# P1: Tool registry (src/platform/tools/registry.py) + permission/scoping declarations now wired in L2 executor and available to all generalized skills (ide_core bootstrap). PS wrapper (Invoke-IdeTool.ps1) for MVP terminal + future GUI PS integration. See matrix TOOL-001, invocation P1 log, test_p1_registry_smoke.py.
+# P3: Manifest loader + discovery (src/platform/plugins/loader.py: discover() + discover_skills()). PS helper (Discover-IdePack.ps1). Integrated to executor/registry. See test_p3_loader_skills_smoke.py, matrix L4-001, invocation P3 logs.
+# P4: gh CLI evidence (src/platform/tools/gh_evidence.py + Invoke-GhEvidence.ps1). Auth check, create/attach, schema. Registry 'gh_evidence'. Integrated via tools/registry/executor. See test_p4_gh_evidence_smoke.py (incl. real SKILL step), matrix TOOL-001, invocation P4 logs.
+# P5: Gate evidence bundler (src/platform/tools/gate_evidence_bundler.py + New-GateEvidenceBundle.ps1 + GateEngine.bundle_evidence_for_gate). Bundles exec+gh for G1/G3/G4 (md/json viewer). Registry + real SKILL/engine tests. See test_p5_gate_evidence_bundler_smoke.py, matrix L3-001, invocation P5 logs.

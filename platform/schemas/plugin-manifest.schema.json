@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agentic-sdlc.ai/schemas/plugin-manifest.json",
+  "title": "Agentic SDLC Plugin Manifest",
+  "type": "object",
+  "required": ["id", "version", "type", "entry"],
+  "properties": {
+    "id": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
+    "version": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" },
+    "type": { "enum": ["pack", "provider", "viewer", "toolchain", "wrapper"] },
+    "name": { "type": "string" },
+    "description": { "type": "string" },
+    "os": { "type": "array", "items": { "enum": ["windows", "linux", "macos"] } },
+    "languages": { "type": "array", "items": { "type": "string" } },
+    "frameworks": { "type": "array", "items": { "type": "string" } },
+    "entry": {
+      "type": "object",
+      "properties": {
+        "skills_dir": { "type": "string" },
+        "agents_dir": { "type": "string" },
+        "scripts_dir": { "type": "string" },
+        "api": { "type": "string" },
+        "module": { "type": "string" },
+        "viewer": { "type": "string" }
+      }
+    },
+    "dependencies": {
+      "type": "object",
+      "properties": {
+        "packs": { "type": "array", "items": { "type": "string" } },
+        "providers": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "gates": { "type": "array", "items": { "type": "string" } },
+    "toolchains": { "type": "array", "items": { "type": "string" } }
+  }
+}

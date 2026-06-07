@@ -1,0 +1,34 @@
+id: agentic-sdlc-ai-platform
+version: 0.3.0
+status: reboot-scaffold (FarmRTK/MATM generalization complete; PowerShell-MVP + custom GUI in progress)
+min_python: "3.11"
+supported_os:
+  - windows
+  - linux
+  - macos
+default_shell:
+  windows: powershell
+  linux: bash
+  macos: bash
+orchestration_modes:
+  - procedural
+  - langgraph
+  - acp
+primary_agent_runtime: grok-build-acp
+docs:
+  charter: docs/charter/REBOOT_CHARTER.md
+  refactor: docs/charter/REFACTOR_TODO.md
+  decomposition: docs/charter/FRAMEWORK_DECOMPOSITION.md
+  gui: docs/gui/GUI_DESIGN.md
+  matrix: docs/charter/ide-refactor/IDE_ARCHITECTURE_TRACEABILITY_MATRIX.md
+packs:
+  primary_process: plugins/packs/ide-platform (generalized platform skills/agents; L4/L7; coordinated with L2 executor + ide_core tools)
+  domain: plugins/packs/engineering-sdlc (retained FarmRTK domain imports)
+  devops: plugins/packs/github-devops
+  wrapper: plugins/packs/threat-modeling
+coordination:
+  - L0-L8 + Cross per FRAMEWORK_DECOMPOSITION (GUI shell, orchestration, gates, plugin host, workspace, packs).
+  - XGEN complete for platform skills; self-hosting via generalized ide-* + new tools/executor.
+  - PowerShell native + future custom GUI (no source reuse; patterns from Zed/VS Code).
+  - Full traceability via matrix + invocation record + SKILL.md parents.
+  - P1 tool registry complete (src/platform/tools/registry.py bootstraps ide_core; declarations in SKILL frontmatter; executor captures + "tool:" steps; Invoke-IdeTool.ps1 dual surface). See WAVE-02 E2.1, matrix TOOL-001/L4-001.

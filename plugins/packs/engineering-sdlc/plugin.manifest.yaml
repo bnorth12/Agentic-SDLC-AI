@@ -1,0 +1,28 @@
+id: engineering-sdlc
+version: 0.2.0
+type: pack
+name: Engineering SDLC Pack
+description: Domain FarmRTK skills retained here (CAD, firmware, integration, etc.); platform process generalized to ide-platform pack for IDE-native use (see ide-platform/plugin.manifest.yaml for coordination). Generalized SE skills from FarmRTK — REQ, traceability, EIRC, V&V, repo hygiene (cross-coordinated with L4 plugin host, matrix, L2 executor).
+os: [windows, linux, macos]
+languages: [c, cpp, python, rust, java, javascript, php, fortran]
+frameworks: [platformio, arduino, node, cakephp, cargo, maven, cmake]
+entry:
+  skills_dir: imports
+  agents_dir: agents
+  scripts_dir: scripts
+dependencies:
+  packs: [ide-platform]
+  providers: [grok-build]
+gates:
+  - G1_traceability
+  - G3_verification_plan
+  - G4_independent_review
+  - G5_baseline
+toolchains:
+  - platformio
+  - python
+  - node
+  - rust
+  - java
+  - php
+# coordination note (P1 baseline): Domain items stay product-specific; platform governance moved to ide-platform for self-hosting/IDE editing. Cross-refs: matrix, invocation record, REFACTOR_TODO.

@@ -1,0 +1,25 @@
+id: github-devops
+version: 0.2.0
+type: pack
+name: GitHub DevOps Pack
+description: Repo linkage, Actions templates, PR checks, gh CLI skills. Coordinated with ide-platform for evidence attachment on XGEN/self-hosting PRs (gh skills in generalized ide-* like ide-program-metrics, ide-risk-register). See matrix Cross rows, WAVE-02 charter.
+os: [windows, linux, macos]
+languages: []
+frameworks: []
+entry:
+  skills_dir: skills
+  scripts_dir: scripts
+  workflows_dir: workflows
+dependencies:
+  packs: [ide-platform]
+  providers: [github]
+gates:
+  - G4_independent_review
+toolchains:
+  - node
+  - python
+  - rust
+  - java
+  - php
+  - cpp
+coordination: gh CLI examples in ide-platform SKILL.md (PowerShell-MVP); workflows for gate enforcement on generalized content. Cross with L6 providers, invocation record.

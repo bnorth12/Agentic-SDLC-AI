@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agentic-sdlc.ai/schemas/workspace.json",
+  "title": "Agentic SDLC Workspace Manifest",
+  "type": "object",
+  "required": ["id", "repos", "packs", "runtime"],
+  "properties": {
+    "id": { "type": "string" },
+    "maturity": { "enum": ["M0", "M1", "M2", "M3", "M4"], "default": "M1" },
+    "repos": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["path", "role"],
+        "properties": {
+          "path": { "type": "string" },
+          "role": { "enum": ["product", "platform", "plugin", "reference"] },
+          "github": { "type": "string" }
+        }
+      }
+    },
+    "packs": { "type": "array", "items": { "type": "string" } },
+    "gates": {
+      "type": "object",
+      "additionalProperties": {
+        "enum": ["mandatory", "optional", "waived", "maturity-gated"]
+      }
+    },
+    "runtime": {
+      "type": "object",
+      "properties": {
+        "interactive": { "type": "string", "default": "grok-build-acp" },
+        "shell": { "enum": ["powershell", "bash", "auto"] },
+        "providers": {
+          "type": "object",
+          "properties": {
+            "primary": { "type": "string" },
+            "fallback": { "type": "array", "items": { "type": "string" } }
+          }
+        }
+      }
+    },
+    "toolchains": { "type": "array", "items": { "type": "string" } },
+    "github": {
+      "type": "object",
+      "properties": {
+        "org": { "type": "string" },
+        "default_branch": { "type": "string" },
+        "actions_templates_pack": { "type": "string" }
+      }
+    }
+  }
+}

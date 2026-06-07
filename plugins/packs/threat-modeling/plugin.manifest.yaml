@@ -1,0 +1,19 @@
+id: threat-modeling
+version: 0.2.0
+type: wrapper
+name: Multi Agent Threat Modeler Pack
+description: LangGraph A1-A9 pipeline wrapper — sibling repo MATM (generalized governance moved to ide-platform; this retains runtime/wrapper). Coordinated with ide-platform for threat surfaces in matrix (L4 viewer, L7 pack). See REFACTOR_TODO (WRAP for A1-A9).
+os: [windows, linux, macos]
+languages: [python]
+entry:
+  api: python -m threat_modeler
+  module: threat_modeler
+  viewer: viewer.graph-canonical
+dependencies:
+  packs: [ide-platform, engineering-sdlc]
+  providers: [grok-api, openai, ollama]
+gates:
+  - TM_pipeline_hitl
+toolchains:
+  - python
+coordination: Viewer registration in L4; cross with ide-platform's ide-architecture-* and matrix for integrated threat/reqs views. No platform skills here (moved).

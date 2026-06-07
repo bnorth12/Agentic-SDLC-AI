@@ -1,0 +1,225 @@
+# GUI Design — Agentic IDE Shell (L0)
+
+**Status:** Initial consolidated design (R1–R2 foundations, full surfaces in R2+)
+**Parent:** [FRAMEWORK_DECOMPOSITION.md](../charter/FRAMEWORK_DECOMPOSITION.md) (L0 `gui-shell`) · [IDE_REFACTOR_PLAN.md](../charter/IDE_REFACTOR_PLAN.md) (L0 + L1 work packages) · [IDE_ARCHITECTURE_TRACEABILITY_MATRIX.md](../charter/ide-refactor/IDE_ARCHITECTURE_TRACEABILITY_MATRIX.md) (L0-001 traceability)
+**Traceability:** Directly satisfies REQ-STRUCT-002 (first-class editable artifacts under discoverable locations), REQ-STRUCT-004 (L0-L8 decomposition visible in UI), REQ-STRUCT-006 (editors/viewers for agents/skills/evidence, PowerShell + GitHub native, self-hosting). See matrix L0-001 and L4-001 / L5-001.
+
+---
+
+## 1. System-Level Design (What the GUI Must Deliver)
+
+### 1.1 Vision & Core Experience
+A coherent, workspace-driven agentic IDE where:
+- Users open a workspace (manifest-driven repos + packs + maturity).
+- First-class artifacts are directly editable: `.agent.md`, `SKILL.md`, `plugin.manifest.yaml`, gate evidence bundles, layer work packages, traceability matrix rows.
+- Rich viewers render work products in context (markdown, diagrams, graphs, tables, audit trails).
+- Agent interaction is native (ACP panels, slash commands, multi-agent sessions).
+- Everything is governed: tool permissions are explicit, actions produce evidence, gates (G0–G5) surface in the UI with HITL controls.
+- PowerShell (Windows primary) + GitHub are first-class (terminal, gh tasks, PR evidence).
+- The UI itself demonstrates the L0–L8 model and is self-hosting friendly (the platform's own agents/skills/packs are the best examples).
+
+### 1.2 Major Areas / Information Architecture (Top-Level Layout)
+The target long-term shell will provide a modern, dockable, multi-pane IDE layout that follows contemporary lightweight editor design patterns (dockable panels, structure-aware editors, rich viewers, command surfaces, agent interaction areas, integrated terminal, etc.). It will be a fully custom, unique implementation purpose-built for the agentic IDE. We will not reuse or fork source from Zed, VS Code, Eclipse, or any other editor.
+
+In the meantime, we are deliberately continuing with a **PowerShell-first** primary interaction and development surface (the L2 executor running SKILL.md procedures, the `ide_core` tools, direct skill invocation, and terminal workflows). This allows continued self-hosting and platform advancement until we are ready to instantiate a clean custom GUI framework as a true MVP shell.
+
+1. **Workspace / Explorer** (left sidebar, L5-driven)
+   - Tree of repos from `workspace/*.yaml`.
+   - Packs (`plugins/packs/*`), with agents/ and skills/ subtrees.
+   - First-class artifacts highlighted (`.agent.md`, `SKILL.md`, manifests, evidence bundles).
+   - Quick filters: "Generalized", "Pending XGEN", "My recent", gate status.
+
+2. **Editor Area** (central, tabbed or split)
+   - Structure-aware editors for:
+     - Agent definitions (`.agent.md`): outline + rich text + preview of composition.
+     - Skills (`SKILL.md`): frontmatter editor + procedure steps + "invoke" action.
+     - Manifests (`plugin.manifest.yaml`, `platform/manifest.yaml`).
+     - Evidence bundles, ADRs, layer work packages, traceability matrix rows.
+   - "Invoke skill" / "Run via executor" button that routes to L2 (procedural / ACP).
+   - Live preview / diff for generated artifacts.
+
+3. **Viewers Dock / Panels** (right or bottom, multi-view)
+   - Registered via L4 viewer registry + gate `viewer` field.
+   - Current planned (R2/R3):
+     - `viewer.markdown` — REQ, ADR, backlog, SKILL.md body, evidence.
+     - `viewer.mermaid` — architecture diagrams, threat models, layer decompositions.
+     - `viewer.graph-canonical` — MATM-style graphs, dependency / traceability graphs.
+     - `viewer.stix` — threat bundles.
+     - `viewer.icd-csv` / interface tables.
+     - `viewer.audit-trail` — G1/G4 evidence, invocation records, hierarchy validation results.
+   - Viewers can be opened from gate evidence, from editors, or from the explorer.
+   - Multiple viewers can be open simultaneously; layout is persisted per workspace.
+
+4. **Agent Interaction Panel** (right or floating, L1 + L2)
+   - ACP-powered chat / session UI for Planning Agent, Refactoring Agent, other generalized agents.
+   - Multi-agent sessions (e.g., joint Planning + Refactoring run on a wave charter).
+   - Slash command input (`/orchestrate-ide-portfolio`, `/refactor-ide-structure`).
+   - Real-time evidence streaming from L2 executor / L3 gates.
+   - HITL controls surfaced here (approve/reject gate, edit artifact before proceeding).
+
+5. **Integrated Terminal** (bottom, PowerShell primary on Windows)
+   - Full OS terminal (pwsh / bash) with platform context injected (workspace root, active pack, current gate context).
+   - Can run generalized procedural steps directly.
+   - Output can be captured as evidence and sent to viewers or the matrix.
+
+6. **Status / Governance Bar** (top or bottom)
+   - Current workspace + maturity level (affects gate modes).
+   - Active gate / evidence status.
+   - XGEN progress (from the traceability matrix).
+   - Tool permission / scope indicator (what the current skill/agent is allowed to do).
+   - GitHub / PR status for the active change.
+
+7. **Command Palette + Global Search**
+   - "Open agent", "Invoke skill", "View evidence for WP-L2-001", "Run traceability audit".
+   - Search across all artifacts (agents, skills, matrix rows, evidence).
+
+8. **Settings / Preferences**
+   - Workspace manifest editor (visual + raw).
+   - Gate policy overrides.
+   - Tool permission profiles.
+   - Theme + layout presets.
+   - Provider configuration (Grok Build, GitHub, etc.).
+
+### 1.3 Key User Flows (System Level)
+- **Open as IDE workspace** → Load manifest → Populate explorer with agents/skills/packs → Show L0-L8 decomposition hint in UI.
+- **Edit + Invoke cycle** → Open `ide-structural-refactoring/SKILL.md` in editor → "Invoke" button → L2 executor runs it (using ide_core tools) → Evidence appears in `viewer.audit-trail` and matrix row updates.
+- **Multi-agent planning** → Open Agent Panel → Start joint session with Planning + Refactoring Agents → They produce updated charter + matrix → User reviews in viewers + HITL gate.
+- **Self-hosting hygiene** → Run `ide-repo-audit` or `ide-process-audit` → Results in viewers + matrix updated + new evidence bundle.
+- **Generalization PR flow** → Edit/create new ide-* skill → Pre-commit `ide-check-work-commit` scan → Viewers show impact on matrix → Merge gate runs `ide-independent-review`.
+
+### 1.4 Non-Functional Requirements (System Level)
+- **First-class artifact editing**: Any `.agent.md` or `SKILL.md` opened from the explorer must feel native (structure-aware, live validation, invoke action).
+- **Viewer extensibility**: New viewers registered via L4 pack manifest + gate registry; no core rebuild required.
+- **Permission visibility**: Every tool call or executor step must show its scope in the UI.
+- **Evidence as first-class**: Every significant action produces a viewable evidence bundle that can be opened in the appropriate viewer and linked in the matrix.
+- **Performance**: Responsive even with large numbers of generalized agents/skills (hundreds).
+- **Self-hosting**: The GUI must make it natural to develop the platform itself (the repo opened as a workspace should feel complete).
+- **Hybrid execution transparency**: User should see whether a skill is running procedurally (L2 executor), via ACP, or LangGraph.
+
+---
+
+## 2. Software-Level Design (How the GUI Is Built)
+
+### 2.1 Layer Responsibilities (L0 + Dependencies)
+- **L0 (GUI Shell)**: Presentation, layout, editors, viewers, terminal, agent panels. Does **not** implement business logic for skills/agents (delegates to L2/L4).
+- **L1 (Agent Runtime)**: ACP stdio host, tool permission enforcement scoped to IDE surfaces.
+- **L2 (Orchestration)**: Procedural executor + router (invokes skills from editor "invoke" actions or panels).
+- **L3 (Gates + Evidence)**: Gate evaluation, HITL interrupts, evidence bundle production. Viewers are wired to gate `viewer` fields.
+- **L4 (Plugin Host)**: Discovery of `SKILL.md` / `.agent.md`, viewer registry, tool registry + permissions, pack loading.
+- **L5 (Workspace)**: Manifest-driven configuration that populates the explorer, enables/disables surfaces, sets maturity (affects gate modes and tool scopes).
+
+### 2.2 Major Components (SW Level)
+- **ShellHost** (`gui/shell/`)
+  - Current: Zed Personal via `zed-agent-servers.json` (ACP registry).
+  - Future: Portable host (Tauri / custom) that owns layout, docks, theming, global command palette.
+  - Responsibilities: window management, persistent layout (per workspace), terminal integration, status bar.
+
+- **EditorManager**
+  - Structure-aware editors for agent/skill/manifest/evidence.
+  - Uses language server (LSP) for code + custom outline / form views for frontmatter + procedure steps.
+  - "Invoke" action that constructs a WorkPackage and sends to L2 router.
+  - Live validation (calls `validate_hierarchy_metadata` from ide_core tools).
+
+- **ViewerRegistry + ViewerHost**
+  - L4-registered viewers (markdown, mermaid, graph, etc.).
+  - Opened by gate evidence, by editor actions, or explicitly.
+  - Each viewer is a self-contained pane that can request more context (e.g., "show related matrix row").
+
+- **AgentPanel / SessionHost** (L1 + L2)
+  - ACP client for interactive agents.
+  - Multi-session support.
+  - Slash command router.
+  - Real-time evidence subscription from L2/L3.
+
+- **ToolPermissionUI**
+  - Visual indicator and approval surface for what the current executing skill/agent/tool is allowed to do (read/write specific artifact types, run pwsh, call gh, etc.).
+  - Backed by L4 tool registry + L1 permission model.
+
+- **EvidenceBus / GateClient**
+  - Subscribes to L3 evidence production.
+  - Routes evidence to the correct viewer and updates the traceability matrix view (if open).
+
+### 2.3 Data Models (Key SW Artifacts)
+- `Workspace` (from L5 manifest): repos, packs, maturity, gate overrides, enabled surfaces.
+- `Artifact` (first-class): id, type (agent|skill|manifest|evidence|matrix-row), path, frontmatter, body, hierarchy metadata.
+- `GateEvidence`: bundle id, gate, producer (skill or agent), payload, viewer hints, traceability links.
+- `ViewerRegistration`: id, supported formats/mime, component, gate association.
+- `ToolScope`: what a running procedural step is allowed (read paths, write paths, execute commands, call other skills).
+
+### 2.4 Integration Points & Extensibility
+- **With L2 Executor**: Editor "invoke" or panel action → WorkPackage (skill_id, payload, mode=procedural) → executor runs SKILL.md steps → evidence returned → L3 + viewers.
+- **With L4 Loader**: On workspace open or pack change, L4 discovers new agents/skills/viewers/tools and registers them with L0 surfaces.
+- **With Gates (L3)**: Every significant editor action or viewer open can be gated; evidence is produced.
+- **Pack Extensibility (L7)**: Domain packs can contribute viewers, toolchains, and even custom editor behaviors via manifest.
+- **Self-hosting**: The `ide-platform` pack (agents + skills) + the matrix + this design doc are the primary content the GUI is built to edit and visualize.
+
+### 2.5 Philosophy: Unique Custom Instantiation (Modern Editor Patterns, No Source Reuse)
+The long-term GUI is **not** a fork, embedding, or reuse of Zed, VS Code, or Eclipse source code.
+
+- We follow **design patterns and interaction models** from modern lightweight editors (Zed in particular for its speed and extensibility feel, VS Code for the overall dockable editor + panel + viewer paradigm).
+- All core components are built by us: custom shell, custom editors for `.agent.md`/`SKILL.md`/manifests, custom viewer system, custom agent interaction surfaces, custom layout/docking engine, etc.
+- Extensibility comes through our own L4 plugin host + pack manifests (viewers, tools, editor behaviors), not by forking an existing editor's extension system.
+- The goal is a purpose-built agentic IDE that feels familiar to developers coming from Zed/VS Code, but is optimized for first-class agent/skill artifacts, evidence viewing, multi-agent sessions, and governance.
+
+### 2.6 Current Implementation State (MVP CUSTOM tkinter ShellHost delivered)
+- **CURRENT L0 MVP host (Win11 launchable, unique custom, stdlib, no source reuse)**: `src/platform/gui/shell_host.py` (ShellHost + ShellConfig with backend=CUSTOM) + `src/platform/gui/launch_ide.py` (entry: `.\.venv\Scripts\python.exe -m src.platform.gui.launch_ide` or direct). Implements the primary user controls requested: top menubar (File: Open/Close Folder + L4 reload; GitHub: status + evidence via P4 gh_evidence registry tool + clone; Grok/Build: Launch Grok Agent (ACP), Run skill via GrokBuild/L2 handoff, Open PowerShell with IDE context; Help: full UI Legend explaining every area, stub, and wiring). Dockable framework via ttk.PanedWindow (explorer | center vertical with editor + viewers + integrated PS terminal as first-class dockable tool). Real L4 explorer (Treeview from PluginLoader.discover + discover_skills, packs as parents, skills children; select loads real SKILL.md into editor via _on_tree_select). Command palette (Ctrl+P, filter + dispatch real skills or actions). Clarity system: hover <Enter> on frames updates help_label; full Help > UI Legend with explanations of Explorer=L4, Terminal=L2/P2 robust, Editor=L0, Viewers=P5, Status=L3/gates, ACP=L1, menu primary controls, self-host demo. ACP Agent Panel (Toplevel for MVP; _create_agent_panel + _spawn_grok_agent): spawns ShellConfig.agent_command (grok agent stdio per platform/manifest primary_agent_runtime); sends initial JSON system message with current workspace_root ("the repo that is opened"); user input wrapped as `{"role":"user","content": text}` before stdin write+flush (fixed the exact "failed to parse incoming message: expected value at line 1 column 1. Raw: evaluate the repo..." error); stdout reader does json.loads + pretty or raw fallback; handoff button calls real run_procedural_skill (L2 + P1-P5). Status bar shows workspace, backend, terminal, gates (L3), tools (P1-P5), self-host note. PS terminal uses P2 robust pwsh (NoProfile, cwd, threaded). All wired to real backend (P3 loader on open folder, P2 executor on invoke/palette/handoff, P4 gh, P5 bundler on invoke, L3 gates in status).
+- **Self-hosting demo (live in the delivered shell)**: Open this repo as workspace (File menu) → L4 explorer populates with ide-platform packs/skills (from P3) → Invoke button or palette runs real generalized skill (e.g. ide-hierarchy-taxonomy-steward) via L2 (robust P2) → P5 evidence bundle produced and shown. ACP panel can be launched and given the opened workspace context; handoff executes real L2.
+- **Dual PS + GUI**: All P1-P5 tools have PS wrappers (Invoke-IdeTool.ps1, Run-RobustPwsh.ps1, etc.) for terminal MVP + future GUI terminal integration. "Open PowerShell with IDE Context" menu item launches co-running pwsh with workspace.
+- **P1-P5 + L2/L3/L4 integration complete for MVP surfaces**: ToolRegistry (P1) with read/write_ide_artifact, run_robust_powershell, gh_evidence, bundle_gate_evidence, validate_hierarchy_metadata; executor switched to robust path; loader discover_skills powers explorer/palette; GateEngine + bundler for P5 in viewers/terminal; status pulls live gates.
+- **Installer / future**: gui/installer/... still present for bootstrap; long-term evolution to richer custom (Dear PyGui/Tauri) per philosophy will replace/enhance the current stdlib tkinter CUSTOM MVP (which was built precisely to provide the menu/dockables/clarity/GrokBuild surfaces the project needed to continue self-hosting).
+- Viewers/Editors/Agent panel details: Current is functional stubs + real loading/wiring (editor shows SKILL content; ACP is live with protocol); full rich planned R2+ but the HMI framework + primary controls + ACP stdio bridge (JSON framing + context) + clarity are delivered in this tkinter shell.
+- Tool permissions / ACP: Backed by P1 registry + L1 panel; ACP handoff to L2 works.
+
+- **Governance wiring (mandatory engineering rigor in interfaces)**: All user-facing paths (explorer invoke, command palette, ACP panel send/handoff, menu actions) now call _run_governance_preflight before proceeding. This runs the full suite (ide-governance-policy-compiler for upfront policy/arch/trace/hierarchy, ide-check-work-commit + verification skills for actual testing/compliance) via L2 executor + P1 tools + P5 evidence bundles (surfaced in viewers/status). New mandatory gates (G0.1_upfront_engineering, G_pre_user_command_testing, G_hmi_governance_enforcement) in registry. Same preflight logic in PS Invoke-IdeTool.ps1 (before any target tool/skill). Prevents "start coding before engineering" and "pass command to user/ACP before testing". Dual PS/GUI, self-audited by the gov skills themselves. See matrix X GOV-WIRING-001 and invocation GOV-WIRING-001.
+
+### Basic Functionality Baseline for Self-Host Transition (PS → IDE)
+When the team is ready to move primary development of the IDE from the PowerShell surface (wrappers + terminal) into the IDE itself (GUI + co-running PS), the following is the documented, tested basic functionality that exists today. Stubs/TODOs are explicitly acceptable provided this baseline works and is documented (per user direction).
+
+**What works today (rely on this for self-host dev of the IDE):**
+- Launch: `.\.venv\Scripts\python.exe -m src.platform.gui.launch_ide` (Win11 native, stdlib tkinter, zero extra deps, correct module syntax).
+- Primary Menu controls: File (Open/Close Folder as workspace with L4 reload), GitHub (status + P4 gh_evidence create/attach + git clone + reload), Grok/Build (Launch Grok Agent (ACP), Run skill via L2 handoff, Open PowerShell with IDE Context), Help (full UI Legend explaining every area, stub, and wiring).
+- Dockable tool framework: ttk.PanedWindow splits (L4 Explorer | center vertical with Editor + Viewers Dock + Integrated PowerShell Terminal as first-class dockable tool). Comment hooks exist for packs to register additional dockable panels.
+- L4 Explorer + self-host demo: Real discovery via PluginLoader (packs as tree parents, skills/agents as children from ide-platform etc.). Tree select loads real SKILL.md content into editor. "Invoke Selected" or palette runs real generalized skill (e.g. ide-hierarchy-taxonomy-steward) via L2 executor (P2 robust pwsh) and produces visible P5 evidence bundle (in viewers + terminal output).
+- Command surfaces: Ctrl+P palette (dynamic list of discoverable skills + actions; filters; dispatches real L2 invokes or menu-equivalent actions). ACP panel input + handoff button.
+- ACP / GrokBuild integration: Full JSON protocol framing (initial system message with current opened workspace/repo context + every typed command as `{"role":"user","content":...}`). Governance preflight runs before any send or handoff. Real L2 handoff button. Graceful local stub when "grok" CLI not present.
+- Governance preflights (dual): Always executed on user-facing actions (explorer invoke, palette, ACP send/handoff, menu runs, open folder). Calls the gov skills (ide-governance-policy-compiler, ide-check-work-commit, ide-hierarchy-taxonomy-steward, etc.) via L2 + produces P5 bundle + surfaces results in viewers/status. Meets "never start coding before upfront engineering" and "never pass command before actual testing" on all governed paths. Evidence today; hard blocking + HITL planned for future slices.
+- PS dual (first-class): All P1-P5 tools have thin PS wrappers (Invoke-IdeTool.ps1 etc.) for terminal MVP use + future GUI terminal integration. "Open PowerShell with IDE Context" menu item. Robust pwsh execution in the integrated terminal pane (NoProfile, cwd scoping, threaded output).
+- Status / visibility: Bottom bar shows workspace, backend (CUSTOM), terminal (powershell), active gates (L3), tools ready (P1-P5 + bundler), self-host note. UI Legend + hover help_label make every stub/control purpose and usage obvious.
+- Self-host loop (proof of basic functionality): File > Open Folder on this repo → L4 explorer populates with ide-platform packs/skills (P3) → invoke via button/palette/handoff → real L2 execution + P5 bundle appears → gov preflight evidence produced on the action.
+
+**Stubs / partial / future (explicitly acceptable for basic functionality; called out in UI Legend, code comments, and this design):**
+- Editor: Real SKILL.md load on tree select + "Invoke from Editor" that runs L2. Full structure-aware editing, frontmatter forms, live validation, and save are stubs (described as "L0 structure-aware stub").
+- Viewers Dock: P5 evidence bundles and basic markdown display work after invokes. Rich viewers (mermaid diagrams, graph-canonical, audit trails, stix, etc.) are partial/stubs (planned R2/R3).
+- ACP panel: Protocol, context injection, preflight, and L2 handoff are real. "Stub vs procedural" menu item and no-CLI fallback mode are explicit stubs. Full multi-agent session state and richer chat UI are future.
+- Governance enforcement: Preflights always run, call the skills, produce P5 evidence, and surface it (meets the "never before..." rules today). "Future strict enforcement", "HITL option in future", and auto-executor gate running are noted as future.
+- Other evolution: Rich custom host (Tauri/Dear PyGui per philosophy), full pack-registered dockables, advanced theming, settings UI, and "when ready" flip of primary dev surface in manifests/docs (PS will remain fully supported as dual surface).
+
+**Transition notes:** PS remains the reliable primary for complex or long-running work. The GUI + co-running PS provides the visual IDE experience + governance enforcement points. When the documented baseline above + tests (current phase1_batch1_smoke + gov skill runs) are sufficient, development work can move into the IDE (edit generalized skills, run self-audits via the GUI, use ACP with preflights, etc.) while keeping full PS fallback. All changes to the platform must continue to go through the gov preflights on the governed paths. See matrix X PS-IDE-TRANSITION-001, invocation record (PS-to-IDE Transition Readiness section), and the skill-driven gap eval (temp_transition_gap_eval.py).
+
+This baseline was produced by actively running the governance/trace/verification skills + P1 tools (as required) during the TRANS batch.
+
+P2/P4/P5 details (dual) as before in prior text (robust pwsh, gh_evidence, bundler + GateEngine; all live in smokes + self-host inside the GUI). See matrix L0-001 (now expanded with hierarchy for these controls), L1-001 (ACP protocol fix), invocation record (phases + "Tasks 1-5 of 5" + ACP-JSON-FRAME-001 closure batch + PS-IDE-TRANSITION-001), and the skills (ide-hierarchy-taxonomy-steward, ide-architecture-document-surface-enforcer, ide-source-to-evidence-traceability, ide-verification-coverage) run in this closure + TRANS batches.
+
+### 2.7 Open Decisions & Risks (to be resolved in detailed SW design)
+- Exact layout/docking engine for the custom portable shell (we will own this, not reuse an existing editor's).
+- Editor implementation strategy (custom structure-aware components for `.agent.md` / `SKILL.md` vs. leveraging LSP where it makes sense for code-like content).
+- Depth of in-UI tool permission prompting vs profile-based trust.
+- How deeply the traceability matrix and layer work packages are visualized live vs. treated as first-class editable artifacts.
+- Theming, theming extensibility, and accessibility for our custom shell.
+- Whether to start the custom shell on Tauri (webview) for speed of development or go more native earlier.
+
+---
+
+## 3. Roadmap Alignment (L0 Surfaces) — PowerShell-First Phase
+
+- **R1 (current foundations, PowerShell-centric)**: Executor + tools + generalized content (including full FarmRTK batches) + traceability + architecture docs. Primary development and daily use of the platform happens through PowerShell (scripts, the L2 executor running SKILL.md procedures, `ide_core` tools, direct skill invocation, and an enhanced terminal experience). The temporary Zed ACP bridge is used only for early multi-agent sessions and convenience during self-hosting.
+
+- **When ready — Custom GUI MVP**: Once a suitable GUI framework is available that allows a clean, minimal custom shell (no forking of existing editor source), we instantiate our own L0 GUI Shell. This will provide structure-aware editors for `.agent.md` / `SKILL.md` / manifests, basic viewers, agent panels, PowerShell terminal integration, etc., while strictly following our design patterns and owning the implementation.
+
+- **R2+ (post-GUI MVP)**: Rich custom editors, multi-viewer layouts, full ACP multi-agent UI, tool permission surfaces, pack extensibility for viewers/editors, polished experience. At this point PowerShell remains fully supported and native, but the visual IDE becomes the primary surface for most users.
+
+This approach lets us continue rapid self-hosting development inside our own generalized skills and executor without compromising the "unique custom instantiation" principle.
+
+This document will be updated as L0 work packages are executed. All changes must maintain traceability in the matrix and reference the L0-L8 decomposition.
+
+**End of initial GUI design.** Ready for detailed component specs, wireframes, or implementation tickets.
