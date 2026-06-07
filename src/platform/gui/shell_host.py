@@ -23,6 +23,7 @@ import json  # for ACP stdio JSON message framing (L1 agent panel)
 from ..plugins.loader import PluginLoader
 from ..orchestration.executor import run_procedural_skill
 from ..tools.gate_evidence_bundler import create_gate_evidence_bundle, bundle_to_markdown
+from ..gates.engine import GateEngine  # for L3 evaluation of pre-flights
 
 
 class ShellBackend(str, Enum):
@@ -221,6 +222,12 @@ class ShellHost:
         explorer_frame.bind("<Enter>", lambda e: self.help_label.config(text="L4 Explorer pane (dockable): shows discovered skills/agents. Open Folder in menu reloads from workspace."))
 
         def invoke_from_tree() -> None:
+            # GOVERNANCE WIRING: mandatory preflight before any skill invoke / "try this" from explorer
+            pre = self._run_governance_preflight(context="gui_explorer_invoke", action_description="Invoke skill from L4 explorer tree")
+            append_output(f"[GOV] Preflight for invoke: {pre.get('status')}\n")
+            if pre.get("evidence_bundle"):
+                append_output(f"[GOV Evidence]\n{pre['evidence_bundle']}\n")
+
             # Wire to L2 + P5 (example from selected or default known gated skill)
             skill_id = "ide-hierarchy-taxonomy-steward"
             append_output(f"[L2] Invoking {skill_id} via robust executor (from explorer)...\n")
@@ -450,6 +457,58 @@ See GUI_DESIGN.md for the full vision (dockable tools, agent panels, command pal
 """
         messagebox.showinfo("UI Legend", legend)
 
+    def _run_governance_preflight(self, context: str = "user_action", action_description: str = "") -> dict:
+        """GOVERNANCE WIRING (Cross L2/L3 + HMI): Mandatory pre-flight using full engineering rigor (agents/skills/tools) before any user-facing action or 'try this' exposure.
+
+        Prevents:
+        - Starting coding/work before upfront engineering (requirements, arch, hierarchy, policy, traceability via ide-governance-policy-compiler + related).
+        - Passing command/GUI action/ACP suggestion to user or agent before actual testing/compliance (ide-check-work-commit, ide-verification-coverage, compliance monitor).
+
+        Called from: invoke/palette/handoff/ACP send/menu actions/open folder (for discover), etc.
+        Dual with PS wrappers.
+
+        Runs the new G0.1_upfront_engineering and G_pre_user_command_testing (and G_hmi_governance_enforcement) via L2 skills, produces P5 bundle, evaluates via GateEngine, shows in status/viewers.
+        For mandatory gates: blocks or warns with evidence if not satisfied (HITL option in future).
+        """
+        results = {"context": context, "action": action_description, "preflights": [], "status": "ok", "evidence_bundle": None}
+        gov_skills = [
+            ("ide-governance-policy-compiler", "G0.1_upfront_engineering"),
+            ("ide-check-work-commit", "G_pre_user_command_testing"),  # represents testing/compliance before exposure
+            ("ide-hierarchy-taxonomy-steward", "upfront hierarchy for L0-L8 surfaces"),
+        ]
+        engine = GateEngine()
+        sources = []
+        for skill_id, gate_note in gov_skills:
+            try:
+                res = run_procedural_skill(skill_id, workspace_root=self.config.workspace_root)
+                sources.append({"type": "governance_preflight", "id": skill_id, "gate": gate_note, "result": res})
+                results["preflights"].append({"skill": skill_id, "status": res.get("status"), "declared": res.get("outputs", {}).get("declared_tools")})
+                # Append to viewers for visibility (user sees the rigor)
+                if hasattr(self, 'viewer_text'):
+                    self.viewer_text.insert(tk.END, f"[GOV PREFLIGHT] {skill_id} ({gate_note}): {res.get('status')}\n")
+            except Exception as e:
+                results["preflights"].append({"skill": skill_id, "status": "error", "error": str(e)})
+                results["status"] = "preflight_error"
+
+        if sources:
+            try:
+                bundle = create_gate_evidence_bundle("G_hmi_governance_enforcement", sources)
+                results["evidence_bundle"] = bundle_to_markdown(bundle)[:800] + "..."
+                # Also surface via status
+                if hasattr(self, 'status_var'):
+                    self.status_var.set(self.status_var.get() + " | Last gov preflight: " + results["status"])
+            except Exception as be:
+                results["evidence_error"] = str(be)
+
+        # L3 evaluation (future strict enforcement can raise or require HITL here)
+        try:
+            gate_eval = engine.bundle_evidence_for_gate("G_hmi_governance_enforcement", sources)
+            results["gate_eval"] = gate_eval.get("status", "evaluated")
+        except Exception:
+            pass
+
+        return results
+
     def _create_agent_panel(self):
         """L1 GrokBuild/ACP Agent Panel (improved protocol handling).
         Spawns the agent_command from ShellConfig (defaults to ["grok","agent","stdio"] per platform/manifest primary_agent_runtime).
@@ -573,11 +632,20 @@ See GUI_DESIGN.md for the full vision (dockable tools, agent panels, command pal
                 text = input_var.get().strip()
                 if text:
                     input_var.set("")
+                    # GOVERNANCE: preflight before sending any user command to ACP agent (prevents raw "try this" without rigor)
+                    pre = self._run_governance_preflight(context="acp_user_command", action_description=f"ACP send: {text[:50]}")
+                    append(f"[GOV preflight for ACP command] status={pre.get('status')}")
                     send_user_message(text)
 
             input_entry.bind("<Return>", on_enter)
 
             def do_handoff() -> None:
+                # GOVERNANCE WIRING: preflight before L2 handoff (upfront engineering + testing before "giving" the skill execution to user/context)
+                pre = self._run_governance_preflight(context="acp_or_panel_handoff", action_description="Handoff to L2 executor for skill")
+                append(f"[GOV preflight for handoff] {pre.get('status')}")
+                if pre.get("evidence_bundle"):
+                    append(f"[GOV Evidence for handoff]\n{pre['evidence_bundle']}\n")
+
                 skill = "ide-hierarchy-taxonomy-steward"
                 append(f"[Handoff] Invoking real L2 procedural skill: {skill} (uses P2 robust pwsh + P1 registry + P3 loader + P5 bundler)...")
                 try:

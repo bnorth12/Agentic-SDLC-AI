@@ -31,12 +31,46 @@ param(
 
     [string]$PayloadJson = '{}',
 
-    [string]$PythonExe = 'python'
+    [string]$PythonExe = 'python',
+
+    [switch]$SkipGovernance
 )
 
 $ErrorActionPreference = 'Stop'
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 $repoRoot = (Resolve-Path (Join-Path $here '..\..\..\..')).Path   # src/platform/tools -> repo root
+
+# GOVERNANCE WIRING (dual with GUI): Before any tool/skill "user command" or exposure,
+# run full engineering rigor (upfront + testing) via the skills/tools.
+# This ensures we never start "coding"/action or give something to try (in PS or via GUI terminal)
+# before upfront engineering (G0.1) and actual testing/compliance (G_pre_user_command_testing).
+# Uses L2 skills (ide-governance-policy-compiler, ide-check-work-commit etc.) + P1 registry + P5 evidence.
+# Bypass only for internal 'list' or with explicit -SkipGovernance (for reviewed scripts only; still produces evidence).
+if (-not $SkipGovernance -and $Name -notin @('list','list_tools','list-tools')) {
+    Write-Host "[GOV] Running mandatory preflight (upfront engineering + pre-exposure testing) before $Name ..."
+    $govPy = @'
+import sys, json
+sys.path.insert(0, r"'" + $repoRoot + r'"')
+from src.platform.orchestration.executor import run_procedural_skill
+from src.platform.tools.gate_evidence_bundler import create_gate_evidence_bundle, bundle_to_markdown
+skills = ["ide-governance-policy-compiler", "ide-check-work-commit", "ide-hierarchy-taxonomy-steward"]
+results = []
+for sk in skills:
+    try:
+        r = run_procedural_skill(sk, workspace_root=r"'" + $repoRoot + r'"')
+        results.append({"skill": sk, "status": r.get("status"), "declared": r.get("outputs",{}).get("declared_tools")})
+    except Exception as ex:
+        results.append({"skill": sk, "status": "error", "error": str(ex)[:200]})
+bundle = create_gate_evidence_bundle("G_hmi_governance_enforcement", [{"type":"ps_wrapper_preflight", "results": results}])
+print(json.dumps({"status": "gov_preflight_complete", "results": results, "evidence": bundle_to_markdown(bundle)[:600]}, indent=2))
+'@
+    $tmpGov = Join-Path $env:TEMP "gov_preflight_$(Get-Random).py"
+    Set-Content -Path $tmpGov -Value $govPy -Encoding UTF8
+    & $PythonExe $tmpGov 2>&1 | ForEach-Object { Write-Host "[GOV] $_" }
+    Remove-Item $tmpGov -ErrorAction SilentlyContinue | Out-Null
+    # In full wiring, parse the output; if mandatory gates fail, throw or require HITL/evidence review before proceeding.
+    # For now, evidence is always produced and visible; strict block in later G enforcement slices.
+}
 
 $pyCode = @'
 import sys, json

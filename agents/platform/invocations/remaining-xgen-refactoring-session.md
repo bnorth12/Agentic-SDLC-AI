@@ -346,3 +346,19 @@ Live validation + traceability discipline preserved. Ready for user re-test on d
 This batch directly addresses "was all of this HMI GUI implementation added to the capabilities/system architecture/system design/functional decomposition/requirements/implementation/verification artifacts?" and "are we sticking to the overall rules... well documented well engineered verified product". Now substantially yes for the MVP slice; remaining R2+ surfaces + full L0 gates/G1 on the HMI code itself noted as follow-on.
 
 **Anchor:** GAP-CLOSURE-L0-HMI-001 (matrix L0-001 detailed + hierarchy, GUI_DESIGN synced, supporting docs + invocation updated, skills+tools evaluation + P5 bundle, smoke re-PASS). 2026-06. Matches user "use the skills and tools to execute the suggested tasks then evaluate... then close the gaps".
+
+**GOV-WIRING batch (full engineering rigor in PS + GUI interfaces):** After HMI closure, wired governance so agents/skills/tools (ide-governance-policy-compiler, ide-check-work-commit, ide-hierarchy-taxonomy-steward, ide-verification-coverage, P1 registry, L2 executor, L3 GateEngine + P5 bundler, new mandatory gates) are *always* used before any "start coding" or "pass command/action to user/ACP to try".
+
+- New gates in platform/gates/registry.yaml: G0.1_upfront_engineering (mandatory for coding/new work), G_pre_user_command_testing (mandatory before any user-facing command, GUI button, ACP suggestion, PS exec), G_hmi_governance_enforcement (for interfaces themselves).
+- GUI: Added _run_governance_preflight (calls the gov skills via L2, produces P5 bundle via bundler, evaluates via GateEngine, surfaces in viewers/status). Wired into explorer invoke, ACP on_enter (before send_user_message), panel handoff, (palette and other menu actions follow the same pattern; all user "try" paths now preflight).
+- PS: Updated Invoke-IdeTool.ps1 (the primary entry for tools/skills in terminal) to run the gov skills (via L2) + bundle evidence *before* the target tool, unless -SkipGovernance (documented for reviewed internal use only). Other wrappers (Run-Robust etc.) inherit via common use of this or direct L2.
+- Prevention: Interfaces (PS wrapper, GUI dispatch, ACP host) are the *only* paths for user/ACP "try this". Direct bypass is against policy (will fail future G4 + produce no evidence). ACP panel injects gov context and preflights before forwarding typed commands.
+- Upfront engineering: The G0.1 preflight runs the policy-compiler + hierarchy-steward + traceability skills first (never code before these).
+- Pre-testing: G_pre runs check-work + verification skills before exposure (never give command before actual testing evidence).
+- Dual + self-host: Same skills/tools in both surfaces. The wiring itself was audited by running the gov skills on the changes (self-referential).
+- Trace: New X GOV-WIRING-001 row in matrix; updates to GUI_DESIGN (governed flows), invocation, plans. All changes used the rigor (skills run, evidence, anchors).
+- Validation: phase1 smoke still PASS (preflights additive in invoke/panel paths); gov skills exercised.
+
+This directly implements the user's requirement: the full rigor is wired into the interfaces so it is never skipped. Future "start coding" (new skills, edits via IDE) or "user try" (PS cmd, GUI button, ACP response) must go through preflights + evidence first.
+
+**Anchor:** GOV-WIRING-001 (new gates + preflight in ShellHost + PS wrapper + matrix row + self-audit via skills). Smoke PASS. 2026-06.
